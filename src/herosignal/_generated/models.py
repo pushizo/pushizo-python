@@ -209,6 +209,48 @@ class AppSettingsWebPush(TypedDict, total=False):
     serviceWorkerPath: str
     serviceWorkerScope: str
     prompt: "AppSettingsWebPushPrompt"
+    welcomeNotification: "AppSettingsWebPushWelcomeNotification"
+    clickBehavior: "AppSettingsWebPushClickBehavior"
+    customLink: "AppSettingsWebPushCustomLink"
+    promptBackoffDays: List[int]
+
+
+class AppSettingsWebPushClickBehavior(TypedDict, total=False):
+    """AppSettingsWebPushClickBehavior şeması."""
+
+    #: Zorunlu. Değerler: "exact", "origin".
+    match: str
+    #: Zorunlu. Değerler: "navigate", "focus".
+    action: str
+
+
+class AppSettingsWebPushCustomLink(TypedDict, total=False):
+    """AppSettingsWebPushCustomLink şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu. Değerler: "button", "link".
+    style: str
+    #: Zorunlu. Değerler: "small", "medium", "large".
+    size: str
+    color: "AppSettingsWebPushCustomLinkColor"
+    texts: Dict[str, "AppSettingsWebPushCustomLinkTextsValue"]
+    unsubscribeEnabled: bool
+
+
+class AppSettingsWebPushCustomLinkColor(TypedDict, total=False):
+    """AppSettingsWebPushCustomLinkColor şeması."""
+
+    button: str
+    text: str
+
+
+class AppSettingsWebPushCustomLinkTextsValue(TypedDict, total=False):
+    """AppSettingsWebPushCustomLinkTextsValue şeması."""
+
+    subscribe: str
+    unsubscribe: str
+    explanation: str
 
 
 class AppSettingsWebPushPrompt(TypedDict, total=False):
@@ -242,6 +284,22 @@ class AppSettingsWebPushPromptTextsValue(TypedDict, total=False):
     message: str
     accept: str
     cancel: str
+
+
+class AppSettingsWebPushWelcomeNotification(TypedDict, total=False):
+    """AppSettingsWebPushWelcomeNotification şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    url: str
+    texts: Dict[str, "AppSettingsWebPushWelcomeNotificationTextsValue"]
+
+
+class AppSettingsWebPushWelcomeNotificationTextsValue(TypedDict, total=False):
+    """AppSettingsWebPushWelcomeNotificationTextsValue şeması."""
+
+    title: str
+    message: str
 
 
 class AuditEntry(TypedDict, total=False):
@@ -2935,6 +2993,48 @@ class UpdateAppDtoSettingsWebPush(TypedDict, total=False):
     serviceWorkerPath: str
     serviceWorkerScope: str
     prompt: "UpdateAppDtoSettingsWebPushPrompt"
+    welcomeNotification: "UpdateAppDtoSettingsWebPushWelcomeNotification"
+    clickBehavior: "UpdateAppDtoSettingsWebPushClickBehavior"
+    customLink: "UpdateAppDtoSettingsWebPushCustomLink"
+    promptBackoffDays: List[int]
+
+
+class UpdateAppDtoSettingsWebPushClickBehavior(TypedDict, total=False):
+    """UpdateAppDtoSettingsWebPushClickBehavior şeması."""
+
+    #: Zorunlu. Değerler: "exact", "origin".
+    match: str
+    #: Zorunlu. Değerler: "navigate", "focus".
+    action: str
+
+
+class UpdateAppDtoSettingsWebPushCustomLink(TypedDict, total=False):
+    """UpdateAppDtoSettingsWebPushCustomLink şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu. Değerler: "button", "link".
+    style: str
+    #: Zorunlu. Değerler: "small", "medium", "large".
+    size: str
+    color: "UpdateAppDtoSettingsWebPushCustomLinkColor"
+    texts: Dict[str, "UpdateAppDtoSettingsWebPushCustomLinkTextsValue"]
+    unsubscribeEnabled: bool
+
+
+class UpdateAppDtoSettingsWebPushCustomLinkColor(TypedDict, total=False):
+    """UpdateAppDtoSettingsWebPushCustomLinkColor şeması."""
+
+    button: str
+    text: str
+
+
+class UpdateAppDtoSettingsWebPushCustomLinkTextsValue(TypedDict, total=False):
+    """UpdateAppDtoSettingsWebPushCustomLinkTextsValue şeması."""
+
+    subscribe: str
+    unsubscribe: str
+    explanation: str
 
 
 class UpdateAppDtoSettingsWebPushPrompt(TypedDict, total=False):
@@ -2968,6 +3068,22 @@ class UpdateAppDtoSettingsWebPushPromptTextsValue(TypedDict, total=False):
     message: str
     accept: str
     cancel: str
+
+
+class UpdateAppDtoSettingsWebPushWelcomeNotification(TypedDict, total=False):
+    """UpdateAppDtoSettingsWebPushWelcomeNotification şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    url: str
+    texts: Dict[str, "UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue"]
+
+
+class UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue(TypedDict, total=False):
+    """UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue şeması."""
+
+    title: str
+    message: str
 
 
 class UpdateInAppDto(TypedDict, total=False):
@@ -3468,9 +3584,15 @@ __all__ = [
     "AppSettingsQuietHours",
     "AppSettingsSdkSetup",
     "AppSettingsWebPush",
+    "AppSettingsWebPushClickBehavior",
+    "AppSettingsWebPushCustomLink",
+    "AppSettingsWebPushCustomLinkColor",
+    "AppSettingsWebPushCustomLinkTextsValue",
     "AppSettingsWebPushPrompt",
     "AppSettingsWebPushPromptCategoriesItem",
     "AppSettingsWebPushPromptTextsValue",
+    "AppSettingsWebPushWelcomeNotification",
+    "AppSettingsWebPushWelcomeNotificationTextsValue",
     "AuditEntry",
     "AuditPage",
     "Campaign",
@@ -3646,9 +3768,15 @@ __all__ = [
     "UpdateAppDtoSettingsQuietHours",
     "UpdateAppDtoSettingsSdkSetup",
     "UpdateAppDtoSettingsWebPush",
+    "UpdateAppDtoSettingsWebPushClickBehavior",
+    "UpdateAppDtoSettingsWebPushCustomLink",
+    "UpdateAppDtoSettingsWebPushCustomLinkColor",
+    "UpdateAppDtoSettingsWebPushCustomLinkTextsValue",
     "UpdateAppDtoSettingsWebPushPrompt",
     "UpdateAppDtoSettingsWebPushPromptCategoriesItem",
     "UpdateAppDtoSettingsWebPushPromptTextsValue",
+    "UpdateAppDtoSettingsWebPushWelcomeNotification",
+    "UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue",
     "UpdateInAppDto",
     "UpdateInAppDtoAudience",
     "UpdateInAppDtoDisplay",
