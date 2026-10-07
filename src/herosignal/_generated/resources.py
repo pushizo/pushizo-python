@@ -2840,6 +2840,455 @@ class OrganizationResource:
         )
 
 
+class JourneysResource:
+    """journeys kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        q: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyPage":
+        """Journey listesi
+
+        ``GET /v1/apps/{appId}/journeys``
+
+        Parametreler:
+            status: Değerler: "draft", "active", "paused", "archived".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/journeys",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "status": status, "q": q},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        q: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["Journey"]:
+        """``list`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list(
+                limit=limit,
+                status=status,
+                q=q,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def create(
+        self,
+        body: "JourneysCreateBody",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Journey oluştur (taslak)
+
+        ``POST /v1/apps/{appId}/journeys``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/journeys",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        journey_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Journey detayı
+
+        ``GET /v1/apps/{appId}/journeys/{journeyId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/journeys/{journeyId}",
+            path_params={"journeyId": journey_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        journey_id: str,
+        body: "UpdateJourneyDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Ad / açıklama
+
+        ``PATCH /v1/apps/{appId}/journeys/{journeyId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/journeys/{journeyId}",
+            path_params={"journeyId": journey_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        journey_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Hiç yayınlanmamış journey'i sil
+
+        ``DELETE /v1/apps/{appId}/journeys/{journeyId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/journeys/{journeyId}",
+            path_params={"journeyId": journey_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def save_draft(
+        self,
+        journey_id: str,
+        body: "JourneysSaveDraftBody",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Taslağı kaydet
+
+        ``PUT /v1/apps/{appId}/journeys/{journeyId}/draft``
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/journeys/{journeyId}/draft",
+            path_params={"journeyId": journey_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_node(
+        self,
+        journey_id: str,
+        node_id: str,
+        body: "UpdateNodeDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Taslaktaki düğümü güncelle
+
+        ``PATCH /v1/apps/{appId}/journeys/{journeyId}/nodes/{nodeId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/journeys/{journeyId}/nodes/{nodeId}",
+            path_params={"journeyId": journey_id, "nodeId": node_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def versions(
+        self,
+        journey_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyVersionList":
+        """Sürümler
+
+        ``GET /v1/apps/{appId}/journeys/{journeyId}/versions``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/journeys/{journeyId}/versions",
+            path_params={"journeyId": journey_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def publish(
+        self,
+        journey_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyPublishResult":
+        """Yayınla
+
+        ``POST /v1/apps/{appId}/journeys/{journeyId}/publish``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/journeys/{journeyId}/publish",
+            path_params={"journeyId": journey_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def pause(
+        self,
+        journey_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Duraklat
+
+        ``POST /v1/apps/{appId}/journeys/{journeyId}/pause``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/journeys/{journeyId}/pause",
+            path_params={"journeyId": journey_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def resume(
+        self,
+        journey_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Devam ettir
+
+        ``POST /v1/apps/{appId}/journeys/{journeyId}/resume``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/journeys/{journeyId}/resume",
+            path_params={"journeyId": journey_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def archive(
+        self,
+        journey_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Arşivle
+
+        ``POST /v1/apps/{appId}/journeys/{journeyId}/archive``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/journeys/{journeyId}/archive",
+            path_params={"journeyId": journey_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def duplicate(
+        self,
+        journey_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Kopyala
+
+        ``POST /v1/apps/{appId}/journeys/{journeyId}/duplicate``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/journeys/{journeyId}/duplicate",
+            path_params={"journeyId": journey_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def stats(
+        self,
+        journey_id: str,
+        *,
+        version: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyStats":
+        """Düğüm bazlı istatistik
+
+        ``GET /v1/apps/{appId}/journeys/{journeyId}/stats``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/journeys/{journeyId}/stats",
+            path_params={"journeyId": journey_id},
+            query={"version": version},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def runs(
+        self,
+        journey_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        user_id: Optional[str] = None,
+        version: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyRunPage":
+        """Run listesi
+
+        ``GET /v1/apps/{appId}/journeys/{journeyId}/runs``
+
+        Parametreler:
+            status: Değerler: "active", "waiting", "completed", "exited", "failed".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/journeys/{journeyId}/runs",
+            path_params={"journeyId": journey_id},
+            query={"limit": limit, "cursor": cursor, "status": status, "user_id": user_id, "version": version},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def runs_all(
+        self,
+        journey_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        user_id: Optional[str] = None,
+        version: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["JourneyRun"]:
+        """``runs`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.runs(
+                journey_id,
+                limit=limit,
+                status=status,
+                user_id=user_id,
+                version=version,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def trigger(
+        self,
+        journey_id: str,
+        body: "TriggerRunDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyTriggerResult":
+        """Kullanıcıyı journey'e sok (external_id, user_id veya alias; context Liquid custom_data)
+
+        ``POST /v1/apps/{appId}/journeys/{journeyId}/runs``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/journeys/{journeyId}/runs",
+            path_params={"journeyId": journey_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def run(
+        self,
+        journey_id: str,
+        run_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyRunDetail":
+        """Run detayı ve adımlar
+
+        ``GET /v1/apps/{appId}/journeys/{journeyId}/runs/{runId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/journeys/{journeyId}/runs/{runId}",
+            path_params={"journeyId": journey_id, "runId": run_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def exit_run(
+        self,
+        journey_id: str,
+        run_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyRunDetail":
+        """Run'ı sonlandır
+
+        ``DELETE /v1/apps/{appId}/journeys/{journeyId}/runs/{runId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/journeys/{journeyId}/runs/{runId}",
+            path_params={"journeyId": journey_id, "runId": run_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_for_user(
+        self,
+        label: str,
+        value: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "UserJourneyRuns":
+        """Kullanıcının journey run'ları
+
+        ``GET /v1/apps/{appId}/users/by/{label}/{value}/journeys``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/users/by/{label}/{value}/journeys",
+            path_params={"label": label, "value": value},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class GeneratedResources:
     """İstemciye kaynak alanlarını ekleyen üretilmiş karışım (mixin) sınıfı."""
 
@@ -2862,6 +3311,7 @@ class GeneratedResources:
     apps: AppsResource
     api_keys: ApiKeysResource
     organization: OrganizationResource
+    journeys: JourneysResource
 
     def _init_resources(self) -> None:
         self.notifications = NotificationsResource(self)  # type: ignore[arg-type]
@@ -2883,6 +3333,7 @@ class GeneratedResources:
         self.apps = AppsResource(self)  # type: ignore[arg-type]
         self.api_keys = ApiKeysResource(self)  # type: ignore[arg-type]
         self.organization = OrganizationResource(self)  # type: ignore[arg-type]
+        self.journeys = JourneysResource(self)  # type: ignore[arg-type]
 
 
 RESOURCE_NAMES = (
@@ -2905,4 +3356,5 @@ RESOURCE_NAMES = (
     "apps",
     "api_keys",
     "organization",
+    "journeys",
 )

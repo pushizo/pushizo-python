@@ -932,6 +932,7 @@ class CreateInAppDto(TypedDict, total=False):
     display: "CreateInAppDtoDisplay"
     audience: "CreateInAppDtoAudience"
     frequency: "CreateInAppDtoFrequency"
+    journey_only: bool
     priority: int
     start_at: Optional[str]
     end_at: Optional[str]
@@ -1197,7 +1198,7 @@ class CreateWebhookDto(TypedDict, total=False):
     #: Zorunlu.
     url: str
     description: Optional[str]
-    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed".
+    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited".
     events: List[str]
     event_filters: "CreateWebhookDtoEventFilters"
     batch: bool
@@ -1724,6 +1725,8 @@ class InAppMessage(TypedDict, total=False):
     #: Zorunlu.
     frequency: "InAppMessageFrequency"
     #: Zorunlu.
+    journey_only: bool
+    #: Zorunlu.
     start_at: Optional[str]
     #: Zorunlu.
     end_at: Optional[str]
@@ -1845,6 +1848,414 @@ class InboxReadAllResult(TypedDict, total=False):
     updated: int
     #: Zorunlu.
     unread_count: int
+
+
+class Journey(TypedDict, total=False):
+    """Journey şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    description: Optional[str]
+    #: Zorunlu. Değerler: "draft", "active", "paused", "archived".
+    status: str
+    #: Zorunlu.
+    current_version: Optional[int]
+    #: Zorunlu.
+    draft_version: Optional[int]
+    #: Zorunlu.
+    trigger_kind: Optional[str]
+    #: Zorunlu.
+    published_at: Optional[str]
+    #: Zorunlu.
+    created_by: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+    #: Zorunlu.
+    summary: "JourneySummary"
+
+
+class JourneyDetail(TypedDict, total=False):
+    """JourneyDetail şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    description: Optional[str]
+    #: Zorunlu. Değerler: "draft", "active", "paused", "archived".
+    status: str
+    #: Zorunlu.
+    current_version: Optional[int]
+    #: Zorunlu.
+    draft_version: Optional[int]
+    #: Zorunlu.
+    trigger_kind: Optional[str]
+    #: Zorunlu.
+    published_at: Optional[str]
+    #: Zorunlu.
+    created_by: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+    #: Zorunlu.
+    summary: "JourneyDetailSummary"
+    #: Zorunlu.
+    editing: "JourneyDetailEditing"
+    #: Zorunlu.
+    issues: List["JourneyDetailIssuesItem"]
+
+
+class JourneyDetailEditing(TypedDict, total=False):
+    """JourneyDetailEditing şeması."""
+
+    #: Zorunlu.
+    version: int
+    #: Zorunlu.
+    graph: Dict[str, Any]
+    #: Zorunlu.
+    settings: Dict[str, Any]
+    #: Zorunlu.
+    published_at: Optional[str]
+    #: Zorunlu.
+    published_by: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class JourneyDetailIssuesItem(TypedDict, total=False):
+    """JourneyDetailIssuesItem şeması."""
+
+    #: Zorunlu.
+    code: str
+    node_id: str
+    edge_id: str
+    #: Zorunlu.
+    message: str
+
+
+class JourneyDetailSummary(TypedDict, total=False):
+    """JourneyDetailSummary şeması."""
+
+    #: Zorunlu.
+    runs_total: int
+    #: Zorunlu.
+    active: int
+    #: Zorunlu.
+    completed: int
+    #: Zorunlu.
+    exited: int
+    #: Zorunlu.
+    failed: int
+    #: Zorunlu.
+    goal_reached: int
+
+
+class JourneyPage(TypedDict, total=False):
+    """JourneyPage şeması."""
+
+    #: Zorunlu.
+    data: List["Journey"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+    #: Zorunlu.
+    has_more: bool
+
+
+class JourneyPublishResult(TypedDict, total=False):
+    """JourneyPublishResult şeması."""
+
+    #: Zorunlu.
+    journey: "Journey"
+    #: Zorunlu.
+    version: int
+    #: Zorunlu.
+    issues: List["JourneyPublishResultIssuesItem"]
+
+
+class JourneyPublishResultIssuesItem(TypedDict, total=False):
+    """JourneyPublishResultIssuesItem şeması."""
+
+    #: Zorunlu.
+    code: str
+    node_id: str
+    edge_id: str
+    #: Zorunlu.
+    message: str
+
+
+class JourneyRun(TypedDict, total=False):
+    """JourneyRun şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    journey_id: str
+    #: Zorunlu.
+    version: int
+    #: Zorunlu.
+    user_id: str
+    #: Zorunlu.
+    external_id: Optional[str]
+    #: Zorunlu. Değerler: "active", "waiting", "completed", "exited", "failed".
+    status: str
+    #: Zorunlu.
+    current_node_id: Optional[str]
+    #: Zorunlu.
+    next_action_at: Optional[str]
+    #: Zorunlu.
+    entered_at: str
+    #: Zorunlu.
+    completed_at: Optional[str]
+    #: Zorunlu.
+    exit_reason: Optional[str]
+    #: Zorunlu.
+    goal_id: Optional[str]
+    #: Zorunlu.
+    goal_reached_at: Optional[str]
+    #: Zorunlu.
+    context: Dict[str, Any]
+
+
+class JourneyRunDetail(TypedDict, total=False):
+    """JourneyRunDetail şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    journey_id: str
+    #: Zorunlu.
+    version: int
+    #: Zorunlu.
+    user_id: str
+    #: Zorunlu.
+    external_id: Optional[str]
+    #: Zorunlu. Değerler: "active", "waiting", "completed", "exited", "failed".
+    status: str
+    #: Zorunlu.
+    current_node_id: Optional[str]
+    #: Zorunlu.
+    next_action_at: Optional[str]
+    #: Zorunlu.
+    entered_at: str
+    #: Zorunlu.
+    completed_at: Optional[str]
+    #: Zorunlu.
+    exit_reason: Optional[str]
+    #: Zorunlu.
+    goal_id: Optional[str]
+    #: Zorunlu.
+    goal_reached_at: Optional[str]
+    #: Zorunlu.
+    context: Dict[str, Any]
+    #: Zorunlu.
+    journey_name: str
+    #: Zorunlu.
+    steps: List["JourneyRunDetailStepsItem"]
+
+
+class JourneyRunDetailStepsItem(TypedDict, total=False):
+    """JourneyRunDetailStepsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    node_id: str
+    #: Zorunlu.
+    node_type: str
+    #: Zorunlu. Değerler: "completed", "waiting", "failed", "skipped".
+    status: str
+    #: Zorunlu.
+    branch: Optional[str]
+    #: Zorunlu.
+    result: Dict[str, Any]
+    #: Zorunlu.
+    started_at: str
+    #: Zorunlu.
+    finished_at: Optional[str]
+
+
+class JourneyRunPage(TypedDict, total=False):
+    """JourneyRunPage şeması."""
+
+    #: Zorunlu.
+    data: List["JourneyRun"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+    #: Zorunlu.
+    has_more: bool
+
+
+class JourneysCreateBody(TypedDict, total=False):
+    """JourneysCreateBody şeması."""
+
+    #: Zorunlu.
+    name: str
+    description: str
+    #: React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+    graph: "JourneysCreateBodyGraph"
+    #: Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md)
+    settings: Dict[str, Any]
+
+
+class JourneysCreateBodyGraph(TypedDict, total=False):
+    """React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)"""
+
+    #: Zorunlu.
+    nodes: List[Dict[str, Any]]
+    #: Zorunlu.
+    edges: List[Dict[str, Any]]
+
+
+class JourneysSaveDraftBody(TypedDict, total=False):
+    """JourneysSaveDraftBody şeması."""
+
+    #: Zorunlu. React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+    graph: "JourneysSaveDraftBodyGraph"
+    #: Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md)
+    settings: Dict[str, Any]
+
+
+class JourneysSaveDraftBodyGraph(TypedDict, total=False):
+    """React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)"""
+
+    #: Zorunlu.
+    nodes: List[Dict[str, Any]]
+    #: Zorunlu.
+    edges: List[Dict[str, Any]]
+
+
+class JourneyStats(TypedDict, total=False):
+    """JourneyStats şeması."""
+
+    #: Zorunlu.
+    version: Optional[int]
+    #: Zorunlu.
+    summary: "JourneyStatsSummary"
+    #: Zorunlu.
+    nodes: List["JourneyStatsNodesItem"]
+    #: Zorunlu.
+    goals: List["JourneyStatsGoalsItem"]
+    #: Zorunlu.
+    exit_reasons: Dict[str, int]
+
+
+class JourneyStatsGoalsItem(TypedDict, total=False):
+    """JourneyStatsGoalsItem şeması."""
+
+    #: Zorunlu.
+    goal_id: str
+    #: Zorunlu.
+    reached: int
+
+
+class JourneyStatsNodesItem(TypedDict, total=False):
+    """JourneyStatsNodesItem şeması."""
+
+    #: Zorunlu.
+    node_id: str
+    #: Zorunlu.
+    node_type: str
+    #: Zorunlu.
+    entered: int
+    #: Zorunlu.
+    completed: int
+    #: Zorunlu.
+    waiting_now: int
+    #: Zorunlu.
+    skipped: int
+    #: Zorunlu.
+    failed: int
+    #: Zorunlu.
+    branches: Dict[str, int]
+    messages: Dict[str, int]
+
+
+class JourneyStatsSummary(TypedDict, total=False):
+    """JourneyStatsSummary şeması."""
+
+    #: Zorunlu.
+    runs_total: int
+    #: Zorunlu.
+    active: int
+    #: Zorunlu.
+    completed: int
+    #: Zorunlu.
+    exited: int
+    #: Zorunlu.
+    failed: int
+    #: Zorunlu.
+    goal_reached: int
+    #: Zorunlu.
+    waiting: int
+    #: Zorunlu.
+    goal_conversion_rate: float
+
+
+class JourneySummary(TypedDict, total=False):
+    """JourneySummary şeması."""
+
+    #: Zorunlu.
+    runs_total: int
+    #: Zorunlu.
+    active: int
+    #: Zorunlu.
+    completed: int
+    #: Zorunlu.
+    exited: int
+    #: Zorunlu.
+    failed: int
+    #: Zorunlu.
+    goal_reached: int
+
+
+class JourneyTriggerResult(TypedDict, total=False):
+    """JourneyTriggerResult şeması."""
+
+    #: Zorunlu.
+    entered: bool
+    #: Zorunlu.
+    run: Optional["JourneyRun"]
+    #: Zorunlu. Değerler: "inactive", "outside_schedule", "re_entry", "already_active", "unknown_user".
+    reason: Optional[str]
+
+
+class JourneyVersionList(TypedDict, total=False):
+    """JourneyVersionList şeması."""
+
+    #: Zorunlu.
+    data: List["JourneyVersionListDataItem"]
+
+
+class JourneyVersionListDataItem(TypedDict, total=False):
+    """JourneyVersionListDataItem şeması."""
+
+    #: Zorunlu.
+    version: int
+    #: Zorunlu.
+    graph: Dict[str, Any]
+    #: Zorunlu.
+    settings: Dict[str, Any]
+    #: Zorunlu.
+    published_at: Optional[str]
+    #: Zorunlu.
+    published_by: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
 
 
 class Member(TypedDict, total=False):
@@ -2896,6 +3307,24 @@ class TemplateVersionListDataItem(TypedDict, total=False):
     created_at: str
 
 
+class TriggerRunDto(TypedDict, total=False):
+    """TriggerRunDto şeması."""
+
+    external_id: str
+    user_id: str
+    alias: "TriggerRunDtoAlias"
+    context: Dict[str, Any]
+
+
+class TriggerRunDtoAlias(TypedDict, total=False):
+    """TriggerRunDtoAlias şeması."""
+
+    #: Zorunlu.
+    label: str
+    #: Zorunlu.
+    value: str
+
+
 class UpdateApiKeyDto(TypedDict, total=False):
     """UpdateApiKeyDto şeması."""
 
@@ -3094,6 +3523,7 @@ class UpdateInAppDto(TypedDict, total=False):
     display: "UpdateInAppDtoDisplay"
     audience: "UpdateInAppDtoAudience"
     frequency: "UpdateInAppDtoFrequency"
+    journey_only: bool
     priority: int
     start_at: Optional[str]
     end_at: Optional[str]
@@ -3125,6 +3555,29 @@ class UpdateInAppDtoFrequency(TypedDict, total=False):
     max_impressions: int
     min_interval_seconds: int
     stop_after_interaction: bool
+
+
+class UpdateJourneyDto(TypedDict, total=False):
+    """UpdateJourneyDto şeması."""
+
+    name: str
+    description: Optional[str]
+
+
+class UpdateNodeDto(TypedDict, total=False):
+    """UpdateNodeDto şeması."""
+
+    data: Dict[str, Any]
+    position: "UpdateNodeDtoPosition"
+
+
+class UpdateNodeDtoPosition(TypedDict, total=False):
+    """UpdateNodeDtoPosition şeması."""
+
+    #: Zorunlu.
+    x: float
+    #: Zorunlu.
+    y: float
 
 
 class UpdateTemplateDto(TypedDict, total=False):
@@ -3218,7 +3671,7 @@ class UpdateWebhookDto(TypedDict, total=False):
 
     url: str
     description: Optional[str]
-    #: Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed".
+    #: Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited".
     events: List[str]
     event_filters: "UpdateWebhookDtoEventFilters"
     batch: bool
@@ -3355,6 +3808,48 @@ class UserIdentity(TypedDict, total=False):
 
     #: Zorunlu.
     identity: Dict[str, str]
+
+
+class UserJourneyRuns(TypedDict, total=False):
+    """UserJourneyRuns şeması."""
+
+    #: Zorunlu.
+    data: List["UserJourneyRunsDataItem"]
+
+
+class UserJourneyRunsDataItem(TypedDict, total=False):
+    """UserJourneyRunsDataItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    journey_id: str
+    #: Zorunlu.
+    version: int
+    #: Zorunlu.
+    user_id: str
+    #: Zorunlu.
+    external_id: Optional[str]
+    #: Zorunlu. Değerler: "active", "waiting", "completed", "exited", "failed".
+    status: str
+    #: Zorunlu.
+    current_node_id: Optional[str]
+    #: Zorunlu.
+    next_action_at: Optional[str]
+    #: Zorunlu.
+    entered_at: str
+    #: Zorunlu.
+    completed_at: Optional[str]
+    #: Zorunlu.
+    exit_reason: Optional[str]
+    #: Zorunlu.
+    goal_id: Optional[str]
+    #: Zorunlu.
+    goal_reached_at: Optional[str]
+    #: Zorunlu.
+    context: Dict[str, Any]
+    #: Zorunlu.
+    journey_name: str
 
 
 class UserList(TypedDict, total=False):
@@ -3691,6 +4186,30 @@ __all__ = [
     "InboxItem",
     "InboxPage",
     "InboxReadAllResult",
+    "Journey",
+    "JourneyDetail",
+    "JourneyDetailEditing",
+    "JourneyDetailIssuesItem",
+    "JourneyDetailSummary",
+    "JourneyPage",
+    "JourneyPublishResult",
+    "JourneyPublishResultIssuesItem",
+    "JourneyRun",
+    "JourneyRunDetail",
+    "JourneyRunDetailStepsItem",
+    "JourneyRunPage",
+    "JourneysCreateBody",
+    "JourneysCreateBodyGraph",
+    "JourneysSaveDraftBody",
+    "JourneysSaveDraftBodyGraph",
+    "JourneyStats",
+    "JourneyStatsGoalsItem",
+    "JourneyStatsNodesItem",
+    "JourneyStatsSummary",
+    "JourneySummary",
+    "JourneyTriggerResult",
+    "JourneyVersionList",
+    "JourneyVersionListDataItem",
     "Member",
     "MemberList",
     "Message",
@@ -3759,6 +4278,8 @@ __all__ = [
     "TemplatePage",
     "TemplateVersionList",
     "TemplateVersionListDataItem",
+    "TriggerRunDto",
+    "TriggerRunDtoAlias",
     "UpdateApiKeyDto",
     "UpdateAppDto",
     "UpdateAppDtoPlatformFlags",
@@ -3781,6 +4302,9 @@ __all__ = [
     "UpdateInAppDtoAudience",
     "UpdateInAppDtoDisplay",
     "UpdateInAppDtoFrequency",
+    "UpdateJourneyDto",
+    "UpdateNodeDto",
+    "UpdateNodeDtoPosition",
     "UpdateTemplateDto",
     "UpdateTemplateDtoContent",
     "UpdateTemplateDtoContentButtonsItem",
@@ -3794,6 +4318,8 @@ __all__ = [
     "UserExport",
     "UserExportEventsItem",
     "UserIdentity",
+    "UserJourneyRuns",
+    "UserJourneyRunsDataItem",
     "UserList",
     "UsersSearchBody",
     "UsersSearchBodyDefinition",
