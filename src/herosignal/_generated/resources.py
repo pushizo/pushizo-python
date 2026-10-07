@@ -214,6 +214,7 @@ class NotificationsResource:
         self,
         message_id: str,
         *,
+        app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Export":
         """Bildirim geçmişi CSV işi (teslimatlar; tamamlanınca download_url)
@@ -224,6 +225,8 @@ class NotificationsResource:
             "GET",
             "/v1/notifications/{messageId}/history",
             path_params={"messageId": message_id},
+            app_id=app_id,
+            query_app_id=True,
             request_options=request_options,
         )
 
@@ -231,6 +234,7 @@ class NotificationsResource:
         self,
         message_id: str,
         *,
+        app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Export":
         """Mesaj olay CSV işi (gönderildi/teslim/açıldı/tıklandı/bounce…; tamamlanınca download_url)
@@ -241,6 +245,8 @@ class NotificationsResource:
             "POST",
             "/v1/notifications/{messageId}/export_events",
             path_params={"messageId": message_id},
+            app_id=app_id,
+            query_app_id=True,
             request_options=request_options,
         )
 
@@ -911,13 +917,16 @@ class SegmentsResource:
         self,
         segment_id: str,
         *,
-        force: str,
+        force: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "SegmentEstimate":
         """Tahmini sayım
 
         ``POST /v1/apps/{appId}/segments/{segmentId}/estimate``
+
+        Parametreler:
+            force: true: önbelleği atla, tam sayım Değerler: "true", "false".
         """
         return self._client._call(
             "POST",
