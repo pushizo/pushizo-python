@@ -13,7 +13,7 @@ from urllib.parse import quote
 
 import httpx
 
-from ._errors import HeroSignalError
+from ._errors import HeroSignalError, NetworkError, error_class_for_status
 from ._generated.resources import GeneratedResources
 from ._types import FileInput, RequestOptions
 from ._version import __version__
@@ -37,9 +37,8 @@ class HeroSignal(GeneratedResources):
             idempotency_key=f"order-{order_id}",
         )
 
-    Kaynaklar (``notifications``, ``users``, ``aliases``, ``subscriptions``, ``events``, ``segments``,
-    ``templates``, ``campaigns``, ``suppressions``, ``exports``, ``imports``, ``webhooks``, ``channels``,
-    ``analytics``, ``apps``, ``organization``) ``api/openapi.yaml``'dan üretilir.
+    Kaynaklar (``notifications``, ``users``, ``segments``, ``templates``, ``campaigns`` …; tam liste
+    ``herosignal._generated.resources.RESOURCE_NAMES``) ``api/openapi.yaml``'dan üretilir.
     """
 
     def __init__(
@@ -228,7 +227,7 @@ class HeroSignal(GeneratedResources):
                     timeout=timeout,
                 )
             except httpx.TransportError as exc:
-                error = HeroSignalError(0, "NETWORK", str(exc) or exc.__class__.__name__)
+                error = NetworkError(0, "NETWORK", str(exc) or exc.__class__.__name__)
             else:
                 if 200 <= response.status_code < 300:
                     return _parse_body(response)
@@ -304,7 +303,7 @@ def _error_from_response(response: httpx.Response) -> HeroSignalError:
     except ValueError:
         envelope = {}
     details = envelope.get("details")
-    return HeroSignalError(
+    return error_class_for_status(response.status_code)(
         response.status_code,
         str(envelope.get("code") or f"HTTP_{response.status_code}"),
         str(envelope.get("message") or f"HTTP {response.status_code}"),
