@@ -59,6 +59,44 @@ class ApiEventsDtoEventsItem(TypedDict, total=False):
     external_id: str
 
 
+class ApiKey(TypedDict, total=False):
+    """ApiKey şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    org_id: str
+    #: Zorunlu.
+    app_id: Optional[str]
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    prefix: str
+    #: Zorunlu.
+    scopes: List[str]
+    #: Zorunlu.
+    last_used_at: Optional[str]
+    #: Zorunlu.
+    expires_at: Optional[str]
+    #: Zorunlu.
+    revoked_at: Optional[str]
+    #: Zorunlu.
+    ip_allowlist: List[str]
+    #: Zorunlu.
+    rotated_at: Optional[str]
+    #: Zorunlu.
+    created_by: Optional[str]
+    #: Zorunlu.
+    created_at: str
+
+
+class ApiKeyList(TypedDict, total=False):
+    """ApiKeyList şeması."""
+
+    #: Zorunlu.
+    data: List["ApiKey"]
+
+
 class App(TypedDict, total=False):
     """App şeması."""
 
@@ -569,6 +607,12 @@ class ChannelConfig(TypedDict, total=False):
 class ChannelConfigConfig(TypedDict, total=False):
     """ChannelConfigConfig şeması."""
 
+    #: Değerler: "token", "certificate".
+    auth_type: str
+    #: Değerler: "sandbox", "production", "universal".
+    certificate_environment: str
+    certificate_subject: str
+    certificate_expires_at: str
     key_id: str
     team_id: str
     bundle_id: str
@@ -701,6 +745,27 @@ class ConversionsReportTotals(TypedDict, total=False):
     revenue: float
 
 
+class CopyTemplateDto(TypedDict, total=False):
+    """CopyTemplateDto şeması."""
+
+    #: Zorunlu.
+    target_app_id: str
+    name: str
+
+
+class CreateAppApiKeyDto(TypedDict, total=False):
+    """CreateAppApiKeyDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "admin", "notifications:write", "users:read", "users:write", "events:write", "segments:read", "analytics:read".
+    scopes: List[str]
+    #: Değerler: "live", "test".
+    environment: str
+    expires_at: Optional[str]
+    ip_allowlist: List[str]
+
+
 class CreateAppDto(TypedDict, total=False):
     """CreateAppDto şeması."""
 
@@ -722,10 +787,43 @@ class CreateAppDtoPlatformFlags(TypedDict, total=False):
     sms: bool
 
 
+class CreatedApiKey(TypedDict, total=False):
+    """CreatedApiKey şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    org_id: str
+    #: Zorunlu.
+    app_id: Optional[str]
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    prefix: str
+    #: Zorunlu.
+    scopes: List[str]
+    #: Zorunlu.
+    last_used_at: Optional[str]
+    #: Zorunlu.
+    expires_at: Optional[str]
+    #: Zorunlu.
+    revoked_at: Optional[str]
+    #: Zorunlu.
+    ip_allowlist: List[str]
+    #: Zorunlu.
+    rotated_at: Optional[str]
+    #: Zorunlu.
+    created_by: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    key: str
+
+
 class CreateExportDto(TypedDict, total=False):
     """CreateExportDto şeması."""
 
-    #: Zorunlu. Değerler: "users", "subscriptions", "events", "deliveries".
+    #: Zorunlu. Değerler: "users", "subscriptions", "events", "deliveries", "message_events".
     type: str
     filters: "CreateExportDtoFilters"
 
@@ -745,6 +843,50 @@ CreateExportDtoFilters = TypedDict(
     },
     total=False,
 )
+
+
+class CreateInAppDto(TypedDict, total=False):
+    """CreateInAppDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    triggers: List[Any]
+    #: Zorunlu.
+    display: "CreateInAppDtoDisplay"
+    audience: "CreateInAppDtoAudience"
+    frequency: "CreateInAppDtoFrequency"
+    priority: int
+    start_at: Optional[str]
+    end_at: Optional[str]
+
+
+class CreateInAppDtoAudience(TypedDict, total=False):
+    """CreateInAppDtoAudience şeması."""
+
+    included_segments: List[str]
+    excluded_segments: List[str]
+
+
+class CreateInAppDtoDisplay(TypedDict, total=False):
+    """CreateInAppDtoDisplay şeması."""
+
+    #: Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
+    layout: str
+    background_color: str
+    text_color: str
+    dismissible: bool
+    auto_dismiss_seconds: int
+    #: Zorunlu.
+    blocks: List[Any]
+
+
+class CreateInAppDtoFrequency(TypedDict, total=False):
+    """CreateInAppDtoFrequency şeması."""
+
+    max_impressions: int
+    min_interval_seconds: int
+    stop_after_interaction: bool
 
 
 class CreateNotificationDto(TypedDict, total=False):
@@ -777,6 +919,19 @@ class CreateNotificationDto(TypedDict, total=False):
     chrome_web_image: str
     chrome_web_badge: str
     web_push_topic: str
+    name: str
+    small_icon: str
+    large_icon: str
+    android_accent_color: str
+    #: Değerler: 1, 0, -1.
+    android_visibility: int
+    web_buttons: List["CreateNotificationDtoWebButtonsItem"]
+    require_interaction: bool
+    ios_relevance_score: float
+    thread_id: str
+    target_content_identifier: str
+    throttle_rate_per_minute: int
+    sms_media_urls: List[str]
     content_available: bool
     mutable_content: bool
     collapse_id: str
@@ -830,6 +985,20 @@ class CreateNotificationDtoTarget(TypedDict, total=False):
     #: Değerler: "ios_push", "android_push", "web_push", "email", "sms".
     channels: List[str]
     test_devices_only: bool
+    email_to: List[str]
+    include_phone_numbers: List[str]
+    include_unsubscribed: bool
+
+
+class CreateNotificationDtoWebButtonsItem(TypedDict, total=False):
+    """CreateNotificationDtoWebButtonsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    text: str
+    icon: str
+    url: str
 
 
 class CreateNotificationResult(TypedDict, total=False):
@@ -896,6 +1065,17 @@ class CreateTemplateDtoContent(TypedDict, total=False):
     chrome_web_image: str
     chrome_web_badge: str
     web_push_topic: str
+    small_icon: str
+    large_icon: str
+    android_accent_color: str
+    #: Değerler: 1, 0, -1.
+    android_visibility: int
+    web_buttons: List["CreateTemplateDtoContentWebButtonsItem"]
+    require_interaction: bool
+    ios_relevance_score: float
+    thread_id: str
+    target_content_identifier: str
+    sms_media_urls: List[str]
     content_available: bool
     mutable_content: bool
     custom_data: Dict[str, Any]
@@ -924,13 +1104,24 @@ class CreateTemplateDtoContentButtonsItem(TypedDict, total=False):
     url: str
 
 
+class CreateTemplateDtoContentWebButtonsItem(TypedDict, total=False):
+    """CreateTemplateDtoContentWebButtonsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    text: str
+    icon: str
+    url: str
+
+
 class CreateWebhookDto(TypedDict, total=False):
     """CreateWebhookDto şeması."""
 
     #: Zorunlu.
     url: str
     description: Optional[str]
-    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed".
+    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed".
     events: List[str]
     event_filters: "CreateWebhookDtoEventFilters"
     batch: bool
@@ -1059,6 +1250,32 @@ class EngagementReportTotals(TypedDict, total=False):
     opened: int
     #: Zorunlu.
     clicked: int
+
+
+class EstimateRecipientsDto(TypedDict, total=False):
+    """EstimateRecipientsDto şeması."""
+
+    app_id: str
+    #: Zorunlu.
+    target: "EstimateRecipientsDtoTarget"
+
+
+class EstimateRecipientsDtoTarget(TypedDict, total=False):
+    """EstimateRecipientsDtoTarget şeması."""
+
+    all: bool
+    include_subscription_ids: List[str]
+    include_external_ids: List[str]
+    include_aliases: Dict[str, List[str]]
+    included_segments: List[str]
+    excluded_segments: List[str]
+    filters: Any
+    #: Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+    channels: List[str]
+    test_devices_only: bool
+    email_to: List[str]
+    include_phone_numbers: List[str]
+    include_unsubscribed: bool
 
 
 class EventDefinition(TypedDict, total=False):
@@ -1222,7 +1439,7 @@ class Export(TypedDict, total=False):
     id: str
     #: Zorunlu.
     app_id: str
-    #: Zorunlu. Değerler: "users", "subscriptions", "events", "deliveries".
+    #: Zorunlu. Değerler: "users", "subscriptions", "events", "deliveries", "message_events".
     type: str
     #: Zorunlu.
     filters: "ExportFilters"
@@ -1394,6 +1611,142 @@ class ImportStats(TypedDict, total=False):
     created_subscriptions: int
     skipped: int
     errors: int
+
+
+class InAppMessage(TypedDict, total=False):
+    """InAppMessage şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "draft", "active", "paused", "archived".
+    status: str
+    #: Zorunlu.
+    priority: int
+    #: Zorunlu.
+    triggers: List[Any]
+    #: Zorunlu.
+    display: "InAppMessageDisplay"
+    #: Zorunlu.
+    audience: "InAppMessageAudience"
+    #: Zorunlu.
+    frequency: "InAppMessageFrequency"
+    #: Zorunlu.
+    start_at: Optional[str]
+    #: Zorunlu.
+    end_at: Optional[str]
+    #: Zorunlu.
+    stats: "InAppMessageStats"
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class InAppMessageAudience(TypedDict, total=False):
+    """InAppMessageAudience şeması."""
+
+    included_segments: List[str]
+    excluded_segments: List[str]
+
+
+class InAppMessageDisplay(TypedDict, total=False):
+    """InAppMessageDisplay şeması."""
+
+    #: Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
+    layout: str
+    background_color: str
+    text_color: str
+    dismissible: bool
+    auto_dismiss_seconds: int
+    #: Zorunlu.
+    blocks: List[Any]
+
+
+class InAppMessageFrequency(TypedDict, total=False):
+    """InAppMessageFrequency şeması."""
+
+    max_impressions: int
+    min_interval_seconds: int
+    stop_after_interaction: bool
+
+
+class InAppMessagePage(TypedDict, total=False):
+    """InAppMessagePage şeması."""
+
+    #: Zorunlu.
+    data: List["InAppMessage"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+    #: Zorunlu.
+    has_more: bool
+
+
+class InAppMessageStats(TypedDict, total=False):
+    """InAppMessageStats şeması."""
+
+    #: Zorunlu.
+    impressions: int
+    #: Zorunlu.
+    clicks: int
+    #: Zorunlu.
+    dismissals: int
+    #: Zorunlu.
+    unique_users: int
+    #: Zorunlu.
+    ctr: float
+
+
+class InAppStatusDto(TypedDict, total=False):
+    """InAppStatusDto şeması."""
+
+    #: Zorunlu. Değerler: "draft", "active", "paused", "archived".
+    status: str
+
+
+class InboxItem(TypedDict, total=False):
+    """InboxItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    message_id: Optional[str]
+    #: Zorunlu.
+    title: Optional[str]
+    #: Zorunlu.
+    body: Optional[str]
+    #: Zorunlu.
+    url: Optional[str]
+    #: Zorunlu.
+    image_url: Optional[str]
+    #: Zorunlu.
+    data: Dict[str, str]
+    #: Zorunlu.
+    read: bool
+    #: Zorunlu.
+    read_at: Optional[str]
+    #: Zorunlu.
+    archived_at: Optional[str]
+    #: Zorunlu.
+    expires_at: Optional[str]
+    #: Zorunlu.
+    created_at: str
+
+
+class InboxPage(TypedDict, total=False):
+    """InboxPage şeması."""
+
+    #: Zorunlu.
+    data: List["InboxItem"]
+    #: Zorunlu.
+    unread_count: int
+    #: Zorunlu.
+    next_cursor: Optional[str]
+    #: Zorunlu.
+    has_more: bool
 
 
 class Member(TypedDict, total=False):
@@ -1868,6 +2221,19 @@ class ProvidersReportTotals(TypedDict, total=False):
     failure_rate: Optional[float]
 
 
+class RecipientEstimate(TypedDict, total=False):
+    """RecipientEstimate şeması."""
+
+    #: Zorunlu.
+    recipients_estimate: int
+    #: Zorunlu.
+    by_channel: Dict[str, int]
+    #: Zorunlu.
+    unknown_contacts: int
+    #: Zorunlu.
+    external_id_missing: List[str]
+
+
 class RenderPreview(TypedDict, total=False):
     """RenderPreview şeması."""
 
@@ -1978,6 +2344,17 @@ class RenderTemplateDtoContent(TypedDict, total=False):
     chrome_web_image: str
     chrome_web_badge: str
     web_push_topic: str
+    small_icon: str
+    large_icon: str
+    android_accent_color: str
+    #: Değerler: 1, 0, -1.
+    android_visibility: int
+    web_buttons: List["RenderTemplateDtoContentWebButtonsItem"]
+    require_interaction: bool
+    ios_relevance_score: float
+    thread_id: str
+    target_content_identifier: str
+    sms_media_urls: List[str]
     content_available: bool
     mutable_content: bool
     custom_data: Dict[str, Any]
@@ -1997,6 +2374,17 @@ class RenderTemplateDtoContent(TypedDict, total=False):
 
 class RenderTemplateDtoContentButtonsItem(TypedDict, total=False):
     """RenderTemplateDtoContentButtonsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    text: str
+    icon: str
+    url: str
+
+
+class RenderTemplateDtoContentWebButtonsItem(TypedDict, total=False):
+    """RenderTemplateDtoContentWebButtonsItem şeması."""
 
     #: Zorunlu.
     id: str
@@ -2421,6 +2809,16 @@ class TemplateVersionListDataItem(TypedDict, total=False):
     created_at: str
 
 
+class UpdateApiKeyDto(TypedDict, total=False):
+    """UpdateApiKeyDto şeması."""
+
+    name: str
+    #: Değerler: "admin", "notifications:write", "users:read", "users:write", "events:write", "segments:read", "analytics:read".
+    scopes: List[str]
+    ip_allowlist: List[str]
+    expires_at: Optional[str]
+
+
 class UpdateAppDto(TypedDict, total=False):
     """UpdateAppDto şeması."""
 
@@ -2525,6 +2923,47 @@ class UpdateAppDtoSettingsWebPushPromptTextsValue(TypedDict, total=False):
     cancel: str
 
 
+class UpdateInAppDto(TypedDict, total=False):
+    """UpdateInAppDto şeması."""
+
+    name: str
+    triggers: List[Any]
+    display: "UpdateInAppDtoDisplay"
+    audience: "UpdateInAppDtoAudience"
+    frequency: "UpdateInAppDtoFrequency"
+    priority: int
+    start_at: Optional[str]
+    end_at: Optional[str]
+
+
+class UpdateInAppDtoAudience(TypedDict, total=False):
+    """UpdateInAppDtoAudience şeması."""
+
+    included_segments: List[str]
+    excluded_segments: List[str]
+
+
+class UpdateInAppDtoDisplay(TypedDict, total=False):
+    """UpdateInAppDtoDisplay şeması."""
+
+    #: Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
+    layout: str
+    background_color: str
+    text_color: str
+    dismissible: bool
+    auto_dismiss_seconds: int
+    #: Zorunlu.
+    blocks: List[Any]
+
+
+class UpdateInAppDtoFrequency(TypedDict, total=False):
+    """UpdateInAppDtoFrequency şeması."""
+
+    max_impressions: int
+    min_interval_seconds: int
+    stop_after_interaction: bool
+
+
 class UpdateTemplateDto(TypedDict, total=False):
     """UpdateTemplateDto şeması."""
 
@@ -2561,6 +3000,17 @@ class UpdateTemplateDtoContent(TypedDict, total=False):
     chrome_web_image: str
     chrome_web_badge: str
     web_push_topic: str
+    small_icon: str
+    large_icon: str
+    android_accent_color: str
+    #: Değerler: 1, 0, -1.
+    android_visibility: int
+    web_buttons: List["UpdateTemplateDtoContentWebButtonsItem"]
+    require_interaction: bool
+    ios_relevance_score: float
+    thread_id: str
+    target_content_identifier: str
+    sms_media_urls: List[str]
     content_available: bool
     mutable_content: bool
     custom_data: Dict[str, Any]
@@ -2589,12 +3039,23 @@ class UpdateTemplateDtoContentButtonsItem(TypedDict, total=False):
     url: str
 
 
+class UpdateTemplateDtoContentWebButtonsItem(TypedDict, total=False):
+    """UpdateTemplateDtoContentWebButtonsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    text: str
+    icon: str
+    url: str
+
+
 class UpdateWebhookDto(TypedDict, total=False):
     """UpdateWebhookDto şeması."""
 
     url: str
     description: Optional[str]
-    #: Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed".
+    #: Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed".
     events: List[str]
     event_filters: "UpdateWebhookDtoEventFilters"
     batch: bool
@@ -2692,6 +3153,45 @@ class UserDetailAliasesItem(TypedDict, total=False):
     label: str
     #: Zorunlu.
     value: str
+
+
+class UserExport(TypedDict, total=False):
+    """UserExport şeması."""
+
+    #: Zorunlu.
+    exported_at: str
+    #: Zorunlu.
+    user: "UserDetail"
+    #: Zorunlu.
+    events: List["UserExportEventsItem"]
+
+
+class UserExportEventsItem(TypedDict, total=False):
+    """UserExportEventsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    user_id: Optional[str]
+    #: Zorunlu.
+    subscription_id: Optional[str]
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    properties: Dict[str, Any]
+    #: Zorunlu.
+    value: Optional[float]
+    #: Zorunlu. Değerler: "sdk", "api", "system", "import".
+    source: str
+    #: Zorunlu.
+    occurred_at: str
+
+
+class UserIdentity(TypedDict, total=False):
+    """UserIdentity şeması."""
+
+    #: Zorunlu.
+    identity: Dict[str, str]
 
 
 class UserList(TypedDict, total=False):
@@ -2910,6 +3410,8 @@ __all__ = [
     "AddSubscriptionDtoDevice",
     "ApiEventsDto",
     "ApiEventsDtoEventsItem",
+    "ApiKey",
+    "ApiKeyList",
     "App",
     "AppList",
     "AppPlatformFlags",
@@ -2953,18 +3455,27 @@ __all__ = [
     "ConversionsReportPrevious",
     "ConversionsReportRowsItem",
     "ConversionsReportTotals",
+    "CopyTemplateDto",
+    "CreateAppApiKeyDto",
     "CreateAppDto",
     "CreateAppDtoPlatformFlags",
+    "CreatedApiKey",
     "CreateExportDto",
     "CreateExportDtoFilters",
+    "CreateInAppDto",
+    "CreateInAppDtoAudience",
+    "CreateInAppDtoDisplay",
+    "CreateInAppDtoFrequency",
     "CreateNotificationDto",
     "CreateNotificationDtoButtonsItem",
     "CreateNotificationDtoTarget",
+    "CreateNotificationDtoWebButtonsItem",
     "CreateNotificationResult",
     "CreateSuppressionDto",
     "CreateTemplateDto",
     "CreateTemplateDtoContent",
     "CreateTemplateDtoContentButtonsItem",
+    "CreateTemplateDtoContentWebButtonsItem",
     "CreateWebhookDto",
     "CreateWebhookDtoEventFilters",
     "Delivery",
@@ -2974,6 +3485,8 @@ __all__ = [
     "EngagementReportPrevious",
     "EngagementReportRowsItem",
     "EngagementReportTotals",
+    "EstimateRecipientsDto",
+    "EstimateRecipientsDtoTarget",
     "EventDefinition",
     "EventDefinitionDetail",
     "EventDefinitionDetailDailyItem",
@@ -2997,6 +3510,15 @@ __all__ = [
     "Import",
     "ImportList",
     "ImportStats",
+    "InAppMessage",
+    "InAppMessageAudience",
+    "InAppMessageDisplay",
+    "InAppMessageFrequency",
+    "InAppMessagePage",
+    "InAppMessageStats",
+    "InAppStatusDto",
+    "InboxItem",
+    "InboxPage",
     "Member",
     "MemberList",
     "Message",
@@ -3027,6 +3549,7 @@ __all__ = [
     "ProvidersReportRowsItem",
     "ProvidersReportRowsItemErrorsItem",
     "ProvidersReportTotals",
+    "RecipientEstimate",
     "RenderPreview",
     "RenderPreviewButtonsItem",
     "RenderPreviewEmail",
@@ -3034,6 +3557,7 @@ __all__ = [
     "RenderTemplateDto",
     "RenderTemplateDtoContent",
     "RenderTemplateDtoContentButtonsItem",
+    "RenderTemplateDtoContentWebButtonsItem",
     "RenderTemplateDtoUser",
     "ScheduleCampaignDto",
     "ScheduleCampaignDtoRecurrence",
@@ -3064,6 +3588,7 @@ __all__ = [
     "TemplatePage",
     "TemplateVersionList",
     "TemplateVersionListDataItem",
+    "UpdateApiKeyDto",
     "UpdateAppDto",
     "UpdateAppDtoPlatformFlags",
     "UpdateAppDtoSettings",
@@ -3074,15 +3599,23 @@ __all__ = [
     "UpdateAppDtoSettingsWebPushPrompt",
     "UpdateAppDtoSettingsWebPushPromptCategoriesItem",
     "UpdateAppDtoSettingsWebPushPromptTextsValue",
+    "UpdateInAppDto",
+    "UpdateInAppDtoAudience",
+    "UpdateInAppDtoDisplay",
+    "UpdateInAppDtoFrequency",
     "UpdateTemplateDto",
     "UpdateTemplateDtoContent",
     "UpdateTemplateDtoContentButtonsItem",
+    "UpdateTemplateDtoContentWebButtonsItem",
     "UpdateWebhookDto",
     "UpdateWebhookDtoEventFilters",
     "UpsertUserDto",
     "User",
     "UserDetail",
     "UserDetailAliasesItem",
+    "UserExport",
+    "UserExportEventsItem",
+    "UserIdentity",
     "UserList",
     "UsersSearchBody",
     "UsersSearchBodyDefinition",
