@@ -49,6 +49,7 @@ class NotificationsResource:
         kind: Optional[str] = None,
         status: Optional[str] = None,
         sort: Optional[str] = None,
+        label: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "MessageList":
@@ -66,7 +67,7 @@ class NotificationsResource:
             "GET",
             "/v1/notifications",
             path_params={},
-            query={"limit": limit, "cursor": cursor, "source": source, "kind": kind, "status": status, "sort": sort},
+            query={"limit": limit, "cursor": cursor, "source": source, "kind": kind, "status": status, "sort": sort, "label": label},
             app_id=app_id,
             query_app_id=True,
             request_options=request_options,
@@ -81,6 +82,7 @@ class NotificationsResource:
         kind: Optional[str] = None,
         status: Optional[str] = None,
         sort: Optional[str] = None,
+        label: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> Iterator["Message"]:
@@ -92,6 +94,7 @@ class NotificationsResource:
                 kind=kind,
                 status=status,
                 sort=sort,
+                label=label,
                 app_id=app_id,
                 request_options=request_options,
                 cursor=next_cursor,
@@ -1072,6 +1075,25 @@ class TemplatesResource:
             request_options=request_options,
         )
 
+    def stats(
+        self,
+        template_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "TemplateStats":
+        """Şablon analitiği
+
+        ``GET /v1/apps/{appId}/templates/{templateId}/stats``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/templates/{templateId}/stats",
+            path_params={"templateId": template_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def copy_to_app(
         self,
         template_id: str,
@@ -1149,6 +1171,7 @@ class CampaignsResource:
         status: Optional[str] = None,
         type: Optional[str] = None,
         channel: Optional[str] = None,
+        label: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "CampaignPage":
@@ -1165,7 +1188,7 @@ class CampaignsResource:
             "GET",
             "/v1/apps/{appId}/campaigns",
             path_params={},
-            query={"limit": limit, "cursor": cursor, "q": q, "status": status, "type": type, "channel": channel},
+            query={"limit": limit, "cursor": cursor, "q": q, "status": status, "type": type, "channel": channel, "label": label},
             app_id=app_id,
             request_options=request_options,
         )
@@ -1179,6 +1202,7 @@ class CampaignsResource:
         status: Optional[str] = None,
         type: Optional[str] = None,
         channel: Optional[str] = None,
+        label: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> Iterator["Campaign"]:
@@ -1190,6 +1214,7 @@ class CampaignsResource:
                 status=status,
                 type=type,
                 channel=channel,
+                label=label,
                 app_id=app_id,
                 request_options=request_options,
                 cursor=next_cursor,
@@ -1426,6 +1451,46 @@ class CampaignsResource:
             "GET",
             "/v1/apps/{appId}/campaigns/{campaignId}/stats",
             path_params={"campaignId": campaign_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def variant_stats(
+        self,
+        campaign_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CampaignVariantStats":
+        """A/B varyant karşılaştırması
+
+        ``GET /v1/apps/{appId}/campaigns/{campaignId}/variants/stats``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/campaigns/{campaignId}/variants/stats",
+            path_params={"campaignId": campaign_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def select_winner(
+        self,
+        campaign_id: str,
+        body: "SelectWinnerDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Campaign":
+        """A/B kazananını seç
+
+        ``POST /v1/apps/{appId}/campaigns/{campaignId}/winner``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/campaigns/{campaignId}/winner",
+            path_params={"campaignId": campaign_id},
+            body=body,
             app_id=app_id,
             request_options=request_options,
         )
@@ -2539,6 +2604,30 @@ class AnalyticsResource:
             request_options=request_options,
         )
 
+    def retention(
+        self,
+        *,
+        weeks: Optional[int] = None,
+        format: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RetentionReport":
+        """Retention kohortu
+
+        ``GET /v1/apps/{appId}/analytics/retention``
+
+        Parametreler:
+            format: Değerler: "json", "csv".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/analytics/retention",
+            path_params={},
+            query={"weeks": weeks, "format": format},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def engagement(
         self,
         *,
@@ -2837,6 +2926,91 @@ class OrganizationResource:
                 cursor=next_cursor,
             ),
             cursor,
+        )
+
+
+class CategoriesResource:
+    """categories kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "MessageCategoryList":
+        """Mesaj kategorileri
+
+        ``GET /v1/apps/{appId}/categories``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/categories",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: "CreateCategoryDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "MessageCategory":
+        """Kategori oluştur
+
+        ``POST /v1/apps/{appId}/categories``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/categories",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        category_id: str,
+        body: "UpdateCategoryDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "MessageCategory":
+        """Kategori güncelle
+
+        ``PATCH /v1/apps/{appId}/categories/{categoryId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/categories/{categoryId}",
+            path_params={"categoryId": category_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        category_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Kategori sil
+
+        ``DELETE /v1/apps/{appId}/categories/{categoryId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/categories/{categoryId}",
+            path_params={"categoryId": category_id},
+            app_id=app_id,
+            request_options=request_options,
         )
 
 
@@ -3289,6 +3463,55 @@ class JourneysResource:
         )
 
 
+class PreferencesResource:
+    """preferences kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def get(
+        self,
+        label: str,
+        value: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "UserPreferences":
+        """Kullanıcının tercihleri (alias ile)
+
+        ``GET /v1/apps/{appId}/users/by/{label}/{value}/preferences``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/users/by/{label}/{value}/preferences",
+            path_params={"label": label, "value": value},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def set(
+        self,
+        label: str,
+        value: str,
+        body: "SetPreferencesDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "UserPreferences":
+        """Kullanıcı tercihlerini yaz (alias ile)
+
+        ``PUT /v1/apps/{appId}/users/by/{label}/{value}/preferences``
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/users/by/{label}/{value}/preferences",
+            path_params={"label": label, "value": value},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class GeneratedResources:
     """İstemciye kaynak alanlarını ekleyen üretilmiş karışım (mixin) sınıfı."""
 
@@ -3311,7 +3534,9 @@ class GeneratedResources:
     apps: AppsResource
     api_keys: ApiKeysResource
     organization: OrganizationResource
+    categories: CategoriesResource
     journeys: JourneysResource
+    preferences: PreferencesResource
 
     def _init_resources(self) -> None:
         self.notifications = NotificationsResource(self)  # type: ignore[arg-type]
@@ -3333,7 +3558,9 @@ class GeneratedResources:
         self.apps = AppsResource(self)  # type: ignore[arg-type]
         self.api_keys = ApiKeysResource(self)  # type: ignore[arg-type]
         self.organization = OrganizationResource(self)  # type: ignore[arg-type]
+        self.categories = CategoriesResource(self)  # type: ignore[arg-type]
         self.journeys = JourneysResource(self)  # type: ignore[arg-type]
+        self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
 
 
 RESOURCE_NAMES = (
@@ -3356,5 +3583,7 @@ RESOURCE_NAMES = (
     "apps",
     "api_keys",
     "organization",
+    "categories",
     "journeys",
+    "preferences",
 )

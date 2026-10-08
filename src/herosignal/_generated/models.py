@@ -148,6 +148,11 @@ class AppSettings(TypedDict, total=False):
 
     quietHours: Optional["AppSettingsQuietHours"]
     frequencyCap: Optional["AppSettingsFrequencyCap"]
+    frequencyCaps: List["AppSettingsFrequencyCapsItem"]
+    inApp: "AppSettingsInApp"
+    androidChannels: List["AppSettingsAndroidChannelsItem"]
+    sms: "AppSettingsSms"
+    preferenceCenter: "AppSettingsPreferenceCenter"
     defaultTtlSeconds: int
     identityVerificationRequired: bool
     allowedOrigins: List[str]
@@ -155,6 +160,21 @@ class AppSettings(TypedDict, total=False):
     webPush: "AppSettingsWebPush"
     onboarding: "AppSettingsOnboarding"
     sdkSetup: Optional["AppSettingsSdkSetup"]
+
+
+class AppSettingsAndroidChannelsItem(TypedDict, total=False):
+    """AppSettingsAndroidChannelsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    description: str
+    #: Zorunlu. Değerler: "low", "default", "high", "urgent".
+    importance: str
+    sound: str
+    vibration: bool
+    group: str
 
 
 class AppSettingsFrequencyCap(TypedDict, total=False):
@@ -166,6 +186,32 @@ class AppSettingsFrequencyCap(TypedDict, total=False):
     windowHours: int
 
 
+class AppSettingsFrequencyCapsItem(TypedDict, total=False):
+    """AppSettingsFrequencyCapsItem şeması."""
+
+    #: Zorunlu.
+    max: int
+    #: Zorunlu.
+    window: "AppSettingsFrequencyCapsItemWindow"
+    #: Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+    channels: List[str]
+
+
+class AppSettingsFrequencyCapsItemWindow(TypedDict, total=False):
+    """AppSettingsFrequencyCapsItemWindow şeması."""
+
+    #: Zorunlu.
+    value: int
+    #: Zorunlu. Değerler: "minutes", "hours", "days", "weeks".
+    unit: str
+
+
+class AppSettingsInApp(TypedDict, total=False):
+    """AppSettingsInApp şeması."""
+
+    minIntervalSeconds: int
+
+
 class AppSettingsOnboarding(TypedDict, total=False):
     """AppSettingsOnboarding şeması."""
 
@@ -173,6 +219,26 @@ class AppSettingsOnboarding(TypedDict, total=False):
     step: int
     simulation: bool
     completed_at: Optional[str]
+
+
+class AppSettingsPreferenceCenter(TypedDict, total=False):
+    """AppSettingsPreferenceCenter şeması."""
+
+    enabled: bool
+    brandName: str
+    logoUrl: str
+    accentColor: str
+    customUnsubscribeUrl: str
+    texts: Dict[str, "AppSettingsPreferenceCenterTextsValue"]
+
+
+class AppSettingsPreferenceCenterTextsValue(TypedDict, total=False):
+    """AppSettingsPreferenceCenterTextsValue şeması."""
+
+    title: str
+    description: str
+    unsubscribeAll: str
+    saved: str
 
 
 class AppSettingsQuietHours(TypedDict, total=False):
@@ -201,6 +267,14 @@ class AppSettingsSdkSetup(TypedDict, total=False):
     detectedSubscriptionId: Optional[str]
     testMessageId: Optional[str]
     completedAt: Optional[str]
+
+
+class AppSettingsSms(TypedDict, total=False):
+    """AppSettingsSms şeması."""
+
+    helpReply: str
+    stopReply: str
+    autoReply: bool
 
 
 class AppSettingsWebPush(TypedDict, total=False):
@@ -260,6 +334,8 @@ class AppSettingsWebPushPrompt(TypedDict, total=False):
     enabled: bool
     #: Zorunlu. Değerler: "slidedown", "native".
     type: str
+    #: Değerler: "push", "email", "sms", "email_sms".
+    collect: str
     delaySeconds: int
     pageViews: int
     scrollPercent: int
@@ -351,6 +427,14 @@ class Campaign(TypedDict, total=False):
     app_id: str
     #: Zorunlu.
     name: str
+    #: Zorunlu.
+    labels: List[str]
+    #: Zorunlu.
+    category: Optional[str]
+    #: Zorunlu.
+    ab_test: "CampaignAbTest"
+    #: Zorunlu.
+    variants: List["CampaignVariantsItem"]
     #: Zorunlu. Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
     type: str
     #: Zorunlu. Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
@@ -393,6 +477,41 @@ class Campaign(TypedDict, total=False):
     updated_at: str
     #: Zorunlu.
     estimated_recipients: Optional[int]
+
+
+class CampaignAbTest(TypedDict, total=False):
+    """CampaignAbTest şeması."""
+
+    enabled: bool
+    test_percentage: int
+    winner: "CampaignAbTestWinner"
+    #: Değerler: "testing", "winner_sent".
+    phase: str
+    winner_variant_id: str
+    decided_at: str
+    decided_by: str
+    significance: "CampaignAbTestSignificance"
+
+
+class CampaignAbTestSignificance(TypedDict, total=False):
+    """CampaignAbTestSignificance şeması."""
+
+    #: Zorunlu.
+    p_value: float
+    #: Zorunlu.
+    significant: bool
+    #: Zorunlu.
+    metric: str
+
+
+class CampaignAbTestWinner(TypedDict, total=False):
+    """CampaignAbTestWinner şeması."""
+
+    #: Zorunlu. Değerler: "manual", "auto".
+    mode: str
+    #: Zorunlu. Değerler: "open_rate", "click_rate", "conversion_rate".
+    metric: str
+    evaluate_after_minutes: int
 
 
 class CampaignApproval(TypedDict, total=False):
@@ -453,11 +572,35 @@ class CampaignsCreateBody(TypedDict, total=False):
     audience: "CampaignsCreateBodyAudience"
     #: messages.content ile aynı şema (headings, contents, url, buttons…)
     content: Dict[str, Any]
+    labels: List[str]
+    #: Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
+    category: Optional[str]
+    ab_test: "CampaignsCreateBodyAbTest"
+    #: A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
+    variants: List["CampaignsCreateBodyVariantsItem"]
     template_id: str
     template_version: int
     delivery: "CampaignsCreateBodyDelivery"
     recurrence: Optional["CampaignsCreateBodyRecurrence"]
     send_at: Optional[str]
+
+
+class CampaignsCreateBodyAbTest(TypedDict, total=False):
+    """CampaignsCreateBodyAbTest şeması."""
+
+    enabled: bool
+    test_percentage: int
+    winner: "CampaignsCreateBodyAbTestWinner"
+
+
+class CampaignsCreateBodyAbTestWinner(TypedDict, total=False):
+    """CampaignsCreateBodyAbTestWinner şeması."""
+
+    #: Değerler: "manual", "auto".
+    mode: str
+    #: Değerler: "open_rate", "click_rate", "conversion_rate".
+    metric: str
+    evaluate_after_minutes: int
 
 
 class CampaignsCreateBodyAudience(TypedDict, total=False):
@@ -503,6 +646,18 @@ class CampaignsCreateBodyRecurrence(TypedDict, total=False):
     cron: str
     until: Optional[str]
     timezone: str
+
+
+class CampaignsCreateBodyVariantsItem(TypedDict, total=False):
+    """CampaignsCreateBodyVariantsItem şeması."""
+
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    content: Optional[Dict[str, Any]]
+    is_control: bool
 
 
 class CampaignStats(TypedDict, total=False):
@@ -605,11 +760,35 @@ class CampaignsUpdateBody(TypedDict, total=False):
     audience: "CampaignsUpdateBodyAudience"
     #: messages.content ile aynı şema (headings, contents, url, buttons…)
     content: Dict[str, Any]
+    labels: List[str]
+    #: Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
+    category: Optional[str]
+    ab_test: "CampaignsUpdateBodyAbTest"
+    #: A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
+    variants: List["CampaignsUpdateBodyVariantsItem"]
     template_id: str
     template_version: int
     delivery: "CampaignsUpdateBodyDelivery"
     recurrence: Optional["CampaignsUpdateBodyRecurrence"]
     send_at: Optional[str]
+
+
+class CampaignsUpdateBodyAbTest(TypedDict, total=False):
+    """CampaignsUpdateBodyAbTest şeması."""
+
+    enabled: bool
+    test_percentage: int
+    winner: "CampaignsUpdateBodyAbTestWinner"
+
+
+class CampaignsUpdateBodyAbTestWinner(TypedDict, total=False):
+    """CampaignsUpdateBodyAbTestWinner şeması."""
+
+    #: Değerler: "manual", "auto".
+    mode: str
+    #: Değerler: "open_rate", "click_rate", "conversion_rate".
+    metric: str
+    evaluate_after_minutes: int
 
 
 class CampaignsUpdateBodyAudience(TypedDict, total=False):
@@ -655,6 +834,127 @@ class CampaignsUpdateBodyRecurrence(TypedDict, total=False):
     cron: str
     until: Optional[str]
     timezone: str
+
+
+class CampaignsUpdateBodyVariantsItem(TypedDict, total=False):
+    """CampaignsUpdateBodyVariantsItem şeması."""
+
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    content: Optional[Dict[str, Any]]
+    is_control: bool
+
+
+class CampaignVariantsItem(TypedDict, total=False):
+    """CampaignVariantsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    #: Zorunlu.
+    content: Optional[Dict[str, Any]]
+    #: Zorunlu.
+    is_control: bool
+    #: Zorunlu.
+    position: int
+
+
+class CampaignVariantStats(TypedDict, total=False):
+    """CampaignVariantStats şeması."""
+
+    #: Zorunlu.
+    ab_test: "CampaignVariantStatsAbTest"
+    #: Zorunlu.
+    variants: List["CampaignVariantStatsVariantsItem"]
+    #: Zorunlu.
+    leader: Optional[str]
+    #: Zorunlu.
+    significance: "CampaignVariantStatsSignificance"
+
+
+class CampaignVariantStatsAbTest(TypedDict, total=False):
+    """CampaignVariantStatsAbTest şeması."""
+
+    enabled: bool
+    test_percentage: int
+    winner: "CampaignVariantStatsAbTestWinner"
+    #: Değerler: "testing", "winner_sent".
+    phase: str
+    winner_variant_id: str
+    decided_at: str
+    decided_by: str
+    significance: "CampaignVariantStatsAbTestSignificance"
+
+
+class CampaignVariantStatsAbTestSignificance(TypedDict, total=False):
+    """CampaignVariantStatsAbTestSignificance şeması."""
+
+    #: Zorunlu.
+    p_value: float
+    #: Zorunlu.
+    significant: bool
+    #: Zorunlu.
+    metric: str
+
+
+class CampaignVariantStatsAbTestWinner(TypedDict, total=False):
+    """CampaignVariantStatsAbTestWinner şeması."""
+
+    #: Zorunlu. Değerler: "manual", "auto".
+    mode: str
+    #: Zorunlu. Değerler: "open_rate", "click_rate", "conversion_rate".
+    metric: str
+    evaluate_after_minutes: int
+
+
+class CampaignVariantStatsSignificance(TypedDict, total=False):
+    """CampaignVariantStatsSignificance şeması."""
+
+    #: Zorunlu.
+    p_value: float
+    #: Zorunlu.
+    significant: bool
+    #: Zorunlu.
+    metric: str
+
+
+class CampaignVariantStatsVariantsItem(TypedDict, total=False):
+    """CampaignVariantStatsVariantsItem şeması."""
+
+    #: Zorunlu.
+    variant_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    #: Zorunlu.
+    is_control: bool
+    #: Zorunlu.
+    targeted: int
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    delivered: int
+    #: Zorunlu.
+    opened: int
+    #: Zorunlu.
+    clicked: int
+    #: Zorunlu.
+    converted: int
+    #: Zorunlu.
+    holdout: int
+    #: Zorunlu.
+    open_rate: float
+    #: Zorunlu.
+    click_rate: float
+    #: Zorunlu.
+    conversion_rate: float
 
 
 class ChannelConfig(TypedDict, total=False):
@@ -863,6 +1163,20 @@ class CreateAppDtoPlatformFlags(TypedDict, total=False):
     sms: bool
 
 
+class CreateCategoryDto(TypedDict, total=False):
+    """CreateCategoryDto şeması."""
+
+    #: Zorunlu.
+    key: str
+    #: Zorunlu.
+    name: Dict[str, str]
+    description: Dict[str, str]
+    #: Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+    channels: Optional[List[str]]
+    default_opted_in: bool
+    position: int
+
+
 class CreatedApiKey(TypedDict, total=False):
     """CreatedApiKey şeması."""
 
@@ -928,6 +1242,8 @@ class CreateInAppDto(TypedDict, total=False):
     name: str
     #: Zorunlu.
     triggers: List[Any]
+    trigger_groups: List[List[Any]]
+    variants: List["CreateInAppDtoVariantsItem"]
     #: Zorunlu.
     display: "CreateInAppDtoDisplay"
     audience: "CreateInAppDtoAudience"
@@ -964,6 +1280,32 @@ class CreateInAppDtoFrequency(TypedDict, total=False):
     max_impressions: int
     min_interval_seconds: int
     stop_after_interaction: bool
+
+
+class CreateInAppDtoVariantsItem(TypedDict, total=False):
+    """CreateInAppDtoVariantsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    #: Zorunlu.
+    display: "CreateInAppDtoVariantsItemDisplay"
+
+
+class CreateInAppDtoVariantsItemDisplay(TypedDict, total=False):
+    """CreateInAppDtoVariantsItemDisplay şeması."""
+
+    #: Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
+    layout: str
+    background_color: str
+    text_color: str
+    dismissible: bool
+    auto_dismiss_seconds: int
+    #: Zorunlu.
+    blocks: List[Any]
 
 
 class CreateNotificationDto(TypedDict, total=False):
@@ -1037,6 +1379,8 @@ class CreateNotificationDto(TypedDict, total=False):
     throttle_rate_per_minute: int
     include_unsubscribed: bool
     name: str
+    labels: List[str]
+    category: str
 
 
 class CreateNotificationDtoButtonsItem(TypedDict, total=False):
@@ -1719,6 +2063,10 @@ class InAppMessage(TypedDict, total=False):
     #: Zorunlu.
     triggers: List[Any]
     #: Zorunlu.
+    trigger_groups: Optional[List[List[Any]]]
+    #: Zorunlu.
+    variants: List["InAppMessageVariantsItem"]
+    #: Zorunlu.
     display: "InAppMessageDisplay"
     #: Zorunlu.
     audience: "InAppMessageAudience"
@@ -1732,6 +2080,8 @@ class InAppMessage(TypedDict, total=False):
     end_at: Optional[str]
     #: Zorunlu.
     stats: "InAppMessageStats"
+    #: Zorunlu.
+    variant_stats: List["InAppMessageVariantStatsItem"]
     #: Zorunlu.
     created_at: str
     #: Zorunlu.
@@ -1788,6 +2138,45 @@ class InAppMessageStats(TypedDict, total=False):
     dismissals: int
     #: Zorunlu.
     unique_users: int
+    #: Zorunlu.
+    ctr: float
+
+
+class InAppMessageVariantsItem(TypedDict, total=False):
+    """InAppMessageVariantsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    #: Zorunlu.
+    display: "InAppMessageVariantsItemDisplay"
+
+
+class InAppMessageVariantsItemDisplay(TypedDict, total=False):
+    """InAppMessageVariantsItemDisplay şeması."""
+
+    #: Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
+    layout: str
+    background_color: str
+    text_color: str
+    dismissible: bool
+    auto_dismiss_seconds: int
+    #: Zorunlu.
+    blocks: List[Any]
+
+
+class InAppMessageVariantStatsItem(TypedDict, total=False):
+    """InAppMessageVariantStatsItem şeması."""
+
+    #: Zorunlu.
+    variant_id: str
+    #: Zorunlu.
+    impressions: int
+    #: Zorunlu.
+    clicks: int
     #: Zorunlu.
     ctr: float
 
@@ -2181,6 +2570,24 @@ class JourneyStatsNodesItem(TypedDict, total=False):
     #: Zorunlu.
     branches: Dict[str, int]
     messages: Dict[str, int]
+    variants: List["JourneyStatsNodesItemVariantsItem"]
+
+
+class JourneyStatsNodesItemVariantsItem(TypedDict, total=False):
+    """JourneyStatsNodesItemVariantsItem şeması."""
+
+    #: Zorunlu.
+    variant_id: str
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    opened: int
+    #: Zorunlu.
+    clicked: int
+    #: Zorunlu.
+    converted: int
+    #: Zorunlu.
+    winner: bool
 
 
 class JourneyStatsSummary(TypedDict, total=False):
@@ -2310,6 +2717,16 @@ class Message(TypedDict, total=False):
     #: Zorunlu.
     options: Dict[str, Any]
     #: Zorunlu.
+    labels: List[str]
+    #: Zorunlu.
+    category: Optional[str]
+    #: Zorunlu.
+    template_id: Optional[str]
+    #: Zorunlu.
+    campaign_id: Optional[str]
+    #: Zorunlu.
+    variants: Optional[List["MessageVariantsItem"]]
+    #: Zorunlu.
     counts: "MessageCounts"
     #: Zorunlu.
     requested_by: "MessageRequestedBy"
@@ -2325,6 +2742,40 @@ class Message(TypedDict, total=False):
     created_at: str
     #: Zorunlu.
     updated_at: str
+
+
+class MessageCategory(TypedDict, total=False):
+    """MessageCategory şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    key: str
+    #: Zorunlu.
+    name: Dict[str, str]
+    #: Zorunlu.
+    description: Dict[str, str]
+    #: Zorunlu.
+    channels: Optional[List[str]]
+    #: Zorunlu.
+    default_opted_in: bool
+    #: Zorunlu.
+    position: int
+    #: Zorunlu.
+    opted_out_users: int
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class MessageCategoryList(TypedDict, total=False):
+    """MessageCategoryList şeması."""
+
+    #: Zorunlu.
+    data: List["MessageCategory"]
 
 
 class MessageCounts(TypedDict, total=False):
@@ -2450,6 +2901,19 @@ class MessagesReportTotals(TypedDict, total=False):
     open_rate: Optional[float]
     #: Zorunlu.
     click_rate: Optional[float]
+
+
+class MessageVariantsItem(TypedDict, total=False):
+    """MessageVariantsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    #: Zorunlu.
+    is_control: bool
 
 
 class Ok(TypedDict, total=False):
@@ -2900,6 +3364,28 @@ class RenderTemplateDtoUser(TypedDict, total=False):
     properties: Dict[str, Any]
 
 
+class RetentionReport(TypedDict, total=False):
+    """RetentionReport şeması."""
+
+    #: Zorunlu.
+    weeks: int
+    #: Zorunlu.
+    cohorts: List["RetentionReportCohortsItem"]
+    #: Zorunlu.
+    average: List[Optional[float]]
+
+
+class RetentionReportCohortsItem(TypedDict, total=False):
+    """RetentionReportCohortsItem şeması."""
+
+    #: Zorunlu.
+    week: str
+    #: Zorunlu.
+    users: int
+    #: Zorunlu.
+    retention: List[Optional[float]]
+
+
 class ScheduleCampaignDto(TypedDict, total=False):
     """ScheduleCampaignDto şeması."""
 
@@ -3074,11 +3560,36 @@ class SegmentsUpdateBodyDefinition(TypedDict, total=False):
     none: List[Dict[str, Any]]
 
 
+class SelectWinnerDto(TypedDict, total=False):
+    """SelectWinnerDto şeması."""
+
+    #: Zorunlu.
+    variant_id: str
+
+
 class SetOwnerDto(TypedDict, total=False):
     """SetOwnerDto şeması."""
 
     #: Zorunlu.
     external_id: str
+
+
+class SetPreferencesDto(TypedDict, total=False):
+    """SetPreferencesDto şeması."""
+
+    #: Zorunlu.
+    preferences: List["SetPreferencesDtoPreferencesItem"]
+
+
+class SetPreferencesDtoPreferencesItem(TypedDict, total=False):
+    """SetPreferencesDtoPreferencesItem şeması."""
+
+    #: Zorunlu.
+    category: str
+    #: Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+    channel: Optional[str]
+    #: Zorunlu.
+    opted_in: bool
 
 
 class Subscription(TypedDict, total=False):
@@ -3285,6 +3796,37 @@ class TemplatePage(TypedDict, total=False):
     has_more: bool
 
 
+class TemplateStats(TypedDict, total=False):
+    """TemplateStats şeması."""
+
+    #: Zorunlu.
+    template_id: str
+    #: Zorunlu.
+    messages: int
+    #: Zorunlu.
+    campaigns: int
+    #: Zorunlu.
+    targeted: int
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    delivered: int
+    #: Zorunlu.
+    opened: int
+    #: Zorunlu.
+    clicked: int
+    #: Zorunlu.
+    converted: int
+    #: Zorunlu.
+    open_rate: float
+    #: Zorunlu.
+    click_rate: float
+    #: Zorunlu.
+    conversion_rate: float
+    #: Zorunlu.
+    last_used_at: Optional[str]
+
+
 class TemplateVersionList(TypedDict, total=False):
     """TemplateVersionList şeması."""
 
@@ -3361,6 +3903,11 @@ class UpdateAppDtoSettings(TypedDict, total=False):
 
     quietHours: Optional["UpdateAppDtoSettingsQuietHours"]
     frequencyCap: Optional["UpdateAppDtoSettingsFrequencyCap"]
+    frequencyCaps: List["UpdateAppDtoSettingsFrequencyCapsItem"]
+    inApp: "UpdateAppDtoSettingsInApp"
+    androidChannels: List["UpdateAppDtoSettingsAndroidChannelsItem"]
+    sms: "UpdateAppDtoSettingsSms"
+    preferenceCenter: "UpdateAppDtoSettingsPreferenceCenter"
     defaultTtlSeconds: int
     identityVerificationRequired: bool
     allowedOrigins: List[str]
@@ -3368,6 +3915,21 @@ class UpdateAppDtoSettings(TypedDict, total=False):
     webPush: "UpdateAppDtoSettingsWebPush"
     onboarding: "UpdateAppDtoSettingsOnboarding"
     sdkSetup: Optional["UpdateAppDtoSettingsSdkSetup"]
+
+
+class UpdateAppDtoSettingsAndroidChannelsItem(TypedDict, total=False):
+    """UpdateAppDtoSettingsAndroidChannelsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    description: str
+    #: Zorunlu. Değerler: "low", "default", "high", "urgent".
+    importance: str
+    sound: str
+    vibration: bool
+    group: str
 
 
 class UpdateAppDtoSettingsFrequencyCap(TypedDict, total=False):
@@ -3379,6 +3941,32 @@ class UpdateAppDtoSettingsFrequencyCap(TypedDict, total=False):
     windowHours: int
 
 
+class UpdateAppDtoSettingsFrequencyCapsItem(TypedDict, total=False):
+    """UpdateAppDtoSettingsFrequencyCapsItem şeması."""
+
+    #: Zorunlu.
+    max: int
+    #: Zorunlu.
+    window: "UpdateAppDtoSettingsFrequencyCapsItemWindow"
+    #: Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+    channels: List[str]
+
+
+class UpdateAppDtoSettingsFrequencyCapsItemWindow(TypedDict, total=False):
+    """UpdateAppDtoSettingsFrequencyCapsItemWindow şeması."""
+
+    #: Zorunlu.
+    value: int
+    #: Zorunlu. Değerler: "minutes", "hours", "days", "weeks".
+    unit: str
+
+
+class UpdateAppDtoSettingsInApp(TypedDict, total=False):
+    """UpdateAppDtoSettingsInApp şeması."""
+
+    minIntervalSeconds: int
+
+
 class UpdateAppDtoSettingsOnboarding(TypedDict, total=False):
     """UpdateAppDtoSettingsOnboarding şeması."""
 
@@ -3386,6 +3974,26 @@ class UpdateAppDtoSettingsOnboarding(TypedDict, total=False):
     step: int
     simulation: bool
     completed_at: Optional[str]
+
+
+class UpdateAppDtoSettingsPreferenceCenter(TypedDict, total=False):
+    """UpdateAppDtoSettingsPreferenceCenter şeması."""
+
+    enabled: bool
+    brandName: str
+    logoUrl: str
+    accentColor: str
+    customUnsubscribeUrl: str
+    texts: Dict[str, "UpdateAppDtoSettingsPreferenceCenterTextsValue"]
+
+
+class UpdateAppDtoSettingsPreferenceCenterTextsValue(TypedDict, total=False):
+    """UpdateAppDtoSettingsPreferenceCenterTextsValue şeması."""
+
+    title: str
+    description: str
+    unsubscribeAll: str
+    saved: str
 
 
 class UpdateAppDtoSettingsQuietHours(TypedDict, total=False):
@@ -3414,6 +4022,14 @@ class UpdateAppDtoSettingsSdkSetup(TypedDict, total=False):
     detectedSubscriptionId: Optional[str]
     testMessageId: Optional[str]
     completedAt: Optional[str]
+
+
+class UpdateAppDtoSettingsSms(TypedDict, total=False):
+    """UpdateAppDtoSettingsSms şeması."""
+
+    helpReply: str
+    stopReply: str
+    autoReply: bool
 
 
 class UpdateAppDtoSettingsWebPush(TypedDict, total=False):
@@ -3473,6 +4089,8 @@ class UpdateAppDtoSettingsWebPushPrompt(TypedDict, total=False):
     enabled: bool
     #: Zorunlu. Değerler: "slidedown", "native".
     type: str
+    #: Değerler: "push", "email", "sms", "email_sms".
+    collect: str
     delaySeconds: int
     pageViews: int
     scrollPercent: int
@@ -3515,11 +4133,24 @@ class UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue(TypedDict, total=
     message: str
 
 
+class UpdateCategoryDto(TypedDict, total=False):
+    """UpdateCategoryDto şeması."""
+
+    name: Dict[str, str]
+    description: Dict[str, str]
+    #: Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+    channels: Optional[List[str]]
+    default_opted_in: bool
+    position: int
+
+
 class UpdateInAppDto(TypedDict, total=False):
     """UpdateInAppDto şeması."""
 
     name: str
     triggers: List[Any]
+    trigger_groups: List[List[Any]]
+    variants: List["UpdateInAppDtoVariantsItem"]
     display: "UpdateInAppDtoDisplay"
     audience: "UpdateInAppDtoAudience"
     frequency: "UpdateInAppDtoFrequency"
@@ -3555,6 +4186,32 @@ class UpdateInAppDtoFrequency(TypedDict, total=False):
     max_impressions: int
     min_interval_seconds: int
     stop_after_interaction: bool
+
+
+class UpdateInAppDtoVariantsItem(TypedDict, total=False):
+    """UpdateInAppDtoVariantsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    #: Zorunlu.
+    display: "UpdateInAppDtoVariantsItemDisplay"
+
+
+class UpdateInAppDtoVariantsItemDisplay(TypedDict, total=False):
+    """UpdateInAppDtoVariantsItemDisplay şeması."""
+
+    #: Zorunlu. Değerler: "modal", "banner_top", "banner_bottom", "fullscreen".
+    layout: str
+    background_color: str
+    text_color: str
+    dismissible: bool
+    auto_dismiss_seconds: int
+    #: Zorunlu.
+    blocks: List[Any]
 
 
 class UpdateJourneyDto(TypedDict, total=False):
@@ -3863,6 +4520,34 @@ class UserList(TypedDict, total=False):
     has_more: bool
 
 
+class UserPreferences(TypedDict, total=False):
+    """UserPreferences şeması."""
+
+    #: Zorunlu.
+    user_id: str
+    #: Zorunlu.
+    data: List["UserPreferencesDataItem"]
+    #: Zorunlu.
+    categories: List["MessageCategory"]
+
+
+class UserPreferencesDataItem(TypedDict, total=False):
+    """UserPreferencesDataItem şeması."""
+
+    #: Zorunlu.
+    category: str
+    #: Zorunlu.
+    channel: Optional[str]
+    #: Zorunlu.
+    opted_in: bool
+    #: Zorunlu.
+    explicit: bool
+    #: Zorunlu.
+    source: Optional[str]
+    #: Zorunlu.
+    updated_at: Optional[str]
+
+
 class UsersSearchBody(TypedDict, total=False):
     """UsersSearchBody şeması."""
 
@@ -4074,10 +4759,17 @@ __all__ = [
     "AppList",
     "AppPlatformFlags",
     "AppSettings",
+    "AppSettingsAndroidChannelsItem",
     "AppSettingsFrequencyCap",
+    "AppSettingsFrequencyCapsItem",
+    "AppSettingsFrequencyCapsItemWindow",
+    "AppSettingsInApp",
     "AppSettingsOnboarding",
+    "AppSettingsPreferenceCenter",
+    "AppSettingsPreferenceCenterTextsValue",
     "AppSettingsQuietHours",
     "AppSettingsSdkSetup",
+    "AppSettingsSms",
     "AppSettingsWebPush",
     "AppSettingsWebPushClickBehavior",
     "AppSettingsWebPushCustomLink",
@@ -4091,15 +4783,21 @@ __all__ = [
     "AuditEntry",
     "AuditPage",
     "Campaign",
+    "CampaignAbTest",
+    "CampaignAbTestSignificance",
+    "CampaignAbTestWinner",
     "CampaignApproval",
     "CampaignDelivery",
     "CampaignPage",
     "CampaignRecurrence",
     "CampaignsCreateBody",
+    "CampaignsCreateBodyAbTest",
+    "CampaignsCreateBodyAbTestWinner",
     "CampaignsCreateBodyAudience",
     "CampaignsCreateBodyAudienceFilters",
     "CampaignsCreateBodyDelivery",
     "CampaignsCreateBodyRecurrence",
+    "CampaignsCreateBodyVariantsItem",
     "CampaignStats",
     "CampaignStats2",
     "CampaignStatsChannelsItem",
@@ -4107,10 +4805,20 @@ __all__ = [
     "CampaignStatsHourlyItem",
     "CampaignStatsRates",
     "CampaignsUpdateBody",
+    "CampaignsUpdateBodyAbTest",
+    "CampaignsUpdateBodyAbTestWinner",
     "CampaignsUpdateBodyAudience",
     "CampaignsUpdateBodyAudienceFilters",
     "CampaignsUpdateBodyDelivery",
     "CampaignsUpdateBodyRecurrence",
+    "CampaignsUpdateBodyVariantsItem",
+    "CampaignVariantsItem",
+    "CampaignVariantStats",
+    "CampaignVariantStatsAbTest",
+    "CampaignVariantStatsAbTestSignificance",
+    "CampaignVariantStatsAbTestWinner",
+    "CampaignVariantStatsSignificance",
+    "CampaignVariantStatsVariantsItem",
     "ChannelConfig",
     "ChannelConfigConfig",
     "ChannelList",
@@ -4124,6 +4832,7 @@ __all__ = [
     "CreateAppApiKeyDto",
     "CreateAppDto",
     "CreateAppDtoPlatformFlags",
+    "CreateCategoryDto",
     "CreatedApiKey",
     "CreateExportDto",
     "CreateExportDtoFilters",
@@ -4131,6 +4840,8 @@ __all__ = [
     "CreateInAppDtoAudience",
     "CreateInAppDtoDisplay",
     "CreateInAppDtoFrequency",
+    "CreateInAppDtoVariantsItem",
+    "CreateInAppDtoVariantsItemDisplay",
     "CreateNotificationDto",
     "CreateNotificationDtoButtonsItem",
     "CreateNotificationDtoTarget",
@@ -4182,6 +4893,9 @@ __all__ = [
     "InAppMessageFrequency",
     "InAppMessagePage",
     "InAppMessageStats",
+    "InAppMessageVariantsItem",
+    "InAppMessageVariantsItemDisplay",
+    "InAppMessageVariantStatsItem",
     "InAppStatusDto",
     "InboxItem",
     "InboxPage",
@@ -4205,6 +4919,7 @@ __all__ = [
     "JourneyStats",
     "JourneyStatsGoalsItem",
     "JourneyStatsNodesItem",
+    "JourneyStatsNodesItemVariantsItem",
     "JourneyStatsSummary",
     "JourneySummary",
     "JourneyTriggerResult",
@@ -4213,6 +4928,8 @@ __all__ = [
     "Member",
     "MemberList",
     "Message",
+    "MessageCategory",
+    "MessageCategoryList",
     "MessageCounts",
     "MessageList",
     "MessageRequestedBy",
@@ -4220,6 +4937,7 @@ __all__ = [
     "MessagesReportPrevious",
     "MessagesReportRowsItem",
     "MessagesReportTotals",
+    "MessageVariantsItem",
     "Ok",
     "Org",
     "OrgSettings",
@@ -4249,6 +4967,8 @@ __all__ = [
     "RenderTemplateDtoContentButtonsItem",
     "RenderTemplateDtoContentWebButtonsItem",
     "RenderTemplateDtoUser",
+    "RetentionReport",
+    "RetentionReportCohortsItem",
     "ScheduleCampaignDto",
     "ScheduleCampaignDtoRecurrence",
     "Segment",
@@ -4264,7 +4984,10 @@ __all__ = [
     "SegmentsPreviewBodyDefinition",
     "SegmentsUpdateBody",
     "SegmentsUpdateBodyDefinition",
+    "SelectWinnerDto",
     "SetOwnerDto",
+    "SetPreferencesDto",
+    "SetPreferencesDtoPreferencesItem",
     "Subscription",
     "SubscriptionDevice",
     "SubscriptionsReport",
@@ -4276,6 +4999,7 @@ __all__ = [
     "SuppressionPage",
     "Template",
     "TemplatePage",
+    "TemplateStats",
     "TemplateVersionList",
     "TemplateVersionListDataItem",
     "TriggerRunDto",
@@ -4284,10 +5008,17 @@ __all__ = [
     "UpdateAppDto",
     "UpdateAppDtoPlatformFlags",
     "UpdateAppDtoSettings",
+    "UpdateAppDtoSettingsAndroidChannelsItem",
     "UpdateAppDtoSettingsFrequencyCap",
+    "UpdateAppDtoSettingsFrequencyCapsItem",
+    "UpdateAppDtoSettingsFrequencyCapsItemWindow",
+    "UpdateAppDtoSettingsInApp",
     "UpdateAppDtoSettingsOnboarding",
+    "UpdateAppDtoSettingsPreferenceCenter",
+    "UpdateAppDtoSettingsPreferenceCenterTextsValue",
     "UpdateAppDtoSettingsQuietHours",
     "UpdateAppDtoSettingsSdkSetup",
+    "UpdateAppDtoSettingsSms",
     "UpdateAppDtoSettingsWebPush",
     "UpdateAppDtoSettingsWebPushClickBehavior",
     "UpdateAppDtoSettingsWebPushCustomLink",
@@ -4298,10 +5029,13 @@ __all__ = [
     "UpdateAppDtoSettingsWebPushPromptTextsValue",
     "UpdateAppDtoSettingsWebPushWelcomeNotification",
     "UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue",
+    "UpdateCategoryDto",
     "UpdateInAppDto",
     "UpdateInAppDtoAudience",
     "UpdateInAppDtoDisplay",
     "UpdateInAppDtoFrequency",
+    "UpdateInAppDtoVariantsItem",
+    "UpdateInAppDtoVariantsItemDisplay",
     "UpdateJourneyDto",
     "UpdateNodeDto",
     "UpdateNodeDtoPosition",
@@ -4321,6 +5055,8 @@ __all__ = [
     "UserJourneyRuns",
     "UserJourneyRunsDataItem",
     "UserList",
+    "UserPreferences",
+    "UserPreferencesDataItem",
     "UsersSearchBody",
     "UsersSearchBodyDefinition",
     "Webhook",
