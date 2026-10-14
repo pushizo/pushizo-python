@@ -1735,6 +1735,27 @@ class InAppMessagesResource:
             request_options=request_options,
         )
 
+    def winner(
+        self,
+        message_id: str,
+        body: "InAppWinnerDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InAppMessage":
+        """A/B kazananını elle seç
+
+        ``POST /v1/apps/{appId}/in-app-messages/{messageId}/winner``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/in-app-messages/{messageId}/winner",
+            path_params={"messageId": message_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
 
 class InboxResource:
     """Kullanıcı bildirim kutusu (inbox): listeleme, okundu işaretleme ve arşivleme."""
