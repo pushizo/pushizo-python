@@ -20,6 +20,13 @@ classifiers = [
 ]
 dependencies = ["httpx>=0.24,<1"]
 
+[project.urls]
+Homepage = "https://github.com/exec0de/herosignal/tree/main/sdk/python"
+Documentation = "https://github.com/exec0de/herosignal/blob/main/docs/sdk/README.md"
+Repository = "https://github.com/exec0de/herosignal"
+Issues = "https://github.com/exec0de/herosignal/issues"
+Changelog = "https://github.com/exec0de/herosignal/blob/main/CHANGELOG.md"
+
 [project.optional-dependencies]
 dev = ["pytest>=7"]
 

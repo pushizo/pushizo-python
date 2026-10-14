@@ -964,7 +964,7 @@ class ChannelConfig(TypedDict, total=False):
     channel: str
     #: Zorunlu. Değerler: "apns", "fcm", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
     provider: Optional[str]
-    #: Zorunlu. Değerler: "unconfigured", "active", "invalid".
+    #: Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
     status: str
     #: Zorunlu.
     config: "ChannelConfigConfig"
@@ -978,6 +978,10 @@ class ChannelConfig(TypedDict, total=False):
     last_error: Optional[str]
     #: Zorunlu.
     updated_at: Optional[str]
+    #: Zorunlu.
+    suspended_reason: Optional[str]
+    #: Zorunlu.
+    dns_check: Optional["ChannelConfigDnsCheck"]
 
 
 class ChannelConfigConfig(TypedDict, total=False):
@@ -1002,6 +1006,7 @@ class ChannelConfigConfig(TypedDict, total=False):
     from_address: str
     from_name: str
     reply_to: str
+    dkim_selector: str
     postal_address: str
     host: str
     port: int
@@ -1017,6 +1022,58 @@ class ChannelConfigConfig(TypedDict, total=False):
     msgheader: str
     #: Değerler: "0", "11", "12".
     iys_filter: str
+
+
+class ChannelConfigDnsCheck(TypedDict, total=False):
+    """ChannelConfigDnsCheck şeması."""
+
+    #: Zorunlu.
+    domain: str
+    #: Zorunlu.
+    checked_at: str
+    #: Zorunlu.
+    spf: "ChannelConfigDnsCheckSpf"
+    #: Zorunlu.
+    dkim: "ChannelConfigDnsCheckDkim"
+    #: Zorunlu.
+    dmarc: "ChannelConfigDnsCheckDmarc"
+    #: Zorunlu.
+    issues: List[str]
+
+
+class ChannelConfigDnsCheckDkim(TypedDict, total=False):
+    """ChannelConfigDnsCheckDkim şeması."""
+
+    #: Zorunlu.
+    ok: bool
+    #: Zorunlu.
+    selector: str
+    #: Zorunlu.
+    record: Optional[str]
+    #: Zorunlu.
+    expected: str
+
+
+class ChannelConfigDnsCheckDmarc(TypedDict, total=False):
+    """ChannelConfigDnsCheckDmarc şeması."""
+
+    #: Zorunlu.
+    ok: bool
+    #: Zorunlu.
+    record: Optional[str]
+    #: Zorunlu.
+    expected: str
+
+
+class ChannelConfigDnsCheckSpf(TypedDict, total=False):
+    """ChannelConfigDnsCheckSpf şeması."""
+
+    #: Zorunlu.
+    ok: bool
+    #: Zorunlu.
+    record: Optional[str]
+    #: Zorunlu.
+    expected: str
 
 
 class ChannelList(TypedDict, total=False):
@@ -2676,7 +2733,7 @@ class Member(TypedDict, total=False):
     email: str
     #: Zorunlu.
     name: str
-    #: Zorunlu. Değerler: "owner", "admin", "developer", "marketer", "analyst", "billing", "viewer".
+    #: Zorunlu. Değerler: "owner", "admin", "developer", "marketer", "analyst", "billing", "viewer", "composer".
     role: str
     #: Zorunlu.
     app_scopes: List[str]
@@ -2984,7 +3041,7 @@ class OverviewStatsChannelsItem(TypedDict, total=False):
     channel: str
     #: Zorunlu. Değerler: "apns", "fcm", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "mock".
     provider: Optional[str]
-    #: Zorunlu. Değerler: "unconfigured", "active", "invalid".
+    #: Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
     status: str
     #: Zorunlu.
     last_error: Optional[str]
@@ -4353,6 +4410,79 @@ class UpsertUserDto(TypedDict, total=False):
     subscriptions: List["AddSubscriptionDto"]
 
 
+class UsageReport(TypedDict, total=False):
+    """UsageReport şeması."""
+
+    #: Zorunlu.
+    org_id: str
+    #: Zorunlu.
+    plan_code: str
+    #: Zorunlu.
+    period: "UsageReportPeriod"
+    #: Zorunlu.
+    metrics: List["UsageReportMetricsItem"]
+    #: Zorunlu.
+    apps: List["UsageReportAppsItem"]
+    #: Zorunlu.
+    daily: List["UsageReportDailyItem"]
+    #: Zorunlu.
+    trialing: bool
+    #: Zorunlu.
+    trial_ends_at: Optional[str]
+
+
+class UsageReportAppsItem(TypedDict, total=False):
+    """UsageReportAppsItem şeması."""
+
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    messages_sent: float
+    #: Zorunlu.
+    active_subscriptions: float
+    #: Zorunlu.
+    mau: float
+
+
+class UsageReportDailyItem(TypedDict, total=False):
+    """UsageReportDailyItem şeması."""
+
+    #: Zorunlu.
+    date: str
+    #: Zorunlu.
+    messages_sent: float
+    #: Zorunlu.
+    api_requests: float
+    #: Zorunlu.
+    events_ingested: float
+
+
+class UsageReportMetricsItem(TypedDict, total=False):
+    """UsageReportMetricsItem şeması."""
+
+    #: Zorunlu.
+    metric: str
+    #: Zorunlu.
+    used: float
+    #: Zorunlu.
+    limit: Optional[float]
+    #: Zorunlu.
+    percent: Optional[float]
+    #: Zorunlu.
+    hard: bool
+
+
+class UsageReportPeriod(TypedDict, total=False):
+    """UsageReportPeriod şeması."""
+
+    #: Zorunlu.
+    start: str
+    #: Zorunlu.
+    end: str
+
+
 class User(TypedDict, total=False):
     """User şeması."""
 
@@ -4821,6 +4951,10 @@ __all__ = [
     "CampaignVariantStatsVariantsItem",
     "ChannelConfig",
     "ChannelConfigConfig",
+    "ChannelConfigDnsCheck",
+    "ChannelConfigDnsCheckDkim",
+    "ChannelConfigDnsCheckDmarc",
+    "ChannelConfigDnsCheckSpf",
     "ChannelList",
     "ChannelValidation",
     "ConversionsReport",
@@ -5046,6 +5180,11 @@ __all__ = [
     "UpdateWebhookDto",
     "UpdateWebhookDtoEventFilters",
     "UpsertUserDto",
+    "UsageReport",
+    "UsageReportAppsItem",
+    "UsageReportDailyItem",
+    "UsageReportMetricsItem",
+    "UsageReportPeriod",
     "User",
     "UserDetail",
     "UserDetailAliasesItem",
