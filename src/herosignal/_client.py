@@ -212,9 +212,14 @@ class HeroSignal(GeneratedResources):
         url = f"{self.base_url}{path}"
         timeout = opts.get("timeout", self.timeout)
         max_retries = opts.get("max_retries", self.max_retries)
+        # Gövdedeki idempotency_key, API tarafında Idempotency-Key başlığıyla eşdeğerdir.
+        has_key = any(k.lower() == "idempotency-key" and v for k, v in headers.items()) or (
+            isinstance(body, Mapping) and isinstance(body.get("idempotency_key"), str) and bool(body["idempotency_key"])
+        )
         attempt = 0
         while True:
             response: Optional[httpx.Response] = None
+            not_sent = False
             try:
                 response = self._http.request(
                     method,
@@ -228,14 +233,38 @@ class HeroSignal(GeneratedResources):
                 )
             except httpx.TransportError as exc:
                 error = NetworkError(0, "NETWORK", str(exc) or exc.__class__.__name__)
+                not_sent = isinstance(exc, _NOT_SENT_ERRORS)
             else:
                 if 200 <= response.status_code < 300:
                     return _parse_body(response)
                 error = _error_from_response(response)
-            if not error.retryable or attempt >= max_retries:
+            if attempt >= max_retries or not _should_retry(method, error, has_key, not_sent):
                 raise error
             self._sleep(_retry_delay(response, attempt))
             attempt += 1
+
+
+#: Sunucuda tekrarlanması ek yan etki doğurmayan HTTP metotları; 5xx ve ağ hatalarında serbestçe yeniden denenir.
+_IDEMPOTENT_METHODS = frozenset({"GET", "HEAD", "OPTIONS", "PUT", "DELETE"})
+
+#: İstek sunucuya hiç ulaşmadan oluşan aktarım hataları: bağlantı reddi / DNS çözümlenemedi (``ConnectError``),
+#: bağlantı kurma ve bağlantı havuzu zaman aşımı.
+_NOT_SENT_ERRORS = (httpx.ConnectError, httpx.ConnectTimeout, httpx.PoolTimeout)
+
+
+def _should_retry(method: str, error: HeroSignalError, has_idempotency_key: bool, not_sent: bool) -> bool:
+    """Yeniden deneme politikası.
+
+    - 429: her metotta yeniden denenir (istek işlenmeden reddedilmiştir; ``Retry-After``'a uyulur).
+    - 5xx / ağ hatası: GET, HEAD, OPTIONS, PUT, DELETE her zaman; POST ve PATCH yalnızca ``Idempotency-Key``
+      taşıyorsa (otomatik anahtar dahil) veya istek sunucuya hiç gönderilmeden başarısız olduysa (bağlantı reddi,
+      DNS hatası, bağlantı zaman aşımı). Aksi hâlde sunucu isteği işlemiş olabilir; tekrar, çift kayıt üretebilir.
+    """
+    if error.status == 429:
+        return True
+    if not error.retryable:
+        return False
+    return method.upper() in _IDEMPOTENT_METHODS or has_idempotency_key or not_sent
 
 
 def _query_items(query: Mapping[str, Any]) -> Iterator[Tuple[str, str]]:

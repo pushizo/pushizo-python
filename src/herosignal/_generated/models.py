@@ -29,7 +29,7 @@ class AddSubscriptionDtoDevice(TypedDict, total=False):
     model: str
     os: str
     os_version: str
-    app_version: str
+    app_version: Optional[str]
     sdk_version: str
     sdk_platform: str
     carrier: str
@@ -1893,6 +1893,10 @@ class EventDefinitionList(TypedDict, total=False):
 
     #: Zorunlu.
     data: List["EventDefinition"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+    #: Zorunlu.
+    has_more: bool
 
 
 class EventsAccepted(TypedDict, total=False):
@@ -3220,7 +3224,7 @@ class PatchSubscriptionDtoDevice(TypedDict, total=False):
     model: str
     os: str
     os_version: str
-    app_version: str
+    app_version: Optional[str]
     sdk_version: str
     sdk_platform: str
     carrier: str
@@ -3767,7 +3771,7 @@ class SubscriptionDevice(TypedDict, total=False):
     model: str
     os: str
     os_version: str
-    app_version: str
+    app_version: Optional[str]
     sdk_version: str
     sdk_platform: str
     carrier: str

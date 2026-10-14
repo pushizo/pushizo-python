@@ -693,6 +693,8 @@ class EventsResource:
     def list_definitions(
         self,
         *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "EventDefinitionList":
@@ -704,8 +706,28 @@ class EventsResource:
             "GET",
             "/v1/apps/{appId}/events/definitions",
             path_params={},
+            query={"limit": limit, "cursor": cursor},
             app_id=app_id,
             request_options=request_options,
+        )
+
+    def list_definitions_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["EventDefinition"]:
+        """``list_definitions`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list_definitions(
+                limit=limit,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
         )
 
     def get_definition(
@@ -1735,6 +1757,27 @@ class InAppMessagesResource:
             request_options=request_options,
         )
 
+    def select_winner(
+        self,
+        message_id: str,
+        body: "InAppWinnerDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InAppMessage":
+        """A/B kazananını elle seç
+
+        ``POST /v1/apps/{appId}/in-app-messages/{messageId}/winner``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/in-app-messages/{messageId}/winner",
+            path_params={"messageId": message_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def winner(
         self,
         message_id: str,
@@ -1746,6 +1789,8 @@ class InAppMessagesResource:
         """A/B kazananını elle seç
 
         ``POST /v1/apps/{appId}/in-app-messages/{messageId}/winner``
+
+        .. deprecated:: ``select_winner`` kullanın; bu ad geriye dönük uyumluluk için korunur.
         """
         return self._client._call(
             "POST",
