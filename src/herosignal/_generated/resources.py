@@ -3328,18 +3328,22 @@ class JourneysResource:
         journey_id: str,
         *,
         version: Optional[int] = None,
+        all_versions: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "JourneyStats":
         """Düğüm bazlı istatistik
 
         ``GET /v1/apps/{appId}/journeys/{journeyId}/stats``
+
+        Parametreler:
+            all_versions: Değerler: "true", "false".
         """
         return self._client._call(
             "GET",
             "/v1/apps/{appId}/journeys/{journeyId}/stats",
             path_params={"journeyId": journey_id},
-            query={"version": version},
+            query={"version": version, "all_versions": all_versions},
             app_id=app_id,
             request_options=request_options,
         )
