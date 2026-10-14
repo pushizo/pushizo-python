@@ -157,6 +157,92 @@ def test_retries_exhausted():
     assert net.value.status == 0 and net.value.code == "NETWORK"
 
 
+def _unavailable():
+    return json_response(503, {"error": {"code": "HS_SERVICE_UNAVAILABLE", "message": "x"}})
+
+
+def test_post_without_idempotency_key_is_not_retried_on_5xx():
+    hs, rec, sleeps = make([_unavailable(), json_response(200, {"accepted": 1})])
+    with pytest.raises(ServerError):
+        hs.events.send({"events": [{"external_id": "u1", "name": "purchase"}]})
+    assert len(rec.requests) == 1
+    assert sleeps == []
+
+    # Otomatik anahtar kapalıyken notifications.create de anahtarsız POST'tur.
+    hs, rec, _ = make([_unavailable(), json_response(202, {"id": "m"})], auto_idempotency_key=False)
+    with pytest.raises(ServerError):
+        hs.notifications.create({"contents": {"en": "x"}})
+    assert len(rec.requests) == 1
+
+    # Okuma zaman aşımı: istek gönderilmiş olabilir, POST tekrarlanmaz.
+    hs, rec, _ = make([httpx.ReadTimeout("yanıt yok")])
+    with pytest.raises(NetworkError):
+        hs.events.send({"events": []})
+    assert len(rec.requests) == 1
+
+
+def test_post_with_idempotency_key_is_retried_on_5xx():
+    hs, rec, sleeps = make([_unavailable(), json_response(200, {"accepted": 1})])
+    res = hs.events.send({"events": []}, request_options={"idempotency_key": "evt-1"})
+    assert res == {"accepted": 1}
+    assert len(rec.requests) == 2 and sleeps == [0.3]
+    assert {r.headers["idempotency-key"] for r in rec.requests} == {"evt-1"}
+
+    # Kullanıcının başlıkla verdiği anahtar da sayılır; PATCH aynı kurala uyar.
+    hs, rec, _ = make([_unavailable(), json_response(200, {"id": "app_1"})])
+    hs.apps.update({"name": "x"}, request_options={"headers": {"Idempotency-Key": "upd-1"}})
+    assert len(rec.requests) == 2 and rec.requests[0].method == "PATCH"
+
+
+def test_idempotent_methods_are_retried_on_5xx():
+    hs, rec, _ = make([_unavailable(), json_response(200, {"data": []})])
+    hs.apps.list()
+    assert [r.method for r in rec.requests] == ["GET", "GET"]
+
+    hs, rec, _ = make([_unavailable(), httpx.Response(204)])
+    hs.request("DELETE", "/v1/apps/app_1/segments/seg_1")
+    assert [r.method for r in rec.requests] == ["DELETE", "DELETE"]
+
+
+def test_rate_limited_post_is_retried_without_key():
+    hs, rec, sleeps = make(
+        [
+            json_response(429, {"error": {"code": "HS_RATE_LIMITED", "message": "x"}}, {"retry-after": "1"}),
+            json_response(200, {"accepted": 1}),
+        ]
+    )
+    assert hs.events.send({"events": []}) == {"accepted": 1}
+    assert len(rec.requests) == 2 and sleeps == [1.0]
+    assert "idempotency-key" not in rec.requests[0].headers
+
+
+def test_post_retried_when_request_was_never_sent():
+    hs, rec, _ = make([httpx.ConnectError("bağlantı reddedildi"), httpx.ConnectTimeout("x"), json_response(200, {"accepted": 1})])
+    assert hs.events.send({"events": []}) == {"accepted": 1}
+    assert len(rec.requests) == 3
+
+
+def test_post_retried_on_real_connection_refused():
+    import socket
+
+    with socket.socket() as sock:
+        sock.bind(("127.0.0.1", 0))
+        port = sock.getsockname()[1]
+    sleeps = []
+    hs = HeroSignal("k", app_id="a", base_url=f"http://127.0.0.1:{port}", sleep=sleeps.append, max_retries=1)
+    with pytest.raises(NetworkError):
+        hs.events.send({"events": []})
+    assert sleeps == [0.3], "bağlantı reddi: istek gönderilmedi, POST yeniden denenir"
+
+
+def test_in_app_select_winner_and_deprecated_alias():
+    hs, rec, _ = make([json_response(200, {"id": "iam_1"}), json_response(200, {"id": "iam_1"})])
+    hs.in_app_messages.select_winner("iam_1", {"variant_id": "b"})
+    hs.in_app_messages.winner("iam_1", {"variant_id": "b"})
+    assert [str(r.url) for r in rec.requests] == ["https://api.test/v1/apps/app_1/in-app-messages/iam_1/winner"] * 2
+    assert all(r.method == "POST" and json.loads(r.content) == {"variant_id": "b"} for r in rec.requests)
+
+
 def test_pagination_iterates_all_pages():
     hs, rec, _ = make(
         [
