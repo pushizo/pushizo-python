@@ -2258,6 +2258,17 @@ class InAppMessageStats(TypedDict, total=False):
     ctr: float
 
 
+class InAppMessageVariantSignificance(TypedDict, total=False):
+    """InAppMessageVariantSignificance şeması."""
+
+    #: Zorunlu.
+    leader: Optional[str]
+    #: Zorunlu.
+    p_value: float
+    #: Zorunlu.
+    significant: bool
+
+
 class InAppMessageVariantsItem(TypedDict, total=False):
     """InAppMessageVariantsItem şeması."""
 
@@ -2282,17 +2293,6 @@ class InAppMessageVariantsItemDisplay(TypedDict, total=False):
     auto_dismiss_seconds: int
     #: Zorunlu.
     blocks: List[Any]
-
-
-class InAppMessageVariantSignificance(TypedDict, total=False):
-    """InAppMessageVariantSignificance şeması."""
-
-    #: Zorunlu.
-    leader: Optional[str]
-    #: Zorunlu.
-    p_value: float
-    #: Zorunlu.
-    significant: bool
 
 
 class InAppMessageVariantStatsItem(TypedDict, total=False):
@@ -5130,9 +5130,9 @@ __all__ = [
     "InAppMessageFrequency",
     "InAppMessagePage",
     "InAppMessageStats",
+    "InAppMessageVariantSignificance",
     "InAppMessageVariantsItem",
     "InAppMessageVariantsItemDisplay",
-    "InAppMessageVariantSignificance",
     "InAppMessageVariantStatsItem",
     "InAppStatusDto",
     "InAppWinnerDto",
