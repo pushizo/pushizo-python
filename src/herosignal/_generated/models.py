@@ -1134,6 +1134,8 @@ class ConversionsReportByCampaignItem(TypedDict, total=False):
     #: Zorunlu.
     influenced: int
     #: Zorunlu.
+    unattributed: int
+    #: Zorunlu.
     revenue: float
     #: Zorunlu.
     sent: int
@@ -1150,6 +1152,8 @@ class ConversionsReportPrevious(TypedDict, total=False):
     direct: int
     #: Zorunlu.
     influenced: int
+    #: Zorunlu.
+    unattributed: int
     #: Zorunlu.
     revenue: float
 
@@ -1174,6 +1178,8 @@ class ConversionsReportTotals(TypedDict, total=False):
     direct: int
     #: Zorunlu.
     influenced: int
+    #: Zorunlu.
+    unattributed: int
     #: Zorunlu.
     revenue: float
 
@@ -1785,6 +1791,10 @@ class EventDefinition(TypedDict, total=False):
     #: Zorunlu.
     is_conversion: bool
     #: Zorunlu.
+    outcome_unique: bool
+    #: Zorunlu.
+    outcome_unattributed: bool
+    #: Zorunlu.
     first_seen_at: str
     #: Zorunlu.
     last_seen_at: str
@@ -1811,6 +1821,10 @@ class EventDefinitionDetail(TypedDict, total=False):
     properties_schema: Dict[str, str]
     #: Zorunlu.
     is_conversion: bool
+    #: Zorunlu.
+    outcome_unique: bool
+    #: Zorunlu.
+    outcome_unattributed: bool
     #: Zorunlu.
     first_seen_at: str
     #: Zorunlu.
@@ -3126,6 +3140,8 @@ class PatchEventDefinitionDto(TypedDict, total=False):
 
     display_name: Optional[str]
     is_conversion: bool
+    outcome_unique: bool
+    outcome_unattributed: bool
 
 
 class PatchSubscriptionDto(TypedDict, total=False):
