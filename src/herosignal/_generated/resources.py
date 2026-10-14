@@ -2928,6 +2928,24 @@ class OrganizationResource:
             cursor,
         )
 
+    def usage(
+        self,
+        *,
+        days: Optional[int] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "UsageReport":
+        """Organizasyon kullanımı ve plan kotaları (org geneli anahtar)
+
+        ``GET /v1/organization/usage``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/organization/usage",
+            path_params={},
+            query={"days": days},
+            request_options=request_options,
+        )
+
 
 class CategoriesResource:
     """categories kaynağı."""
