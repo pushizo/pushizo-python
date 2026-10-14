@@ -1307,6 +1307,7 @@ class CreateInAppDto(TypedDict, total=False):
     triggers: List[Any]
     trigger_groups: List[List[Any]]
     variants: List["CreateInAppDtoVariantsItem"]
+    ab_test: "CreateInAppDtoAbTest"
     #: Zorunlu.
     display: "CreateInAppDtoDisplay"
     audience: "CreateInAppDtoAudience"
@@ -1315,6 +1316,21 @@ class CreateInAppDto(TypedDict, total=False):
     priority: int
     start_at: Optional[str]
     end_at: Optional[str]
+
+
+class CreateInAppDtoAbTest(TypedDict, total=False):
+    """CreateInAppDtoAbTest şeması."""
+
+    winner: "CreateInAppDtoAbTestWinner"
+
+
+class CreateInAppDtoAbTestWinner(TypedDict, total=False):
+    """CreateInAppDtoAbTestWinner şeması."""
+
+    #: Zorunlu. Değerler: "manual", "auto".
+    mode: str
+    min_impressions: int
+    confidence: float
 
 
 class CreateInAppDtoAudience(TypedDict, total=False):
@@ -2154,9 +2170,34 @@ class InAppMessage(TypedDict, total=False):
     #: Zorunlu.
     variant_stats: List["InAppMessageVariantStatsItem"]
     #: Zorunlu.
+    ab_test: "InAppMessageAbTest"
+    #: Zorunlu.
+    variant_significance: Optional["InAppMessageVariantSignificance"]
+    #: Zorunlu.
     created_at: str
     #: Zorunlu.
     updated_at: str
+
+
+class InAppMessageAbTest(TypedDict, total=False):
+    """InAppMessageAbTest şeması."""
+
+    winner: "InAppMessageAbTestWinner"
+    #: Zorunlu.
+    winner_variant_id: Optional[str]
+    #: Zorunlu.
+    decided_at: Optional[str]
+    #: Zorunlu.
+    decided_by: Optional[str]
+
+
+class InAppMessageAbTestWinner(TypedDict, total=False):
+    """InAppMessageAbTestWinner şeması."""
+
+    #: Zorunlu. Değerler: "manual", "auto".
+    mode: str
+    min_impressions: int
+    confidence: float
 
 
 class InAppMessageAudience(TypedDict, total=False):
@@ -2239,6 +2280,17 @@ class InAppMessageVariantsItemDisplay(TypedDict, total=False):
     blocks: List[Any]
 
 
+class InAppMessageVariantSignificance(TypedDict, total=False):
+    """InAppMessageVariantSignificance şeması."""
+
+    #: Zorunlu.
+    leader: Optional[str]
+    #: Zorunlu.
+    p_value: float
+    #: Zorunlu.
+    significant: bool
+
+
 class InAppMessageVariantStatsItem(TypedDict, total=False):
     """InAppMessageVariantStatsItem şeması."""
 
@@ -2257,6 +2309,13 @@ class InAppStatusDto(TypedDict, total=False):
 
     #: Zorunlu. Değerler: "draft", "active", "paused", "archived".
     status: str
+
+
+class InAppWinnerDto(TypedDict, total=False):
+    """InAppWinnerDto şeması."""
+
+    #: Zorunlu.
+    variant_id: str
 
 
 class InboxItem(TypedDict, total=False):
@@ -4224,6 +4283,7 @@ class UpdateInAppDto(TypedDict, total=False):
     triggers: List[Any]
     trigger_groups: List[List[Any]]
     variants: List["UpdateInAppDtoVariantsItem"]
+    ab_test: "UpdateInAppDtoAbTest"
     display: "UpdateInAppDtoDisplay"
     audience: "UpdateInAppDtoAudience"
     frequency: "UpdateInAppDtoFrequency"
@@ -4231,6 +4291,21 @@ class UpdateInAppDto(TypedDict, total=False):
     priority: int
     start_at: Optional[str]
     end_at: Optional[str]
+
+
+class UpdateInAppDtoAbTest(TypedDict, total=False):
+    """UpdateInAppDtoAbTest şeması."""
+
+    winner: "UpdateInAppDtoAbTestWinner"
+
+
+class UpdateInAppDtoAbTestWinner(TypedDict, total=False):
+    """UpdateInAppDtoAbTestWinner şeması."""
+
+    #: Zorunlu. Değerler: "manual", "auto".
+    mode: str
+    min_impressions: int
+    confidence: float
 
 
 class UpdateInAppDtoAudience(TypedDict, total=False):
@@ -4991,6 +5066,8 @@ __all__ = [
     "CreateExportDto",
     "CreateExportDtoFilters",
     "CreateInAppDto",
+    "CreateInAppDtoAbTest",
+    "CreateInAppDtoAbTestWinner",
     "CreateInAppDtoAudience",
     "CreateInAppDtoDisplay",
     "CreateInAppDtoFrequency",
@@ -5042,6 +5119,8 @@ __all__ = [
     "ImportList",
     "ImportStats",
     "InAppMessage",
+    "InAppMessageAbTest",
+    "InAppMessageAbTestWinner",
     "InAppMessageAudience",
     "InAppMessageDisplay",
     "InAppMessageFrequency",
@@ -5049,8 +5128,10 @@ __all__ = [
     "InAppMessageStats",
     "InAppMessageVariantsItem",
     "InAppMessageVariantsItemDisplay",
+    "InAppMessageVariantSignificance",
     "InAppMessageVariantStatsItem",
     "InAppStatusDto",
+    "InAppWinnerDto",
     "InboxItem",
     "InboxPage",
     "InboxReadAllResult",
@@ -5185,6 +5266,8 @@ __all__ = [
     "UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue",
     "UpdateCategoryDto",
     "UpdateInAppDto",
+    "UpdateInAppDtoAbTest",
+    "UpdateInAppDtoAbTestWinner",
     "UpdateInAppDtoAudience",
     "UpdateInAppDtoDisplay",
     "UpdateInAppDtoFrequency",
