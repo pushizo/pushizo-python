@@ -4519,6 +4519,8 @@ class User(TypedDict, total=False):
     #: Zorunlu.
     session_count: int
     #: Zorunlu.
+    usage_seconds: int
+    #: Zorunlu.
     merged_into: Optional[str]
     #: Zorunlu.
     created_at: str
@@ -4549,6 +4551,8 @@ class UserDetail(TypedDict, total=False):
     last_active_at: str
     #: Zorunlu.
     session_count: int
+    #: Zorunlu.
+    usage_seconds: int
     #: Zorunlu.
     merged_into: Optional[str]
     #: Zorunlu.
