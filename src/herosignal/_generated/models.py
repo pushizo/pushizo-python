@@ -118,6 +118,8 @@ class App(TypedDict, total=False):
     timezone: str
     #: Zorunlu.
     settings: "AppSettings"
+    #: Zorunlu. Değerler: "hmac", "jwt", "both".
+    identity_verification_mode: str
     #: Zorunlu. Değerler: "active", "suspended", "deleted".
     status: str
     #: Zorunlu.
@@ -1298,6 +1300,15 @@ CreateExportDtoFilters = TypedDict(
 )
 
 
+class CreateIdentityKeyDto(TypedDict, total=False):
+    """CreateIdentityKeyDto şeması."""
+
+    kid: str
+    label: str
+    public_jwk: Dict[str, Any]
+    public_key_pem: str
+
+
 class CreateInAppDto(TypedDict, total=False):
     """CreateInAppDto şeması."""
 
@@ -1621,7 +1632,7 @@ class CreateWebhookDto(TypedDict, total=False):
     #: Zorunlu.
     url: str
     description: Optional[str]
-    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited".
+    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "audit.created".
     events: List[str]
     event_filters: "CreateWebhookDtoEventFilters"
     batch: bool
@@ -1811,6 +1822,8 @@ class EventDefinition(TypedDict, total=False):
     #: Zorunlu.
     outcome_unattributed: bool
     #: Zorunlu.
+    retention_days: Optional[int]
+    #: Zorunlu.
     first_seen_at: str
     #: Zorunlu.
     last_seen_at: str
@@ -1841,6 +1854,8 @@ class EventDefinitionDetail(TypedDict, total=False):
     outcome_unique: bool
     #: Zorunlu.
     outcome_unattributed: bool
+    #: Zorunlu.
+    retention_days: Optional[int]
     #: Zorunlu.
     first_seen_at: str
     #: Zorunlu.
@@ -2087,6 +2102,32 @@ class FunnelReportStepsItem(TypedDict, total=False):
     conversion_rate: Optional[float]
     #: Zorunlu.
     drop_off: int
+
+
+class IdentityKey(TypedDict, total=False):
+    """IdentityKey şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    kid: str
+    #: Zorunlu. Değerler: "ES256".
+    alg: str
+    #: Zorunlu.
+    public_jwk: Dict[str, str]
+    #: Zorunlu.
+    label: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    revoked_at: Optional[str]
+
+
+class IdentityKeyList(TypedDict, total=False):
+    """IdentityKeyList şeması."""
+
+    #: Zorunlu.
+    data: List["IdentityKey"]
 
 
 class Import(TypedDict, total=False):
@@ -3083,6 +3124,14 @@ class OrgSettings(TypedDict, total=False):
     ipAllowlist: List[str]
     retentionDays: int
     sessionMaxHours: int
+    auditStream: "OrgSettingsAuditStream"
+
+
+class OrgSettingsAuditStream(TypedDict, total=False):
+    """OrgSettingsAuditStream şeması."""
+
+    s3: bool
+    webhookAppId: Optional[str]
 
 
 OverviewStats = TypedDict(
@@ -3205,6 +3254,7 @@ class PatchEventDefinitionDto(TypedDict, total=False):
     is_conversion: bool
     outcome_unique: bool
     outcome_unattributed: bool
+    retention_days: Optional[int]
 
 
 class PatchSubscriptionDto(TypedDict, total=False):
@@ -4022,6 +4072,8 @@ class UpdateAppDto(TypedDict, total=False):
     default_language: str
     timezone: str
     settings: "UpdateAppDtoSettings"
+    #: Değerler: "hmac", "jwt", "both".
+    identity_verification_mode: str
 
 
 class UpdateAppDtoPlatformFlags(TypedDict, total=False):
@@ -4480,7 +4532,7 @@ class UpdateWebhookDto(TypedDict, total=False):
 
     url: str
     description: Optional[str]
-    #: Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited".
+    #: Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "audit.created".
     events: List[str]
     event_filters: "UpdateWebhookDtoEventFilters"
     batch: bool
@@ -5069,6 +5121,7 @@ __all__ = [
     "CreatedApiKey",
     "CreateExportDto",
     "CreateExportDtoFilters",
+    "CreateIdentityKeyDto",
     "CreateInAppDto",
     "CreateInAppDtoAbTest",
     "CreateInAppDtoAbTestWinner",
@@ -5119,6 +5172,8 @@ __all__ = [
     "FunnelReport",
     "FunnelReportPrevious",
     "FunnelReportStepsItem",
+    "IdentityKey",
+    "IdentityKeyList",
     "Import",
     "ImportList",
     "ImportStats",
@@ -5180,6 +5235,7 @@ __all__ = [
     "Ok",
     "Org",
     "OrgSettings",
+    "OrgSettingsAuditStream",
     "OverviewStats",
     "OverviewStatsChannelsItem",
     "OverviewStatsKpis",

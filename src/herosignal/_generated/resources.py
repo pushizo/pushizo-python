@@ -3098,6 +3098,72 @@ class CategoriesResource:
         )
 
 
+class IdentityKeysResource:
+    """identityKeys kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "IdentityKeyList":
+        """SDK kimlik doğrulama (JWT) genel anahtarları
+
+        ``GET /v1/apps/{appId}/identity-keys``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/identity-keys",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: "CreateIdentityKeyDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "IdentityKey":
+        """Genel anahtar ekle (ES256)
+
+        ``POST /v1/apps/{appId}/identity-keys``
+
+        SDK JWT identity verification için ES256 (EC P-256) genel anahtarı ekler; özel anahtar gönderilmez. Belirteç sunucunuzda imzalanır (`sub` = external_id, `aud` = app_id, `exp` ≤ 24 saat) ve SDK isteklerinde `Authorization: Bearer <jwt>` başlığıyla taşınır. Kip app ayarında `identity_verification_mode` ile seçilir.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/identity-keys",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def revoke(
+        self,
+        key_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "IdentityKey":
+        """Genel anahtarı iptal et
+
+        ``DELETE /v1/apps/{appId}/identity-keys/{keyId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/identity-keys/{keyId}",
+            path_params={"keyId": key_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class JourneysResource:
     """journeys kaynağı."""
 
@@ -3623,6 +3689,7 @@ class GeneratedResources:
     api_keys: ApiKeysResource
     organization: OrganizationResource
     categories: CategoriesResource
+    identity_keys: IdentityKeysResource
     journeys: JourneysResource
     preferences: PreferencesResource
 
@@ -3647,6 +3714,7 @@ class GeneratedResources:
         self.api_keys = ApiKeysResource(self)  # type: ignore[arg-type]
         self.organization = OrganizationResource(self)  # type: ignore[arg-type]
         self.categories = CategoriesResource(self)  # type: ignore[arg-type]
+        self.identity_keys = IdentityKeysResource(self)  # type: ignore[arg-type]
         self.journeys = JourneysResource(self)  # type: ignore[arg-type]
         self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
 
@@ -3672,6 +3740,7 @@ RESOURCE_NAMES = (
     "api_keys",
     "organization",
     "categories",
+    "identity_keys",
     "journeys",
     "preferences",
 )
