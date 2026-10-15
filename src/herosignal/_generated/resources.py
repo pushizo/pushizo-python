@@ -984,7 +984,7 @@ class TemplatesResource:
         ``GET /v1/apps/{appId}/templates``
 
         Parametreler:
-            channel: Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+            channel: Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
         """
         return self._client._call(
             "GET",
@@ -1204,7 +1204,7 @@ class CampaignsResource:
         Parametreler:
             status: Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
             type: Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
-            channel: Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
+            channel: Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
         """
         return self._client._call(
             "GET",
@@ -1945,7 +1945,7 @@ class SuppressionsResource:
         ``GET /v1/apps/{appId}/suppressions``
 
         Parametreler:
-            channel: Değerler: "email", "sms".
+            channel: Değerler: "email", "sms", "whatsapp", "rcs".
             reason: Değerler: "bounce", "complaint", "manual", "unsubscribe_link", "stop".
         """
         return self._client._call(
@@ -2238,6 +2238,26 @@ class WebhooksResource:
         return self._client._call(
             "POST",
             "/v1/apps/{appId}/webhooks",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def preview(
+        self,
+        body: "WebhookPreviewDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebhookPreviewResult":
+        """Event Streams önizlemesi: örnek olay + şablon + filtre → gövde/hata (gönderim yapmaz)
+
+        ``POST /v1/apps/{appId}/webhooks/preview``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/webhooks/preview",
             path_params={},
             body=body,
             app_id=app_id,
@@ -3098,6 +3118,647 @@ class CategoriesResource:
         )
 
 
+class ContentTablesResource:
+    """contentTables kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def list_tables(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ContentTableList":
+        """İçerik tabloları
+
+        ``GET /v1/apps/{appId}/content-tables``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/content-tables",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_table_upload(
+        self,
+        file: FileInput,
+        name: str,
+        key_column: str,
+        *,
+        description: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ContentTable":
+        """CSV ile içerik tablosu oluştur
+
+        ``POST /v1/apps/{appId}/content-tables``
+
+        Şablonda `{% lookup '<ad>' key: user.tags.<etiket> as satir %}{{ satir.<sütun> }}`.
+
+        Parametreler:
+            file: UTF-8 CSV; ilk satır başlık. En fazla 100.000 satır, 20 MB.
+            name: Liquid tablo adı (küçük harf, rakam, alt çizgi).
+            key_column: Satır seçiminde kullanılan anahtar sütunu (değerleri benzersiz).
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/content-tables",
+            path_params={},
+            form={"name": name, "key_column": key_column, "description": description},
+            files={"file": file},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get_table(
+        self,
+        table_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ContentTable":
+        """İçerik tablosu ayrıntısı
+
+        ``GET /v1/apps/{appId}/content-tables/{tableId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/content-tables/{tableId}",
+            path_params={"tableId": table_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_table(
+        self,
+        table_id: str,
+        body: "UpdateContentTableDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ContentTable":
+        """İçerik tablosu açıklamasını güncelle
+
+        ``PATCH /v1/apps/{appId}/content-tables/{tableId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/content-tables/{tableId}",
+            path_params={"tableId": table_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete_table(
+        self,
+        table_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """İçerik tablosunu sil
+
+        ``DELETE /v1/apps/{appId}/content-tables/{tableId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/content-tables/{tableId}",
+            path_params={"tableId": table_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def replace_table_upload(
+        self,
+        table_id: str,
+        file: FileInput,
+        *,
+        key_column: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ContentTable":
+        """İçerik tablosunu yeniden yükle (sürüm artar)
+
+        ``PUT /v1/apps/{appId}/content-tables/{tableId}/rows``
+
+        Parametreler:
+            file: Yeni CSV (tablonun tüm satırları değiştirilir, sürüm artar).
+            key_column: İsteğe bağlı yeni anahtar sütunu.
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/content-tables/{tableId}/rows",
+            path_params={"tableId": table_id},
+            form={"key_column": key_column},
+            files={"file": file},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def table_rows(
+        self,
+        table_id: str,
+        *,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        q: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ContentTableRows":
+        """İçerik tablosu satırları
+
+        ``GET /v1/apps/{appId}/content-tables/{tableId}/rows``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/content-tables/{tableId}/rows",
+            path_params={"tableId": table_id},
+            query={"limit": limit, "offset": offset, "q": q},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
+class ConversationsResource:
+    """conversations kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        channel: Optional[str] = None,
+        status: Optional[str] = None,
+        unread: Optional[str] = None,
+        q: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ConversationPage":
+        """Konuşmalar (SMS, WhatsApp, RCS; son mesaja göre; kanal/durum/okunmamış/kişi filtresi)
+
+        ``GET /v1/apps/{appId}/conversations``
+
+        Parametreler:
+            channel: Değerler: "sms", "whatsapp", "rcs".
+            status: Değerler: "open", "closed".
+            unread: Değerler: "true", "false".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/conversations",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "channel": channel, "status": status, "unread": unread, "q": q},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        channel: Optional[str] = None,
+        status: Optional[str] = None,
+        unread: Optional[str] = None,
+        q: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["Conversation"]:
+        """``list`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list(
+                limit=limit,
+                channel=channel,
+                status=status,
+                unread=unread,
+                q=q,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def get(
+        self,
+        conversation_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Conversation":
+        """Konuşma (WhatsApp oturum penceresi ve açık rıza durumu dahil)
+
+        ``GET /v1/apps/{appId}/conversations/{conversationId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/conversations/{conversationId}",
+            path_params={"conversationId": conversation_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def messages(
+        self,
+        conversation_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ConversationMessagePage":
+        """Konuşma mesajları (yeniden eskiye; giden mesaj durumu teslimattan)
+
+        ``GET /v1/apps/{appId}/conversations/{conversationId}/messages``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/conversations/{conversationId}/messages",
+            path_params={"conversationId": conversation_id},
+            query={"limit": limit, "cursor": cursor},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def messages_all(
+        self,
+        conversation_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["ConversationMessagePageDataItem"]:
+        """``messages`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.messages(
+                conversation_id,
+                limit=limit,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def reply(
+        self,
+        conversation_id: str,
+        body: "ConversationReplyDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ConversationReplyResult":
+        """Yanıt gönder. WhatsApp: açık rıza zorunlu; son gelen mesajdan 24 saat içinde metin/medya, pencere dışında yalnızca onaylı şablon (aksi 422 WHATSAPP_WINDOW_CLOSED).
+
+        ``POST /v1/apps/{appId}/conversations/{conversationId}/messages``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/conversations/{conversationId}/messages",
+            path_params={"conversationId": conversation_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def read(
+        self,
+        conversation_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Conversation":
+        """Gelen mesajları okundu işaretle
+
+        ``POST /v1/apps/{appId}/conversations/{conversationId}/read``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/conversations/{conversationId}/read",
+            path_params={"conversationId": conversation_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
+class DataFeedsResource:
+    """dataFeeds kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def list_feeds(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DataFeedList":
+        """Data feed listesi
+
+        ``GET /v1/apps/{appId}/data-feeds``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/data-feeds",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_feed(
+        self,
+        body: "CreateDataFeedDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DataFeed":
+        """Data feed oluştur
+
+        ``POST /v1/apps/{appId}/data-feeds``
+
+        URL şablonu Liquid ile kişiselleştirilir (ör. `https://api.ornek.com/u/{{ user.external_id }}`); şablonda `{{ feed.<ad>.alan }}`.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/data-feeds",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get_feed(
+        self,
+        feed_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DataFeed":
+        """Data feed ayrıntısı
+
+        ``GET /v1/apps/{appId}/data-feeds/{feedId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/data-feeds/{feedId}",
+            path_params={"feedId": feed_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_feed(
+        self,
+        feed_id: str,
+        body: "UpdateDataFeedDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DataFeed":
+        """Data feed güncelle
+
+        ``PATCH /v1/apps/{appId}/data-feeds/{feedId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/data-feeds/{feedId}",
+            path_params={"feedId": feed_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete_feed(
+        self,
+        feed_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Data feed sil
+
+        ``DELETE /v1/apps/{appId}/data-feeds/{feedId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/data-feeds/{feedId}",
+            path_params={"feedId": feed_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def test_feed(
+        self,
+        feed_id: str,
+        body: "TestDataFeedDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DataFeedTestResult":
+        """Data feed'i örnek kullanıcıyla dene
+
+        ``POST /v1/apps/{appId}/data-feeds/{feedId}/test``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/data-feeds/{feedId}/test",
+            path_params={"feedId": feed_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
+class EmailDeliverabilityResource:
+    """emailDeliverability kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def settings(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailDeliverabilitySettings":
+        """E-posta teslim ayarları (BCC/arşiv, gönderim öncesi adres doğrulama, üçüncü taraf doğrulayıcı)
+
+        ``GET /v1/apps/{appId}/email-deliverability``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/email-deliverability",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        body: "DeliverabilitySettingsDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailDeliverabilitySettings":
+        """E-posta teslim ayarlarını güncelle (doğrulayıcı anahtarı zarf şifreli saklanır, geri okunmaz)
+
+        ``PUT /v1/apps/{appId}/email-deliverability``
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/email-deliverability",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def verify(
+        self,
+        body: "VerifyAddressDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailAddressCheck":
+        """Adres doğrulama testi (sözdizimi, MX, tek kullanımlık alan adı, rol hesabı, üçüncü taraf)
+
+        ``POST /v1/apps/{appId}/email-deliverability/verify-address``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/email-deliverability/verify-address",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def plans(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailWarmupPlanList":
+        """Isındırma planları (bugünkü limit/kullanım ve ileri günlere ayrılmış gönderimler)
+
+        ``GET /v1/apps/{appId}/email-deliverability/warmup-plans``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/email-deliverability/warmup-plans",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: "CreateWarmupPlanDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailWarmupPlan":
+        """Isındırma planı oluştur (günlük limit eğrisi veya başlangıç/çarpan/hedef; sağlayıcı payları)
+
+        ``POST /v1/apps/{appId}/email-deliverability/warmup-plans``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/email-deliverability/warmup-plans",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        plan_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailWarmupPlan":
+        """Isındırma planı
+
+        ``GET /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}",
+            path_params={"planId": plan_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_plan(
+        self,
+        plan_id: str,
+        body: "UpdateWarmupPlanDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailWarmupPlan":
+        """Isındırma planını güncelle (duraklat/sürdür, eğri, paylar)
+
+        ``PATCH /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}",
+            path_params={"planId": plan_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        plan_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Isındırma planını sil
+
+        ``DELETE /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}",
+            path_params={"planId": plan_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def usage(
+        self,
+        plan_id: str,
+        *,
+        days: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailWarmupUsage":
+        """Isındırma planı gün × sağlayıcı kullanımı
+
+        ``GET /v1/apps/{appId}/email-deliverability/warmup-plans/{planId}/usage``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}/usage",
+            path_params={"planId": plan_id},
+            query={"days": days},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class IdentityKeysResource:
     """identityKeys kaynağı."""
 
@@ -3159,6 +3820,94 @@ class IdentityKeysResource:
             "DELETE",
             "/v1/apps/{appId}/identity-keys/{keyId}",
             path_params={"keyId": key_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
+class IntegrationsResource:
+    """integrations kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def me(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ZapierMe":
+        """Zapier bağlantı testi: anahtarın app’i ve kapsamları
+
+        ``GET /v1/apps/{appId}/integrations/zapier/me``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/integrations/zapier/me",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def subscribe(
+        self,
+        body: "ZapierSubscribeDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ZapierHook":
+        """REST Hook aboneliği (Zap açıldı)
+
+        ``POST /v1/apps/{appId}/integrations/zapier/hooks``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/integrations/zapier/hooks",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def unsubscribe(
+        self,
+        hook_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "IntegrationOk":
+        """REST Hook aboneliğini sil (Zap kapatıldı)
+
+        ``DELETE /v1/apps/{appId}/integrations/zapier/hooks/{hookId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/integrations/zapier/hooks/{hookId}",
+            path_params={"hookId": hook_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def samples(
+        self,
+        *,
+        event: str,
+        event_name: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> List["ZapierSamplesItem"]:
+        """Tetik örnekleri (performList): son kayıtlar, abonelik gövdesiyle aynı biçim
+
+        ``GET /v1/apps/{appId}/integrations/zapier/samples``
+
+        Parametreler:
+            event: Değerler: "subscription.created", "subscription.unsubscribed", "event.received", "delivery.delivered", "delivery.opened", "delivery.clicked", "user.created", "user.updated", "conversion.created", "campaign.completed".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/integrations/zapier/samples",
+            path_params={},
+            query={"event": event, "event_name": event_name},
             app_id=app_id,
             request_options=request_options,
         )
@@ -3769,6 +4518,53 @@ class LiveActivitiesResource:
         )
 
 
+class McpResource:
+    """mcp kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def create_campaign_draft(
+        self,
+        body: "McpCreateCampaignDraftBody",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Campaign":
+        """Kampanya taslağı oluştur (MCP onaylı mod; gönderim yapmaz)
+
+        ``POST /v1/apps/{appId}/mcp/campaign-drafts``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/mcp/campaign-drafts",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_segment_draft(
+        self,
+        body: "McpCreateSegmentDraftBody",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Segment":
+        """Segment taslağı oluştur (MCP onaylı mod; dinamik segment)
+
+        ``POST /v1/apps/{appId}/mcp/segment-drafts``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/mcp/segment-drafts",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class PreferencesResource:
     """preferences kaynağı."""
 
@@ -3818,6 +4614,359 @@ class PreferencesResource:
         )
 
 
+class SmsKeywordsResource:
+    """smsKeywords kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def keywords(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SmsKeywordList":
+        """İki yönlü mesaj anahtar sözcükleri (org geneli + bu app) ve yasal (ayrılmış) sözcükler
+
+        ``GET /v1/apps/{appId}/sms-keywords``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/sms-keywords",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_keyword(
+        self,
+        body: "CreateKeywordDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SmsKeyword":
+        """Anahtar sözcük oluştur (tag ekle/kaldır, olay → journey tetiği, otomatik yanıt, abonelik)
+
+        ``POST /v1/apps/{appId}/sms-keywords``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/sms-keywords",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_keyword(
+        self,
+        keyword_id: str,
+        body: "UpdateKeywordDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SmsKeyword":
+        """Anahtar sözcüğü güncelle
+
+        ``PATCH /v1/apps/{appId}/sms-keywords/{keywordId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/sms-keywords/{keywordId}",
+            path_params={"keywordId": keyword_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete_keyword(
+        self,
+        keyword_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Anahtar sözcüğü sil
+
+        ``DELETE /v1/apps/{appId}/sms-keywords/{keywordId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/sms-keywords/{keywordId}",
+            path_params={"keywordId": keyword_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
+class WarehouseExportsResource:
+    """warehouseExports kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def tables(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseTables":
+        """Dışa aktarılabilir tablolar, kolonlar ve şema sürümleri
+
+        ``GET /v1/apps/{appId}/warehouse-exports/tables``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/warehouse-exports/tables",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def test(
+        self,
+        body: Any,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseConnectionResult":
+        """Kaydetmeden bağlantı testi
+
+        ``POST /v1/apps/{appId}/warehouse-exports/test-connection``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/warehouse-exports/test-connection",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseExportList":
+        """Veri ambarı dışa aktarımları
+
+        ``GET /v1/apps/{appId}/warehouse-exports``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/warehouse-exports",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: Any,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseExport":
+        """Dışa aktarım oluştur (kimlik bilgisi şifreli saklanır, yanıtta dönmez)
+
+        ``POST /v1/apps/{appId}/warehouse-exports``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/warehouse-exports",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        export_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseExport":
+        """Dışa aktarım detayı
+
+        ``GET /v1/apps/{appId}/warehouse-exports/{exportId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/warehouse-exports/{exportId}",
+            path_params={"exportId": export_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        export_id: str,
+        body: "UpdateWarehouseExportDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseExport":
+        """Dışa aktarımı güncelle (ad, tablolar, zamanlama, etkin/duraklat, hedef ayarı, kimlik bilgisi)
+
+        ``PATCH /v1/apps/{appId}/warehouse-exports/{exportId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/warehouse-exports/{exportId}",
+            path_params={"exportId": export_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        export_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Dışa aktarımı sil (hedefteki veriler silinmez)
+
+        ``DELETE /v1/apps/{appId}/warehouse-exports/{exportId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/warehouse-exports/{exportId}",
+            path_params={"exportId": export_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def test_saved(
+        self,
+        export_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseConnectionResult":
+        """Kayıtlı dışa aktarımın bağlantı testi
+
+        ``POST /v1/apps/{appId}/warehouse-exports/{exportId}/test``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/warehouse-exports/{exportId}/test",
+            path_params={"exportId": export_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def run(
+        self,
+        export_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseExportRun":
+        """Şimdi çalıştır (son başarılı imleçten itibaren)
+
+        ``POST /v1/apps/{appId}/warehouse-exports/{exportId}/run``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/warehouse-exports/{exportId}/run",
+            path_params={"exportId": export_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def runs(
+        self,
+        export_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseExportRunPage":
+        """Çalıştırma geçmişi (cursor)
+
+        ``GET /v1/apps/{appId}/warehouse-exports/{exportId}/runs``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/warehouse-exports/{exportId}/runs",
+            path_params={"exportId": export_id},
+            query={"limit": limit, "cursor": cursor},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def runs_all(
+        self,
+        export_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["WarehouseExportRun"]:
+        """``runs`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.runs(
+                export_id,
+                limit=limit,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+
+class WhatsappResource:
+    """whatsapp kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def templates(
+        self,
+        *,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WhatsAppTemplateList":
+        """WhatsApp şablonları (Meta onay durumu ile)
+
+        ``GET /v1/apps/{appId}/whatsapp/templates``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/whatsapp/templates",
+            path_params={},
+            query={"status": status},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def sync(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WhatsAppTemplateSync":
+        """WhatsApp şablonlarını Meta Graph API’den senkronla
+
+        ``POST /v1/apps/{appId}/whatsapp/templates/sync``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/whatsapp/templates/sync",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class GeneratedResources:
     """İstemciye kaynak alanlarını ekleyen üretilmiş karışım (mixin) sınıfı."""
 
@@ -3841,10 +4990,19 @@ class GeneratedResources:
     api_keys: ApiKeysResource
     organization: OrganizationResource
     categories: CategoriesResource
+    content_tables: ContentTablesResource
+    conversations: ConversationsResource
+    data_feeds: DataFeedsResource
+    email_deliverability: EmailDeliverabilityResource
     identity_keys: IdentityKeysResource
+    integrations: IntegrationsResource
     journeys: JourneysResource
     live_activities: LiveActivitiesResource
+    mcp: McpResource
     preferences: PreferencesResource
+    sms_keywords: SmsKeywordsResource
+    warehouse_exports: WarehouseExportsResource
+    whatsapp: WhatsappResource
 
     def _init_resources(self) -> None:
         self.notifications = NotificationsResource(self)  # type: ignore[arg-type]
@@ -3867,10 +5025,19 @@ class GeneratedResources:
         self.api_keys = ApiKeysResource(self)  # type: ignore[arg-type]
         self.organization = OrganizationResource(self)  # type: ignore[arg-type]
         self.categories = CategoriesResource(self)  # type: ignore[arg-type]
+        self.content_tables = ContentTablesResource(self)  # type: ignore[arg-type]
+        self.conversations = ConversationsResource(self)  # type: ignore[arg-type]
+        self.data_feeds = DataFeedsResource(self)  # type: ignore[arg-type]
+        self.email_deliverability = EmailDeliverabilityResource(self)  # type: ignore[arg-type]
         self.identity_keys = IdentityKeysResource(self)  # type: ignore[arg-type]
+        self.integrations = IntegrationsResource(self)  # type: ignore[arg-type]
         self.journeys = JourneysResource(self)  # type: ignore[arg-type]
         self.live_activities = LiveActivitiesResource(self)  # type: ignore[arg-type]
+        self.mcp = McpResource(self)  # type: ignore[arg-type]
         self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
+        self.sms_keywords = SmsKeywordsResource(self)  # type: ignore[arg-type]
+        self.warehouse_exports = WarehouseExportsResource(self)  # type: ignore[arg-type]
+        self.whatsapp = WhatsappResource(self)  # type: ignore[arg-type]
 
 
 RESOURCE_NAMES = (
@@ -3894,8 +5061,17 @@ RESOURCE_NAMES = (
     "api_keys",
     "organization",
     "categories",
+    "content_tables",
+    "conversations",
+    "data_feeds",
+    "email_deliverability",
     "identity_keys",
+    "integrations",
     "journeys",
     "live_activities",
+    "mcp",
     "preferences",
+    "sms_keywords",
+    "warehouse_exports",
+    "whatsapp",
 )
