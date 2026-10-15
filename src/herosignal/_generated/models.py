@@ -1398,6 +1398,61 @@ class CreateInAppDtoVariantsItemDisplay(TypedDict, total=False):
     blocks: List[Any]
 
 
+class CreateLiveActivityTypeDto(TypedDict, total=False):
+    """CreateLiveActivityTypeDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    description: str
+    #: Zorunlu.
+    content_state_schema: "CreateLiveActivityTypeDtoContentStateSchema"
+    attributes_schema: "CreateLiveActivityTypeDtoAttributesSchema"
+
+
+class CreateLiveActivityTypeDtoAttributesSchema(TypedDict, total=False):
+    """CreateLiveActivityTypeDtoAttributesSchema şeması."""
+
+    #: Zorunlu. Değerler: "object".
+    type: str
+    #: Zorunlu.
+    properties: Dict[str, "CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue"]
+    required: List[str]
+
+
+class CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue(TypedDict, total=False):
+    """CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue şeması."""
+
+    #: Zorunlu. Değerler: "string", "number", "integer", "boolean".
+    type: str
+    enum: List[Any]
+    maxLength: int
+    minimum: float
+    maximum: float
+    description: str
+
+
+class CreateLiveActivityTypeDtoContentStateSchema(TypedDict, total=False):
+    """CreateLiveActivityTypeDtoContentStateSchema şeması."""
+
+    #: Zorunlu. Değerler: "object".
+    type: str
+    #: Zorunlu.
+    properties: Dict[str, "CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue"]
+    required: List[str]
+
+
+class CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue(TypedDict, total=False):
+    """CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue şeması."""
+
+    #: Zorunlu. Değerler: "string", "number", "integer", "boolean".
+    type: str
+    enum: List[Any]
+    maxLength: int
+    minimum: float
+    maximum: float
+    description: str
+
+
 class CreateNotificationDto(TypedDict, total=False):
     """CreateNotificationDto şeması."""
 
@@ -1697,6 +1752,29 @@ class DeliveryList(TypedDict, total=False):
     next_cursor: Optional[str]
     #: Zorunlu.
     has_more: bool
+
+
+class EndLiveActivityDto(TypedDict, total=False):
+    """EndLiveActivityDto şeması."""
+
+    #: Zorunlu.
+    activity_id: str
+    content_state: Dict[str, Any]
+    alert: "EndLiveActivityDtoAlert"
+    stale_date: int
+    dismissal_date: int
+    relevance_score: float
+    #: Değerler: 5, 10.
+    priority: int
+    name: str
+
+
+class EndLiveActivityDtoAlert(TypedDict, total=False):
+    """EndLiveActivityDtoAlert şeması."""
+
+    title: Dict[str, str]
+    body: Dict[str, str]
+    sound: str
 
 
 EngagementReport = TypedDict(
@@ -2840,6 +2918,98 @@ class JourneyVersionListDataItem(TypedDict, total=False):
     updated_at: str
 
 
+class LiveActivitySendResult(TypedDict, total=False):
+    """LiveActivitySendResult şeması."""
+
+    #: Zorunlu.
+    message_id: str
+    #: Zorunlu.
+    activity_id: str
+    #: Zorunlu. Değerler: "start", "update", "end".
+    event: str
+    #: Zorunlu.
+    recipients_estimate: int
+
+
+class LiveActivityTokenResult(TypedDict, total=False):
+    """LiveActivityTokenResult şeması."""
+
+    #: Zorunlu.
+    ok: bool
+
+
+class LiveActivityType(TypedDict, total=False):
+    """LiveActivityType şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    description: Optional[str]
+    #: Zorunlu.
+    content_state_schema: "LiveActivityTypeContentStateSchema"
+    #: Zorunlu.
+    attributes_schema: "LiveActivityTypeAttributesSchema"
+    #: Zorunlu.
+    push_to_start_tokens: int
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class LiveActivityTypeAttributesSchema(TypedDict, total=False):
+    """LiveActivityTypeAttributesSchema şeması."""
+
+    #: Zorunlu. Değerler: "object".
+    type: str
+    #: Zorunlu.
+    properties: Dict[str, "LiveActivityTypeAttributesSchemaPropertiesValue"]
+    required: List[str]
+
+
+class LiveActivityTypeAttributesSchemaPropertiesValue(TypedDict, total=False):
+    """LiveActivityTypeAttributesSchemaPropertiesValue şeması."""
+
+    #: Zorunlu. Değerler: "string", "number", "integer", "boolean".
+    type: str
+    enum: List[Any]
+    maxLength: int
+    minimum: float
+    maximum: float
+    description: str
+
+
+class LiveActivityTypeContentStateSchema(TypedDict, total=False):
+    """LiveActivityTypeContentStateSchema şeması."""
+
+    #: Zorunlu. Değerler: "object".
+    type: str
+    #: Zorunlu.
+    properties: Dict[str, "LiveActivityTypeContentStateSchemaPropertiesValue"]
+    required: List[str]
+
+
+class LiveActivityTypeContentStateSchemaPropertiesValue(TypedDict, total=False):
+    """LiveActivityTypeContentStateSchemaPropertiesValue şeması."""
+
+    #: Zorunlu. Değerler: "string", "number", "integer", "boolean".
+    type: str
+    enum: List[Any]
+    maxLength: int
+    minimum: float
+    maximum: float
+    description: str
+
+
+class LiveActivityTypeList(TypedDict, total=False):
+    """LiveActivityTypeList şeması."""
+
+    #: Zorunlu.
+    data: List["LiveActivityType"]
+
+
 class Member(TypedDict, total=False):
     """Member şeması."""
 
@@ -3778,6 +3948,41 @@ class SetPreferencesDtoPreferencesItem(TypedDict, total=False):
     opted_in: bool
 
 
+class StartLiveActivityDto(TypedDict, total=False):
+    """StartLiveActivityDto şeması."""
+
+    activity_id: str
+    attributes: Dict[str, Any]
+    #: Zorunlu.
+    target: "StartLiveActivityDtoTarget"
+    #: Zorunlu.
+    content_state: Dict[str, Any]
+    alert: "StartLiveActivityDtoAlert"
+    stale_date: int
+    dismissal_date: int
+    relevance_score: float
+    #: Değerler: 5, 10.
+    priority: int
+    name: str
+
+
+class StartLiveActivityDtoAlert(TypedDict, total=False):
+    """StartLiveActivityDtoAlert şeması."""
+
+    title: Dict[str, str]
+    body: Dict[str, str]
+    sound: str
+
+
+class StartLiveActivityDtoTarget(TypedDict, total=False):
+    """StartLiveActivityDtoTarget şeması."""
+
+    include_external_ids: List[str]
+    include_subscription_ids: List[str]
+    included_segments: List[str]
+    all: bool
+
+
 class Subscription(TypedDict, total=False):
     """Subscription şeması."""
 
@@ -4423,6 +4628,82 @@ class UpdateJourneyDto(TypedDict, total=False):
 
     name: str
     description: Optional[str]
+
+
+class UpdateLiveActivityDto(TypedDict, total=False):
+    """UpdateLiveActivityDto şeması."""
+
+    #: Zorunlu.
+    activity_id: str
+    #: Zorunlu.
+    content_state: Dict[str, Any]
+    alert: "UpdateLiveActivityDtoAlert"
+    stale_date: int
+    dismissal_date: int
+    relevance_score: float
+    #: Değerler: 5, 10.
+    priority: int
+    name: str
+
+
+class UpdateLiveActivityDtoAlert(TypedDict, total=False):
+    """UpdateLiveActivityDtoAlert şeması."""
+
+    title: Dict[str, str]
+    body: Dict[str, str]
+    sound: str
+
+
+class UpdateLiveActivityTypeDto(TypedDict, total=False):
+    """UpdateLiveActivityTypeDto şeması."""
+
+    description: Optional[str]
+    content_state_schema: "UpdateLiveActivityTypeDtoContentStateSchema"
+    attributes_schema: "UpdateLiveActivityTypeDtoAttributesSchema"
+
+
+class UpdateLiveActivityTypeDtoAttributesSchema(TypedDict, total=False):
+    """UpdateLiveActivityTypeDtoAttributesSchema şeması."""
+
+    #: Zorunlu. Değerler: "object".
+    type: str
+    #: Zorunlu.
+    properties: Dict[str, "UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue"]
+    required: List[str]
+
+
+class UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue(TypedDict, total=False):
+    """UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue şeması."""
+
+    #: Zorunlu. Değerler: "string", "number", "integer", "boolean".
+    type: str
+    enum: List[Any]
+    maxLength: int
+    minimum: float
+    maximum: float
+    description: str
+
+
+class UpdateLiveActivityTypeDtoContentStateSchema(TypedDict, total=False):
+    """UpdateLiveActivityTypeDtoContentStateSchema şeması."""
+
+    #: Zorunlu. Değerler: "object".
+    type: str
+    #: Zorunlu.
+    properties: Dict[str, "UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue"]
+    required: List[str]
+
+
+class UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue(TypedDict, total=False):
+    """UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue şeması."""
+
+    #: Zorunlu. Değerler: "string", "number", "integer", "boolean".
+    type: str
+    enum: List[Any]
+    maxLength: int
+    minimum: float
+    maximum: float
+    description: str
 
 
 class UpdateNodeDto(TypedDict, total=False):
@@ -5130,6 +5411,11 @@ __all__ = [
     "CreateInAppDtoFrequency",
     "CreateInAppDtoVariantsItem",
     "CreateInAppDtoVariantsItemDisplay",
+    "CreateLiveActivityTypeDto",
+    "CreateLiveActivityTypeDtoAttributesSchema",
+    "CreateLiveActivityTypeDtoAttributesSchemaPropertiesValue",
+    "CreateLiveActivityTypeDtoContentStateSchema",
+    "CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue",
     "CreateNotificationDto",
     "CreateNotificationDtoButtonsItem",
     "CreateNotificationDtoTarget",
@@ -5144,6 +5430,8 @@ __all__ = [
     "CreateWebhookDtoEventFilters",
     "Delivery",
     "DeliveryList",
+    "EndLiveActivityDto",
+    "EndLiveActivityDtoAlert",
     "EngagementReport",
     "EngagementReportCellsItem",
     "EngagementReportPrevious",
@@ -5219,6 +5507,14 @@ __all__ = [
     "JourneyTriggerResult",
     "JourneyVersionList",
     "JourneyVersionListDataItem",
+    "LiveActivitySendResult",
+    "LiveActivityTokenResult",
+    "LiveActivityType",
+    "LiveActivityTypeAttributesSchema",
+    "LiveActivityTypeAttributesSchemaPropertiesValue",
+    "LiveActivityTypeContentStateSchema",
+    "LiveActivityTypeContentStateSchemaPropertiesValue",
+    "LiveActivityTypeList",
     "Member",
     "MemberList",
     "Message",
@@ -5283,6 +5579,9 @@ __all__ = [
     "SetOwnerDto",
     "SetPreferencesDto",
     "SetPreferencesDtoPreferencesItem",
+    "StartLiveActivityDto",
+    "StartLiveActivityDtoAlert",
+    "StartLiveActivityDtoTarget",
     "Subscription",
     "SubscriptionDevice",
     "SubscriptionsReport",
@@ -5334,6 +5633,13 @@ __all__ = [
     "UpdateInAppDtoVariantsItem",
     "UpdateInAppDtoVariantsItemDisplay",
     "UpdateJourneyDto",
+    "UpdateLiveActivityDto",
+    "UpdateLiveActivityDtoAlert",
+    "UpdateLiveActivityTypeDto",
+    "UpdateLiveActivityTypeDtoAttributesSchema",
+    "UpdateLiveActivityTypeDtoAttributesSchemaPropertiesValue",
+    "UpdateLiveActivityTypeDtoContentStateSchema",
+    "UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue",
     "UpdateNodeDto",
     "UpdateNodeDtoPosition",
     "UpdateTemplateDto",

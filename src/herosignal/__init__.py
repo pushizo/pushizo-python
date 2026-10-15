@@ -23,6 +23,7 @@ from ._errors import (
     WebhookSignatureError,
 )
 from ._generated import API_VERSION
+from ._identity import identity_token
 from ._types import FileInput, RequestOptions
 from ._version import __version__
 from ._webhooks import (
@@ -35,6 +36,7 @@ from ._webhooks import (
 )
 
 __all__ = [
+    "identity_token",
     "API_VERSION",
     "DEFAULT_BASE_URL",
     "WEBHOOK_DEFAULT_TOLERANCE_SECONDS",

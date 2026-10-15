@@ -3617,6 +3617,158 @@ class JourneysResource:
         )
 
 
+class LiveActivitiesResource:
+    """liveActivities kaynağı."""
+
+    def __init__(self, client: "HeroSignal") -> None:
+        self._client = client
+
+    def list_types(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LiveActivityTypeList":
+        """Live Activity türleri
+
+        ``GET /v1/apps/{appId}/live-activities/types``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/live-activities/types",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_type(
+        self,
+        body: "CreateLiveActivityTypeDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LiveActivityType":
+        """Live Activity türü oluştur
+
+        ``POST /v1/apps/{appId}/live-activities/types``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/live-activities/types",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_type(
+        self,
+        activity_type: str,
+        body: "UpdateLiveActivityTypeDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LiveActivityType":
+        """Live Activity türünü güncelle
+
+        ``PATCH /v1/apps/{appId}/live-activities/types/{activityType}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/live-activities/types/{activityType}",
+            path_params={"activityType": activity_type},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete_type(
+        self,
+        activity_type: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LiveActivityTokenResult":
+        """Live Activity türünü sil
+
+        ``DELETE /v1/apps/{appId}/live-activities/types/{activityType}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/live-activities/types/{activityType}",
+            path_params={"activityType": activity_type},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def start(
+        self,
+        activity_type: str,
+        body: "StartLiveActivityDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LiveActivitySendResult":
+        """Live Activity başlat (push-to-start)
+
+        ``POST /v1/apps/{appId}/live-activities/{activityType}/start``
+
+        Hedefteki iOS aboneliklerinin push-to-start belirteçleriyle etkinliği uzaktan başlatır (iOS 17.2+). `attributes` ve `content_state` türün şemasına uymalıdır. Dönen `activity_id` ile sonraki update/end yapılır.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/live-activities/{activityType}/start",
+            path_params={"activityType": activity_type},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        activity_type: str,
+        body: "UpdateLiveActivityDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LiveActivitySendResult":
+        """Live Activity güncelle
+
+        ``POST /v1/apps/{appId}/live-activities/{activityType}/update``
+
+        Etkinliğin cihazlardan bildirilen güncelleme belirteçlerine yeni içerik durumu gönderir. Sessiz saat ve frekans sınırı uygulanmaz; priority 5 Apple bütçesini korur.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/live-activities/{activityType}/update",
+            path_params={"activityType": activity_type},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def end(
+        self,
+        activity_type: str,
+        body: "EndLiveActivityDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LiveActivitySendResult":
+        """Live Activity bitir
+
+        ``POST /v1/apps/{appId}/live-activities/{activityType}/end``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/live-activities/{activityType}/end",
+            path_params={"activityType": activity_type},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class PreferencesResource:
     """preferences kaynağı."""
 
@@ -3691,6 +3843,7 @@ class GeneratedResources:
     categories: CategoriesResource
     identity_keys: IdentityKeysResource
     journeys: JourneysResource
+    live_activities: LiveActivitiesResource
     preferences: PreferencesResource
 
     def _init_resources(self) -> None:
@@ -3716,6 +3869,7 @@ class GeneratedResources:
         self.categories = CategoriesResource(self)  # type: ignore[arg-type]
         self.identity_keys = IdentityKeysResource(self)  # type: ignore[arg-type]
         self.journeys = JourneysResource(self)  # type: ignore[arg-type]
+        self.live_activities = LiveActivitiesResource(self)  # type: ignore[arg-type]
         self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
 
 
@@ -3742,5 +3896,6 @@ RESOURCE_NAMES = (
     "categories",
     "identity_keys",
     "journeys",
+    "live_activities",
     "preferences",
 )

@@ -15,6 +15,7 @@ import httpx
 
 from ._errors import HeroSignalError, NetworkError, error_class_for_status
 from ._generated.resources import GeneratedResources
+from ._identity import identity_token
 from ._types import FileInput, RequestOptions
 from ._version import __version__
 
@@ -97,6 +98,11 @@ class HeroSignal(GeneratedResources):
     def identity_hash(sdk_secret: str, external_id: str) -> str:
         """SDK identity verification için ``identity_hash = HMAC-SHA256(sdk_secret, external_id)`` (hex)."""
         return hmac.new(sdk_secret.encode("utf-8"), external_id.encode("utf-8"), hashlib.sha256).hexdigest()
+
+    @staticmethod
+    def identity_token(private_key_pem: str, kid: str, app_id: str, external_id: str, expires_in: int = 3600) -> str:
+        """SDK JWT identity verification belirteci (ES256); bkz. :func:`herosignal.identity_token`."""
+        return identity_token(private_key_pem, kid, app_id, external_id, expires_in)
 
     def request(
         self,
