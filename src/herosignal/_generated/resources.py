@@ -629,7 +629,7 @@ class SubscriptionsResource:
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Subscription":
-        """Token ile abonelik güncelle (token_type: ios_push, android_push, web_push, email, sms veya eski sağlayıcı adları iOSPush, AndroidPush, ChromePush, FirefoxPush, SafariPush, Email, SMS)
+        """Token ile abonelik güncelle (token_type: ios_push, android_push, hms_push, web_push, email, sms veya eski sağlayıcı adları iOSPush, AndroidPush, HuaweiPush, ChromePush, FirefoxPush, SafariPush, Email, SMS)
 
         ``PATCH /v1/apps/{appId}/subscriptions_by_token/{tokenType}/{token}``
         """
@@ -984,7 +984,7 @@ class TemplatesResource:
         ``GET /v1/apps/{appId}/templates``
 
         Parametreler:
-            channel: Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+            channel: Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
         """
         return self._client._call(
             "GET",
@@ -1204,7 +1204,7 @@ class CampaignsResource:
         Parametreler:
             status: Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
             type: Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
-            channel: Değerler: "ios_push", "android_push", "web_push", "email", "sms".
+            channel: Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms".
         """
         return self._client._call(
             "GET",
