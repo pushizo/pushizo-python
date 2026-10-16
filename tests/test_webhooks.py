@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from herosignal import WebhookSignatureError, construct_webhook_events, verify_webhook_signature
+from pushizo import WebhookSignatureError, construct_webhook_events, verify_webhook_signature
 
 VECTORS = json.loads(
     (Path(__file__).resolve().parents[2] / "testdata" / "webhook-signature-vectors.json").read_text(encoding="utf-8")

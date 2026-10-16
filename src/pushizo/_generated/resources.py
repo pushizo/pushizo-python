@@ -7,13 +7,13 @@ from .._types import FileInput, RequestOptions
 from .models import *  # noqa: F401,F403
 
 if TYPE_CHECKING:  # pragma: no cover
-    from .._client import HeroSignal
+    from .._client import Pushizo
 
 
 class NotificationsResource:
     """Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def create(
@@ -257,7 +257,7 @@ class NotificationsResource:
 class UsersResource:
     """Kullanıcı oluşturma/güncelleme (tag, özellik), arama ve abonelik ekleme."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -489,7 +489,7 @@ class UsersResource:
 class AliasesResource:
     """Kullanıcı kimlikleri (alias): ekleme ve kaldırma."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def add(
@@ -539,7 +539,7 @@ class AliasesResource:
 class SubscriptionsResource:
     """Abonelik (cihaz/e-posta/SMS) okuma, güncelleme, silme ve sahip atama."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def get(
@@ -667,7 +667,7 @@ class SubscriptionsResource:
 class EventsResource:
     """Özel olay gönderimi ve olay tanımları."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def send(
@@ -774,7 +774,7 @@ class EventsResource:
 class SegmentsResource:
     """Segment yönetimi, önizleme ve kitle tahmini."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -966,7 +966,7 @@ class SegmentsResource:
 class TemplatesResource:
     """Şablon yönetimi, sürümler ve önizleme."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -1181,7 +1181,7 @@ class TemplatesResource:
 class CampaignsResource:
     """Kampanya yaşam döngüsü (zamanlama, gönderim, duraklatma, onay) ve istatistikler."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -1608,7 +1608,7 @@ class CampaignsResource:
 class InAppMessagesResource:
     """Uygulama içi (in-app) mesaj yönetimi ve durum değişiklikleri."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -1805,7 +1805,7 @@ class InAppMessagesResource:
 class InboxResource:
     """Kullanıcı bildirim kutusu (inbox): listeleme, okundu işaretleme ve arşivleme."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -1926,7 +1926,7 @@ class InboxResource:
 class SuppressionsResource:
     """E-posta/SMS gönderim engeli (suppression) listesi."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -2025,7 +2025,7 @@ class SuppressionsResource:
 class ExportsResource:
     """Veri dışa aktarma işleri."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def create(
@@ -2111,7 +2111,7 @@ class ExportsResource:
 class ImportsResource:
     """Veri içe aktarma işleri (CSV, multipart)."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def create(
@@ -2203,7 +2203,7 @@ class ImportsResource:
 class WebhooksResource:
     """Giden webhook uç noktaları, teslimatlar ve yeniden gönderim."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -2436,7 +2436,7 @@ class WebhooksResource:
 class ChannelsResource:
     """Kanal (APNs, FCM, Web Push, e-posta, SMS) yapılandırması ve doğrulaması."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -2501,7 +2501,7 @@ class ChannelsResource:
 class AnalyticsResource:
     """Analitik raporları."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def overview(
@@ -2745,7 +2745,7 @@ class AnalyticsResource:
 class AppsResource:
     """App listesi ve ayarları."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -2824,7 +2824,7 @@ class AppsResource:
 class ApiKeysResource:
     """App API anahtarları: oluşturma, kapsam/IP izin listesi güncelleme, rotasyon ve iptal."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -2928,7 +2928,7 @@ class ApiKeysResource:
 class OrganizationResource:
     """Organizasyon, üyeler ve denetim kayıtları."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def get(
@@ -3036,7 +3036,7 @@ class OrganizationResource:
 class CategoriesResource:
     """categories kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -3121,7 +3121,7 @@ class CategoriesResource:
 class ContentTablesResource:
     """contentTables kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list_tables(
@@ -3286,7 +3286,7 @@ class ContentTablesResource:
 class ConversationsResource:
     """conversations kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -3452,7 +3452,7 @@ class ConversationsResource:
 class DataFeedsResource:
     """dataFeeds kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list_feeds(
@@ -3579,7 +3579,7 @@ class DataFeedsResource:
 class EmailDeliverabilityResource:
     """emailDeliverability kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def settings(
@@ -3762,7 +3762,7 @@ class EmailDeliverabilityResource:
 class IdentityKeysResource:
     """identityKeys kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -3828,7 +3828,7 @@ class IdentityKeysResource:
 class IntegrationsResource:
     """integrations kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def me(
@@ -3916,7 +3916,7 @@ class IntegrationsResource:
 class JourneysResource:
     """journeys kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list(
@@ -4369,7 +4369,7 @@ class JourneysResource:
 class LiveActivitiesResource:
     """liveActivities kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def list_types(
@@ -4521,7 +4521,7 @@ class LiveActivitiesResource:
 class McpResource:
     """mcp kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def create_campaign_draft(
@@ -4568,7 +4568,7 @@ class McpResource:
 class PreferencesResource:
     """preferences kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def get(
@@ -4617,7 +4617,7 @@ class PreferencesResource:
 class SmsKeywordsResource:
     """smsKeywords kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def keywords(
@@ -4702,7 +4702,7 @@ class SmsKeywordsResource:
 class WarehouseExportsResource:
     """warehouseExports kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def tables(
@@ -4925,7 +4925,7 @@ class WarehouseExportsResource:
 class WhatsappResource:
     """whatsapp kaynağı."""
 
-    def __init__(self, client: "HeroSignal") -> None:
+    def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
     def templates(

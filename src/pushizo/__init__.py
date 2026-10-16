@@ -1,19 +1,19 @@
-"""HeroSignal Python sunucu SDK'sı.
+"""Pushizo Python sunucu SDK'sı.
 
 .. code-block:: python
 
-    from herosignal import HeroSignal
+    from pushizo import Pushizo
 
-    hs = HeroSignal(api_key=os.environ["HS_API_KEY"], app_id="app_…")
+    hs = Pushizo(api_key=os.environ["HS_API_KEY"], app_id="app_…")
     hs.notifications.create({"target": {"include_aliases": {"external_id": ["u1"]}}, "contents": {"en": "Shipped"}})
 """
 
-from ._client import DEFAULT_BASE_URL, HeroSignal
+from ._client import DEFAULT_BASE_URL, Pushizo
 from ._errors import (
     AuthenticationError,
     ConflictError,
     ErrorCode,
-    HeroSignalError,
+    PushizoError,
     InvalidRequestError,
     NetworkError,
     NotFoundError,
@@ -46,8 +46,8 @@ __all__ = [
     "ConflictError",
     "ErrorCode",
     "FileInput",
-    "HeroSignal",
-    "HeroSignalError",
+    "Pushizo",
+    "PushizoError",
     "InvalidRequestError",
     "NetworkError",
     "NotFoundError",

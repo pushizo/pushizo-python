@@ -1,4 +1,4 @@
-"""HeroSignal HTTP istemcisi: kimlik doğrulama, yeniden deneme, idempotency ve sayfalama."""
+"""Pushizo HTTP istemcisi: kimlik doğrulama, yeniden deneme, idempotency ve sayfalama."""
 
 import hashlib
 import hmac
@@ -13,33 +13,33 @@ from urllib.parse import quote
 
 import httpx
 
-from ._errors import HeroSignalError, NetworkError, error_class_for_status
+from ._errors import PushizoError, NetworkError, error_class_for_status
 from ._generated.resources import GeneratedResources
 from ._identity import identity_token
 from ._types import FileInput, RequestOptions
 from ._version import __version__
 
-DEFAULT_BASE_URL = "https://api.herosignal.dev"
+DEFAULT_BASE_URL = "https://api.pushizo.com"
 DEFAULT_TIMEOUT = 30.0
 DEFAULT_MAX_RETRIES = 3
 _BACKOFF_SECONDS = (0.3, 1.0, 3.0)
 
 
-class HeroSignal(GeneratedResources):
-    """HeroSignal sunucu SDK istemcisi.
+class Pushizo(GeneratedResources):
+    """Pushizo sunucu SDK istemcisi.
 
     .. code-block:: python
 
-        from herosignal import HeroSignal
+        from pushizo import Pushizo
 
-        hs = HeroSignal(api_key=os.environ["HS_API_KEY"], app_id="app_…")
+        hs = Pushizo(api_key=os.environ["HS_API_KEY"], app_id="app_…")
         hs.notifications.create(
             {"target": {"include_aliases": {"external_id": [user_id]}}, "contents": {"en": "Shipped"}},
             idempotency_key=f"order-{order_id}",
         )
 
     Kaynaklar (``notifications``, ``users``, ``segments``, ``templates``, ``campaigns`` …; tam liste
-    ``herosignal._generated.resources.RESOURCE_NAMES``) ``api/openapi.yaml``'dan üretilir.
+    ``pushizo._generated.resources.RESOURCE_NAMES``) ``api/openapi.yaml``'dan üretilir.
     """
 
     def __init__(
@@ -66,14 +66,14 @@ class HeroSignal(GeneratedResources):
         :param sleep: Yeniden deneme beklemesi (testlerde değiştirilebilir).
         """
         if not api_key:
-            raise ValueError("HeroSignal: api_key gerekli.")
+            raise ValueError("Pushizo: api_key gerekli.")
         self.api_key = api_key
         self.app_id = app_id
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         self.max_retries = max_retries
         self.auto_idempotency_key = auto_idempotency_key
-        self.user_agent = user_agent or f"herosignal-python/{__version__}"
+        self.user_agent = user_agent or f"pushizo-python/{__version__}"
         self._owns_http = http_client is None
         self._http = http_client if http_client is not None else httpx.Client()
         self._sleep = sleep
@@ -86,7 +86,7 @@ class HeroSignal(GeneratedResources):
         if self._owns_http:
             self._http.close()
 
-    def __enter__(self) -> "HeroSignal":
+    def __enter__(self) -> "Pushizo":
         return self
 
     def __exit__(self, *_exc: Any) -> None:
@@ -101,7 +101,7 @@ class HeroSignal(GeneratedResources):
 
     @staticmethod
     def identity_token(private_key_pem: str, kid: str, app_id: str, external_id: str, expires_in: int = 3600) -> str:
-        """SDK JWT identity verification belirteci (ES256); bkz. :func:`herosignal.identity_token`."""
+        """SDK JWT identity verification belirteci (ES256); bkz. :func:`pushizo.identity_token`."""
         return identity_token(private_key_pem, kid, app_id, external_id, expires_in)
 
     def request(
@@ -124,7 +124,7 @@ class HeroSignal(GeneratedResources):
     def _resolve_app_id(self, app_id: Optional[str]) -> str:
         resolved = app_id or self.app_id
         if not resolved:
-            raise ValueError("HeroSignal: app_id verilmedi (istemci seçeneği veya çağrı parametresi).")
+            raise ValueError("Pushizo: app_id verilmedi (istemci seçeneği veya çağrı parametresi).")
         return resolved
 
     def _call(
@@ -149,7 +149,7 @@ class HeroSignal(GeneratedResources):
             url_path = url_path.replace("{appId}", quote(self._resolve_app_id(app_id), safe=""))
         for name, value in path_params.items():
             if value is None or value == "":
-                raise ValueError(f"HeroSignal: '{name}' yol parametresi boş olamaz.")
+                raise ValueError(f"Pushizo: '{name}' yol parametresi boş olamaz.")
             url_path = url_path.replace("{" + name + "}", quote(str(value), safe=""))
 
         items: List[Tuple[str, str]] = []
@@ -258,7 +258,7 @@ _IDEMPOTENT_METHODS = frozenset({"GET", "HEAD", "OPTIONS", "PUT", "DELETE"})
 _NOT_SENT_ERRORS = (httpx.ConnectError, httpx.ConnectTimeout, httpx.PoolTimeout)
 
 
-def _should_retry(method: str, error: HeroSignalError, has_idempotency_key: bool, not_sent: bool) -> bool:
+def _should_retry(method: str, error: PushizoError, has_idempotency_key: bool, not_sent: bool) -> bool:
     """Yeniden deneme politikası.
 
     - 429: her metotta yeniden denenir (istek işlenmeden reddedilmiştir; ``Retry-After``'a uyulur).
@@ -329,7 +329,7 @@ def _parse_body(response: httpx.Response) -> Any:
     return response.text
 
 
-def _error_from_response(response: httpx.Response) -> HeroSignalError:
+def _error_from_response(response: httpx.Response) -> PushizoError:
     envelope: Dict[str, Any] = {}
     try:
         parsed = response.json()

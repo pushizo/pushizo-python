@@ -1,6 +1,6 @@
 """Giden webhook imza doğrulaması (alıcı tarafı).
 
-Başlık: ``HeroSignal-Signature: t=<unix>,v1=<hex>``; ``v1 = HMAC-SHA256(secret, f"{t}.{ham_gövde}")``.
+Başlık: ``Pushizo-Signature: t=<unix>,v1=<hex>``; ``v1 = HMAC-SHA256(secret, f"{t}.{ham_gövde}")``.
 Secret rotasyonunda başlıkta iki ``v1`` bulunabilir; herhangi biri eşleşirse imza geçerlidir.
 """
 
@@ -14,10 +14,10 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 
 from ._errors import WebhookSignatureError
 
-#: İmza başlığı adı (çerçeveler küçük harfe çevirebilir: ``herosignal-signature``).
-WEBHOOK_SIGNATURE_HEADER = "HeroSignal-Signature"
+#: İmza başlığı adı (çerçeveler küçük harfe çevirebilir: ``pushizo-signature``).
+WEBHOOK_SIGNATURE_HEADER = "Pushizo-Signature"
 #: Olay kimliği başlığı; tekrar gönderimleri ayıklamak için kullanın.
-WEBHOOK_EVENT_ID_HEADER = "HeroSignal-Event-Id"
+WEBHOOK_EVENT_ID_HEADER = "Pushizo-Event-Id"
 #: Varsayılan zaman damgası toleransı (sn); daha eski ``t`` tekrar (replay) sayılır.
 WEBHOOK_DEFAULT_TOLERANCE_SECONDS = 300
 
@@ -48,7 +48,7 @@ def verify_webhook_signature(
     tolerance_seconds: int = WEBHOOK_DEFAULT_TOLERANCE_SECONDS,
     now: Optional[float] = None,
 ) -> WebhookVerifyResult:
-    """HeroSignal webhook imzasını doğrular.
+    """Pushizo webhook imzasını doğrular.
 
     ``payload`` HAM istek gövdesi olmalıdır (JSON'u ayrıştırıp yeniden serileştirmeyin).
     ``secret`` rotasyon sırasında eski ve yeni secret'ı içeren bir liste olabilir.

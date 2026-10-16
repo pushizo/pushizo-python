@@ -6,11 +6,11 @@ import re
 import httpx
 import pytest
 
-from herosignal import (
+from pushizo import (
     AuthenticationError,
     ErrorCode,
-    HeroSignal,
-    HeroSignalError,
+    Pushizo,
+    PushizoError,
     InvalidRequestError,
     NetworkError,
     NotFoundError,
@@ -37,7 +37,7 @@ class Recorder:
 def make(responses, **kwargs):
     rec = Recorder(responses)
     sleeps = []
-    client = HeroSignal(
+    client = Pushizo(
         "hs_live_test",
         app_id="app_1",
         base_url="https://api.test/",
@@ -60,7 +60,7 @@ def test_create_notification_sends_auth_app_and_idempotency():
     assert req.method == "POST"
     assert str(req.url) == "https://api.test/v1/notifications"
     assert req.headers["authorization"] == "Bearer hs_live_test"
-    assert req.headers["user-agent"].startswith("herosignal-python/")
+    assert req.headers["user-agent"].startswith("pushizo-python/")
     body = json.loads(req.content)
     assert body["app_id"] == "app_1"
     assert body["contents"]["tr"] == "Merhaba"
@@ -93,7 +93,7 @@ def test_query_and_path_encoding():
 
 
 def test_missing_app_id_raises():
-    hs = HeroSignal("k", http_client=httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(200))))
+    hs = Pushizo("k", http_client=httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(200))))
     with pytest.raises(ValueError):
         hs.apps.get()
 
@@ -128,7 +128,7 @@ def test_typed_errors_and_no_retry_on_4xx():
     with pytest.raises(NotFoundError) as info:
         hs.notifications.get("msg_x")
     err = info.value
-    assert isinstance(err, HeroSignalError)
+    assert isinstance(err, PushizoError)
     assert (err.status, err.code, err.request_id, err.details) == (404, ErrorCode.NOT_FOUND, "req_1", {"id": "x"})
     assert not err.retryable
     with pytest.raises(InvalidRequestError):
@@ -229,7 +229,7 @@ def test_post_retried_on_real_connection_refused():
         sock.bind(("127.0.0.1", 0))
         port = sock.getsockname()[1]
     sleeps = []
-    hs = HeroSignal("k", app_id="a", base_url=f"http://127.0.0.1:{port}", sleep=sleeps.append, max_retries=1)
+    hs = Pushizo("k", app_id="a", base_url=f"http://127.0.0.1:{port}", sleep=sleeps.append, max_retries=1)
     with pytest.raises(NetworkError):
         hs.events.send({"events": []})
     assert sleeps == [0.3], "bağlantı reddi: istek gönderilmedi, POST yeniden denenir"
@@ -269,12 +269,12 @@ def test_multipart_import():
 
 def test_identity_hash_matches_node():
     # Node: createHmac('sha256', 'secret').update('user-1').digest('hex')
-    assert HeroSignal.identity_hash("secret", "user-1") == "1d16fd7e96e8a9681f283b8a251822ffdc71e2a5bda0c5267a044874fa21b82b"
+    assert Pushizo.identity_hash("secret", "user-1") == "1d16fd7e96e8a9681f283b8a251822ffdc71e2a5bda0c5267a044874fa21b82b"
 
 
 def test_every_operation_has_a_method():
-    from herosignal._generated.resources import RESOURCE_NAMES
+    from pushizo._generated.resources import RESOURCE_NAMES
 
-    hs = HeroSignal("k", app_id="a")
+    hs = Pushizo("k", app_id="a")
     for name in RESOURCE_NAMES:
         assert getattr(hs, name) is not None
