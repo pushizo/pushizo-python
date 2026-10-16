@@ -231,6 +231,13 @@ class AppSettingsOnboarding(TypedDict, total=False):
     step: int
     simulation: bool
     completed_at: Optional[str]
+    version: int
+    #: Değerler: "ios", "android", "huawei", "web".
+    platforms: List[str]
+    #: Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+    framework: str
+    #: Değerler: "code", "wordpress".
+    web_integration: str
 
 
 class AppSettingsPreferenceCenter(TypedDict, total=False):
@@ -5512,6 +5519,13 @@ class UpdateAppDtoSettingsOnboarding(TypedDict, total=False):
     step: int
     simulation: bool
     completed_at: Optional[str]
+    version: int
+    #: Değerler: "ios", "android", "huawei", "web".
+    platforms: List[str]
+    #: Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+    framework: str
+    #: Değerler: "code", "wordpress".
+    web_integration: str
 
 
 class UpdateAppDtoSettingsPreferenceCenter(TypedDict, total=False):
