@@ -1,4 +1,4 @@
-"""HeroSignal istisnaları ve hata kodları."""
+"""Pushizo istisnaları ve hata kodları."""
 
 from typing import Any, Dict, Optional, Type
 
@@ -30,7 +30,7 @@ class ErrorCode:
     NETWORK = "NETWORK"
 
 
-class HeroSignalError(Exception):
+class PushizoError(Exception):
     """API hata zarfından (``{"error": {"code", "message", "request_id", "details"}}``) türetilen istisna.
 
     Ağ hatalarında ``status`` 0 ve ``code`` ``"NETWORK"`` olur. HTTP durumuna göre alt sınıflar
@@ -68,39 +68,39 @@ class HeroSignalError(Exception):
         )
 
 
-class NetworkError(HeroSignalError):
+class NetworkError(PushizoError):
     """Bağlantı kurulamadı veya zaman aşımı (``status`` 0)."""
 
 
-class InvalidRequestError(HeroSignalError):
+class InvalidRequestError(PushizoError):
     """400 / 422: istek doğrulanamadı veya işlenemedi (``details`` alan hatalarını içerir)."""
 
 
-class AuthenticationError(HeroSignalError):
+class AuthenticationError(PushizoError):
     """401: API anahtarı eksik veya geçersiz."""
 
 
-class PermissionDeniedError(HeroSignalError):
+class PermissionDeniedError(PushizoError):
     """403: anahtarın kapsamı yetersiz, IP izin listesi dışı veya kaynak başka kiracıya ait."""
 
 
-class NotFoundError(HeroSignalError):
+class NotFoundError(PushizoError):
     """404: kaynak bulunamadı."""
 
 
-class ConflictError(HeroSignalError):
+class ConflictError(PushizoError):
     """409: kaynak çakışması veya idempotency anahtarı çakışması."""
 
 
-class RateLimitError(HeroSignalError):
+class RateLimitError(PushizoError):
     """429: hız sınırı veya plan kotası aşıldı."""
 
 
-class ServerError(HeroSignalError):
+class ServerError(PushizoError):
     """5xx: sunucu veya sağlayıcı geçici olarak kullanılamıyor."""
 
 
-def error_class_for_status(status: int) -> Type[HeroSignalError]:
+def error_class_for_status(status: int) -> Type[PushizoError]:
     """HTTP durumuna karşılık gelen istisna sınıfı."""
     if status == 0:
         return NetworkError
@@ -118,7 +118,7 @@ def error_class_for_status(status: int) -> Type[HeroSignalError]:
         return RateLimitError
     if status >= 500:
         return ServerError
-    return HeroSignalError
+    return PushizoError
 
 
 class WebhookSignatureError(Exception):
@@ -126,5 +126,5 @@ class WebhookSignatureError(Exception):
     ``timestamp_out_of_tolerance``, ``signature_mismatch`` veya ``malformed_body``."""
 
     def __init__(self, reason: str) -> None:
-        super().__init__(f"HeroSignal webhook imzası geçersiz: {reason}")
+        super().__init__(f"Pushizo webhook imzası geçersiz: {reason}")
         self.reason = reason

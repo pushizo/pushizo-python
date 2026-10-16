@@ -23,7 +23,7 @@ def identity_token(
     """İstemci SDK'sına verilecek ES256 JWT: ``sub`` = external_id, ``aud`` = app_id, ömür en çok 24 saat.
 
     Uygulamanız belirteci kendi sunucusundan alır ve ``login(external_id, jwt=...)`` ile SDK'ya verir. İmza için
-    ``cryptography`` paketi gerekir: ``pip install "herosignal[jwt]"``.
+    ``cryptography`` paketi gerekir: ``pip install "pushizo[jwt]"``.
     """
     if expires_in <= 0 or expires_in > MAX_LIFETIME_SECONDS:
         raise ValueError("expires_in 1…86400 aralığında olmalı.")
@@ -32,7 +32,7 @@ def identity_token(
         from cryptography.hazmat.primitives.asymmetric import ec
         from cryptography.hazmat.primitives.asymmetric.utils import decode_dss_signature
     except ImportError as exc:  # pragma: no cover - kurulum hatası iletisi
-        raise ImportError('identity_token için cryptography gerekli: pip install "herosignal[jwt]"') from exc
+        raise ImportError('identity_token için cryptography gerekli: pip install "pushizo[jwt]"') from exc
 
     key = serialization.load_pem_private_key(private_key_pem.encode("utf-8"), password=None)
     if not isinstance(key, ec.EllipticCurvePrivateKey) or key.curve.name != "secp256r1":

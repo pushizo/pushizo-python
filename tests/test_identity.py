@@ -11,7 +11,7 @@ from cryptography.hazmat.primitives import hashes, serialization  # noqa: E402
 from cryptography.hazmat.primitives.asymmetric import ec  # noqa: E402
 from cryptography.hazmat.primitives.asymmetric.utils import encode_dss_signature  # noqa: E402
 
-from herosignal import HeroSignal, identity_token  # noqa: E402
+from pushizo import Pushizo, identity_token  # noqa: E402
 
 
 def _decode(part: str) -> bytes:
@@ -38,6 +38,6 @@ def test_baslik_talepler_ve_imza_dogrulanir():
 
 def test_statik_yardimci_ve_omur_siniri():
     _, pem = _key_pem()
-    assert HeroSignal.identity_token(pem, "k", "a", "e").count(".") == 2
+    assert Pushizo.identity_token(pem, "k", "a", "e").count(".") == 2
     with pytest.raises(ValueError):
         identity_token(pem, "k", "a", "e", expires_in=90_000)
