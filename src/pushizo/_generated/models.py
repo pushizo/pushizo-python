@@ -6240,6 +6240,7 @@ class UsageReport(TypedDict, total=False):
     trialing: bool
     #: Zorunlu.
     trial_ends_at: Optional[str]
+    overage: Optional["UsageReportOverage"]
 
 
 class UsageReportAppsItem(TypedDict, total=False):
@@ -6283,6 +6284,48 @@ class UsageReportMetricsItem(TypedDict, total=False):
     percent: Optional[float]
     #: Zorunlu.
     hard: bool
+
+
+class UsageReportOverage(TypedDict, total=False):
+    """UsageReportOverage şeması."""
+
+    #: Zorunlu.
+    lines: List["UsageReportOverageLinesItem"]
+    #: Zorunlu.
+    totals: "UsageReportOverageTotals"
+
+
+class UsageReportOverageLinesItem(TypedDict, total=False):
+    """UsageReportOverageLinesItem şeması."""
+
+    #: Zorunlu.
+    metric: str
+    #: Zorunlu.
+    included: float
+    #: Zorunlu.
+    used: float
+    #: Zorunlu.
+    billable: float
+    #: Zorunlu.
+    amounts: "UsageReportOverageLinesItemAmounts"
+
+
+class UsageReportOverageLinesItemAmounts(TypedDict, total=False):
+    """UsageReportOverageLinesItemAmounts şeması."""
+
+    #: Zorunlu.
+    USD: float
+    #: Zorunlu.
+    TRY: float
+
+
+class UsageReportOverageTotals(TypedDict, total=False):
+    """UsageReportOverageTotals şeması."""
+
+    #: Zorunlu.
+    USD: float
+    #: Zorunlu.
+    TRY: float
 
 
 class UsageReportPeriod(TypedDict, total=False):
@@ -7587,6 +7630,10 @@ __all__ = [
     "UsageReportAppsItem",
     "UsageReportDailyItem",
     "UsageReportMetricsItem",
+    "UsageReportOverage",
+    "UsageReportOverageLinesItem",
+    "UsageReportOverageLinesItemAmounts",
+    "UsageReportOverageTotals",
     "UsageReportPeriod",
     "User",
     "UserDetail",
