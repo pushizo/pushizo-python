@@ -36,6 +36,10 @@ class AdAccount(TypedDict, total=False):
     #: Zorunlu.
     last_error_at: Optional[str]
     #: Zorunlu.
+    terms_accepted_at: Optional[str]
+    #: Zorunlu.
+    terms_version: Optional[str]
+    #: Zorunlu.
     audiences: int
     #: Zorunlu.
     created_at: str
