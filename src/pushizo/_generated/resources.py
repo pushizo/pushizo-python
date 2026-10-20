@@ -1808,6 +1808,105 @@ class InboxResource:
     def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
+    def teams(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InboxTeamList":
+        """Takımlar
+
+        ``GET /v1/apps/{appId}/inbox/teams``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/inbox/teams",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def agents(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InboxAgentList":
+        """Temsilciler ve varlık durumu
+
+        ``GET /v1/apps/{appId}/inbox/agents``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/inbox/agents",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def settings(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InboxSettings":
+        """Gelen kutusu ayarları
+
+        ``GET /v1/apps/{appId}/inbox/settings``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/inbox/settings",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_settings(
+        self,
+        body: "InboxSettingsUpdateDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InboxSettings":
+        """Gelen kutusu ayarlarını güncelle
+
+        ``PUT /v1/apps/{appId}/inbox/settings``
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/inbox/settings",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def metrics(
+        self,
+        *,
+        from_: Optional[str] = None,
+        to: Optional[str] = None,
+        channel: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InboxMetrics":
+        """Gelen kutusu metrikleri (ilk yanıt/çözüm ort. ve p90, SLA, temsilci tablosu)
+
+        ``GET /v1/apps/{appId}/inbox/metrics``
+
+        Parametreler:
+            channel: Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/inbox/metrics",
+            path_params={},
+            query={"from": from_, "to": to, "channel": channel},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def list(
         self,
         label: str,
@@ -3033,6 +3132,285 @@ class OrganizationResource:
         )
 
 
+class AdsResource:
+    """ads kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list_accounts(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdAccountList":
+        """Bağlı reklam hesapları
+
+        ``GET /v1/apps/{appId}/ads/accounts``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/accounts",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_audiences(
+        self,
+        *,
+        ad_account_id: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdAudienceList":
+        """Reklam kitleleri
+
+        ``GET /v1/apps/{appId}/ads/audiences``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/audiences",
+            path_params={},
+            query={"ad_account_id": ad_account_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_audience(
+        self,
+        body: "CreateAdAudienceDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdAudience":
+        """Reklam kitlesi oluştur
+
+        ``POST /v1/apps/{appId}/ads/audiences``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/ads/audiences",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get_audience(
+        self,
+        audience_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdAudience":
+        """Reklam kitlesi ayrıntısı
+
+        ``GET /v1/apps/{appId}/ads/audiences/{audienceId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/audiences/{audienceId}",
+            path_params={"audienceId": audience_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_audience(
+        self,
+        audience_id: str,
+        body: "UpdateAdAudienceDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdAudience":
+        """Reklam kitlesini güncelle
+
+        ``PATCH /v1/apps/{appId}/ads/audiences/{audienceId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/ads/audiences/{audienceId}",
+            path_params={"audienceId": audience_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def remove_audience(
+        self,
+        audience_id: str,
+        *,
+        delete_on_platform: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdOk":
+        """Reklam kitlesini sil
+
+        ``DELETE /v1/apps/{appId}/ads/audiences/{audienceId}``
+
+        Parametreler:
+            delete_on_platform: Değerler: "true", "false".
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/ads/audiences/{audienceId}",
+            path_params={"audienceId": audience_id},
+            query={"delete_on_platform": delete_on_platform},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def sync(
+        self,
+        audience_id: str,
+        body: "SyncAdAudienceDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdAudienceSyncQueued":
+        """Senkronu şimdi çalıştır
+
+        ``POST /v1/apps/{appId}/ads/audiences/{audienceId}/sync``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/ads/audiences/{audienceId}/sync",
+            path_params={"audienceId": audience_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def syncs(
+        self,
+        audience_id: str,
+        *,
+        limit: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdAudienceSyncList":
+        """Senkron geçmişi
+
+        ``GET /v1/apps/{appId}/ads/audiences/{audienceId}/syncs``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/audiences/{audienceId}/syncs",
+            path_params={"audienceId": audience_id},
+            query={"limit": limit},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def lookalike(
+        self,
+        audience_id: str,
+        body: "CreateLookalikeDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdAudience":
+        """Benzer kitle (lookalike) oluştur
+
+        ``POST /v1/apps/{appId}/ads/audiences/{audienceId}/lookalikes``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/ads/audiences/{audienceId}/lookalikes",
+            path_params={"audienceId": audience_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
+class CannedResponsesResource:
+    """cannedResponses kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def canned(
+        self,
+        *,
+        q: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CannedResponseList":
+        """Hazır yanıtlar
+
+        ``GET /v1/apps/{appId}/canned-responses``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/canned-responses",
+            path_params={},
+            query={"q": q},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_canned(
+        self,
+        body: "CannedInputDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CannedResponse":
+        """Hazır yanıt oluştur
+
+        ``POST /v1/apps/{appId}/canned-responses``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/canned-responses",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_canned(
+        self,
+        canned_id: str,
+        body: "CannedUpdateDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CannedResponse":
+        """Hazır yanıtı güncelle
+
+        ``PATCH /v1/apps/{appId}/canned-responses/{cannedId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/canned-responses/{cannedId}",
+            path_params={"cannedId": canned_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete_canned(
+        self,
+        canned_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Hazır yanıtı sil
+
+        ``DELETE /v1/apps/{appId}/canned-responses/{cannedId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/canned-responses/{cannedId}",
+            path_params={"cannedId": canned_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class CategoriesResource:
     """categories kaynağı."""
 
@@ -3298,23 +3676,25 @@ class ConversationsResource:
         status: Optional[str] = None,
         unread: Optional[str] = None,
         q: Optional[str] = None,
+        assignee: Optional[str] = None,
+        team_id: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "ConversationPage":
-        """Konuşmalar (SMS, WhatsApp, RCS; son mesaja göre; kanal/durum/okunmamış/kişi filtresi)
+        """Konuşmalar (SMS, WhatsApp, RCS, e-posta, canlı sohbet; son mesaja göre; kanal/durum/okunmamış/atanan/takım/kişi filtresi)
 
         ``GET /v1/apps/{appId}/conversations``
 
         Parametreler:
-            channel: Değerler: "sms", "whatsapp", "rcs".
-            status: Değerler: "open", "closed".
+            channel: Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+            status: Değerler: "open", "pending", "resolved", "closed".
             unread: Değerler: "true", "false".
         """
         return self._client._call(
             "GET",
             "/v1/apps/{appId}/conversations",
             path_params={},
-            query={"limit": limit, "cursor": cursor, "channel": channel, "status": status, "unread": unread, "q": q},
+            query={"limit": limit, "cursor": cursor, "channel": channel, "status": status, "unread": unread, "q": q, "assignee": assignee, "team_id": team_id},
             app_id=app_id,
             request_options=request_options,
         )
@@ -3328,6 +3708,8 @@ class ConversationsResource:
         status: Optional[str] = None,
         unread: Optional[str] = None,
         q: Optional[str] = None,
+        assignee: Optional[str] = None,
+        team_id: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> Iterator["Conversation"]:
@@ -3339,6 +3721,8 @@ class ConversationsResource:
                 status=status,
                 unread=unread,
                 q=q,
+                assignee=assignee,
+                team_id=team_id,
                 app_id=app_id,
                 request_options=request_options,
                 cursor=next_cursor,
@@ -3353,7 +3737,7 @@ class ConversationsResource:
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Conversation":
-        """Konuşma (WhatsApp oturum penceresi ve açık rıza durumu dahil)
+        """Konuşma (atama, SLA, bot durumu, WhatsApp oturum penceresi ve açık rıza dahil)
 
         ``GET /v1/apps/{appId}/conversations/{conversationId}``
         """
@@ -3365,16 +3749,38 @@ class ConversationsResource:
             request_options=request_options,
         )
 
+    def set_status(
+        self,
+        conversation_id: str,
+        body: "ConversationUpdateDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Conversation":
+        """Konuşma durumu: open / pending / resolved (closed = resolved)
+
+        ``PATCH /v1/apps/{appId}/conversations/{conversationId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/conversations/{conversationId}",
+            path_params={"conversationId": conversation_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def messages(
         self,
         conversation_id: str,
         *,
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
+        after_seq: Optional[int] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "ConversationMessagePage":
-        """Konuşma mesajları (yeniden eskiye; giden mesaj durumu teslimattan)
+        """Konuşma mesajları (yeniden eskiye; `after_seq` ile eskiden yeniye; giden mesaj durumu teslimattan veya okundu işaretçisinden)
 
         ``GET /v1/apps/{appId}/conversations/{conversationId}/messages``
         """
@@ -3382,7 +3788,7 @@ class ConversationsResource:
             "GET",
             "/v1/apps/{appId}/conversations/{conversationId}/messages",
             path_params={"conversationId": conversation_id},
-            query={"limit": limit, "cursor": cursor},
+            query={"limit": limit, "cursor": cursor, "after_seq": after_seq},
             app_id=app_id,
             request_options=request_options,
         )
@@ -3393,6 +3799,7 @@ class ConversationsResource:
         *,
         limit: Optional[int] = None,
         cursor: Optional[str] = None,
+        after_seq: Optional[int] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> Iterator["ConversationMessagePageDataItem"]:
@@ -3401,6 +3808,7 @@ class ConversationsResource:
             lambda next_cursor: self.messages(
                 conversation_id,
                 limit=limit,
+                after_seq=after_seq,
                 app_id=app_id,
                 request_options=request_options,
                 cursor=next_cursor,
@@ -3416,7 +3824,7 @@ class ConversationsResource:
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "ConversationReplyResult":
-        """Yanıt gönder. WhatsApp: açık rıza zorunlu; son gelen mesajdan 24 saat içinde metin/medya, pencere dışında yalnızca onaylı şablon (aksi 422 WHATSAPP_WINDOW_CLOSED).
+        """Yanıt gönder (client_message_id ile tekilleşir). Sohbet: doğrudan; e-posta: yanıt adresli işlemsel e-posta; WhatsApp: açık rıza zorunlu, son gelen mesajdan 24 saat içinde metin/medya, pencere dışında yalnızca onaylı şablon (aksi 422 WHATSAPP_WINDOW_CLOSED).
 
         ``POST /v1/apps/{appId}/conversations/{conversationId}/messages``
         """
@@ -3436,13 +3844,74 @@ class ConversationsResource:
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Conversation":
-        """Gelen mesajları okundu işaretle
+        """Gelen mesajları okundu işaretle (sohbette ziyaretçiye okundu bilgisi gider)
 
         ``POST /v1/apps/{appId}/conversations/{conversationId}/read``
         """
         return self._client._call(
             "POST",
             "/v1/apps/{appId}/conversations/{conversationId}/read",
+            path_params={"conversationId": conversation_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def assign(
+        self,
+        conversation_id: str,
+        body: "ConversationAssignDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Conversation":
+        """Konuşmayı temsilciye ve/veya takıma ata (inbox.manage olmadan yalnızca kendine)
+
+        ``POST /v1/apps/{appId}/conversations/{conversationId}/assign``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/conversations/{conversationId}/assign",
+            path_params={"conversationId": conversation_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def tags(
+        self,
+        conversation_id: str,
+        body: "ConversationTagsDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ConversationTagsResult":
+        """Sohbetten kişiye etiket ekle/kaldır
+
+        ``POST /v1/apps/{appId}/conversations/{conversationId}/tags``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/conversations/{conversationId}/tags",
+            path_params={"conversationId": conversation_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def activity(
+        self,
+        conversation_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ConversationActivity":
+        """Konuşma zaman çizelgesi (atama, durum, ilk yanıt, bot devri)
+
+        ``GET /v1/apps/{appId}/conversations/{conversationId}/activity``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/conversations/{conversationId}/activity",
             path_params={"conversationId": conversation_id},
             app_id=app_id,
             request_options=request_options,
@@ -3754,6 +4223,171 @@ class EmailDeliverabilityResource:
             "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}/usage",
             path_params={"planId": plan_id},
             query={"days": days},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
+class FormsResource:
+    """forms kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "FormPage":
+        """Formlar
+
+        ``GET /v1/apps/{appId}/forms``
+
+        Parametreler:
+            status: Değerler: "active", "archived".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/forms",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "status": status},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["Form"]:
+        """``list`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list(
+                limit=limit,
+                status=status,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def create(
+        self,
+        body: "CreateFormDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Form":
+        """Form oluştur
+
+        ``POST /v1/apps/{appId}/forms``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/forms",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        form_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Form":
+        """Form detayı
+
+        ``GET /v1/apps/{appId}/forms/{formId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/forms/{formId}",
+            path_params={"formId": form_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def submissions(
+        self,
+        form_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        since: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "FormSubmissionPage":
+        """Form gönderimleri
+
+        ``GET /v1/apps/{appId}/forms/{formId}/submissions``
+
+        Parametreler:
+            status: Değerler: "accepted", "pending_confirmation", "confirmed".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/forms/{formId}/submissions",
+            path_params={"formId": form_id},
+            query={"limit": limit, "cursor": cursor, "status": status, "since": since},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def submissions_all(
+        self,
+        form_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        since: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["FormSubmission"]:
+        """``submissions`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.submissions(
+                form_id,
+                limit=limit,
+                status=status,
+                since=since,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def submit(
+        self,
+        form_id: str,
+        body: "PublicFormSubmitDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "FormSubmitResult":
+        """Sunucu tarafı form gönderimi (`external_id` verilirse o kullanıcının profili güncellenir)
+
+        ``POST /v1/apps/{appId}/forms/{formId}/submissions``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/forms/{formId}/submissions",
+            path_params={"formId": form_id},
+            body=body,
             app_id=app_id,
             request_options=request_options,
         )
@@ -4366,6 +5000,116 @@ class JourneysResource:
         )
 
 
+class LandingPagesResource:
+    """landingPages kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LandingPageList":
+        """Landing sayfaları
+
+        ``GET /v1/apps/{appId}/landing-pages``
+
+        Parametreler:
+            status: Değerler: "draft", "published", "archived".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/landing-pages",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "status": status},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["LandingPageListDataItem"]:
+        """``list`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list(
+                limit=limit,
+                status=status,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def get(
+        self,
+        page_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LandingPage":
+        """Landing sayfası detayı
+
+        ``GET /v1/apps/{appId}/landing-pages/{pageId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/landing-pages/{pageId}",
+            path_params={"pageId": page_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def publish(
+        self,
+        page_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LandingPage":
+        """Taslağı yayınla
+
+        ``POST /v1/apps/{appId}/landing-pages/{pageId}/publish``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/landing-pages/{pageId}/publish",
+            path_params={"pageId": page_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def unpublish(
+        self,
+        page_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "LandingPage":
+        """Yayından kaldır
+
+        ``POST /v1/apps/{appId}/landing-pages/{pageId}/unpublish``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/landing-pages/{pageId}/unpublish",
+            path_params={"pageId": page_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class LiveActivitiesResource:
     """liveActivities kaynağı."""
 
@@ -4699,6 +5443,213 @@ class SmsKeywordsResource:
         )
 
 
+class SurveysResource:
+    """surveys kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SurveyPage":
+        """Anketler
+
+        ``GET /v1/apps/{appId}/surveys``
+
+        Parametreler:
+            status: Değerler: "draft", "active", "closed".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/surveys",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "status": status},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["Survey"]:
+        """``list`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list(
+                limit=limit,
+                status=status,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def create(
+        self,
+        body: "CreateSurveyDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Survey":
+        """Anket oluştur (taslak)
+
+        ``POST /v1/apps/{appId}/surveys``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/surveys",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        survey_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Survey":
+        """Anket detayı
+
+        ``GET /v1/apps/{appId}/surveys/{surveyId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/surveys/{surveyId}",
+            path_params={"surveyId": survey_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def status(
+        self,
+        survey_id: str,
+        body: "SurveyStatusDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Survey":
+        """Etkinleştir / kapat
+
+        ``POST /v1/apps/{appId}/surveys/{surveyId}/status``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/surveys/{surveyId}/status",
+            path_params={"surveyId": survey_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def report(
+        self,
+        survey_id: str,
+        *,
+        days: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SurveyReport":
+        """NPS / CSAT raporu
+
+        ``GET /v1/apps/{appId}/surveys/{surveyId}/report``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/surveys/{surveyId}/report",
+            path_params={"surveyId": survey_id},
+            query={"days": days},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def responses(
+        self,
+        survey_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        text_question: Optional[str] = None,
+        nps_category: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SurveyResponsePage":
+        """Anket yanıtları
+
+        ``GET /v1/apps/{appId}/surveys/{surveyId}/responses``
+
+        Parametreler:
+            nps_category: Değerler: "promoter", "passive", "detractor".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/surveys/{surveyId}/responses",
+            path_params={"surveyId": survey_id},
+            query={"limit": limit, "cursor": cursor, "text_question": text_question, "nps_category": nps_category},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def responses_all(
+        self,
+        survey_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        text_question: Optional[str] = None,
+        nps_category: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["SurveyResponse"]:
+        """``responses`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.responses(
+                survey_id,
+                limit=limit,
+                text_question=text_question,
+                nps_category=nps_category,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def respond(
+        self,
+        survey_id: str,
+        body: "PublicSurveyResponseDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SurveyResponseResult":
+        """Sunucu tarafı anket yanıtı (`external_id` ile kullanıcıya bağlanır)
+
+        ``POST /v1/apps/{appId}/surveys/{surveyId}/responses``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/surveys/{surveyId}/responses",
+            path_params={"surveyId": survey_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class WarehouseExportsResource:
     """warehouseExports kaynağı."""
 
@@ -4922,6 +5873,161 @@ class WarehouseExportsResource:
         )
 
 
+class WebCampaignsResource:
+    """webCampaigns kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebCampaignPage":
+        """Web kampanyaları
+
+        ``GET /v1/apps/{appId}/web-campaigns``
+
+        Parametreler:
+            status: Değerler: "draft", "active", "paused", "archived".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/web-campaigns",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "status": status},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["WebCampaign"]:
+        """``list`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list(
+                limit=limit,
+                status=status,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def create(
+        self,
+        body: "CreateWebCampaignDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebCampaign":
+        """Web kampanyası oluştur (taslak)
+
+        ``POST /v1/apps/{appId}/web-campaigns``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/web-campaigns",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        campaign_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebCampaign":
+        """Web kampanyası detayı ve istatistikleri
+
+        ``GET /v1/apps/{appId}/web-campaigns/{campaignId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/web-campaigns/{campaignId}",
+            path_params={"campaignId": campaign_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        campaign_id: str,
+        body: "UpdateWebCampaignDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebCampaign":
+        """Web kampanyasını düzenle
+
+        ``PATCH /v1/apps/{appId}/web-campaigns/{campaignId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/web-campaigns/{campaignId}",
+            path_params={"campaignId": campaign_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def report(
+        self,
+        campaign_id: str,
+        *,
+        days: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebCampaignReport":
+        """Günlük seri
+
+        ``GET /v1/apps/{appId}/web-campaigns/{campaignId}/report``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/web-campaigns/{campaignId}/report",
+            path_params={"campaignId": campaign_id},
+            query={"days": days},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def status(
+        self,
+        campaign_id: str,
+        body: "WebCampaignStatusDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebCampaign":
+        """Yayınla / duraklat / arşivle
+
+        ``POST /v1/apps/{appId}/web-campaigns/{campaignId}/status``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/web-campaigns/{campaignId}/status",
+            path_params={"campaignId": campaign_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class WhatsappResource:
     """whatsapp kaynağı."""
 
@@ -4989,19 +6095,25 @@ class GeneratedResources:
     apps: AppsResource
     api_keys: ApiKeysResource
     organization: OrganizationResource
+    ads: AdsResource
+    canned_responses: CannedResponsesResource
     categories: CategoriesResource
     content_tables: ContentTablesResource
     conversations: ConversationsResource
     data_feeds: DataFeedsResource
     email_deliverability: EmailDeliverabilityResource
+    forms: FormsResource
     identity_keys: IdentityKeysResource
     integrations: IntegrationsResource
     journeys: JourneysResource
+    landing_pages: LandingPagesResource
     live_activities: LiveActivitiesResource
     mcp: McpResource
     preferences: PreferencesResource
     sms_keywords: SmsKeywordsResource
+    surveys: SurveysResource
     warehouse_exports: WarehouseExportsResource
+    web_campaigns: WebCampaignsResource
     whatsapp: WhatsappResource
 
     def _init_resources(self) -> None:
@@ -5024,19 +6136,25 @@ class GeneratedResources:
         self.apps = AppsResource(self)  # type: ignore[arg-type]
         self.api_keys = ApiKeysResource(self)  # type: ignore[arg-type]
         self.organization = OrganizationResource(self)  # type: ignore[arg-type]
+        self.ads = AdsResource(self)  # type: ignore[arg-type]
+        self.canned_responses = CannedResponsesResource(self)  # type: ignore[arg-type]
         self.categories = CategoriesResource(self)  # type: ignore[arg-type]
         self.content_tables = ContentTablesResource(self)  # type: ignore[arg-type]
         self.conversations = ConversationsResource(self)  # type: ignore[arg-type]
         self.data_feeds = DataFeedsResource(self)  # type: ignore[arg-type]
         self.email_deliverability = EmailDeliverabilityResource(self)  # type: ignore[arg-type]
+        self.forms = FormsResource(self)  # type: ignore[arg-type]
         self.identity_keys = IdentityKeysResource(self)  # type: ignore[arg-type]
         self.integrations = IntegrationsResource(self)  # type: ignore[arg-type]
         self.journeys = JourneysResource(self)  # type: ignore[arg-type]
+        self.landing_pages = LandingPagesResource(self)  # type: ignore[arg-type]
         self.live_activities = LiveActivitiesResource(self)  # type: ignore[arg-type]
         self.mcp = McpResource(self)  # type: ignore[arg-type]
         self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
         self.sms_keywords = SmsKeywordsResource(self)  # type: ignore[arg-type]
+        self.surveys = SurveysResource(self)  # type: ignore[arg-type]
         self.warehouse_exports = WarehouseExportsResource(self)  # type: ignore[arg-type]
+        self.web_campaigns = WebCampaignsResource(self)  # type: ignore[arg-type]
         self.whatsapp = WhatsappResource(self)  # type: ignore[arg-type]
 
 
@@ -5060,18 +6178,24 @@ RESOURCE_NAMES = (
     "apps",
     "api_keys",
     "organization",
+    "ads",
+    "canned_responses",
     "categories",
     "content_tables",
     "conversations",
     "data_feeds",
     "email_deliverability",
+    "forms",
     "identity_keys",
     "integrations",
     "journeys",
+    "landing_pages",
     "live_activities",
     "mcp",
     "preferences",
     "sms_keywords",
+    "surveys",
     "warehouse_exports",
+    "web_campaigns",
     "whatsapp",
 )
