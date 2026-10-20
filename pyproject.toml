@@ -21,11 +21,10 @@ classifiers = [
 dependencies = ["httpx>=0.24,<1"]
 
 [project.urls]
-Homepage = "https://github.com/exec0de/pushizo/tree/main/sdk/python"
-Documentation = "https://github.com/exec0de/pushizo/blob/main/docs/sdk/README.md"
+Homepage = "https://docs.pushizo.com/docs/sdk/python"
+Documentation = "https://docs.pushizo.com/docs/sdk/python"
 Repository = "https://github.com/exec0de/pushizo"
-Issues = "https://github.com/exec0de/pushizo/issues"
-Changelog = "https://github.com/exec0de/pushizo/blob/main/CHANGELOG.md"
+Changelog = "https://docs.pushizo.com/docs/changelog"
 
 [project.optional-dependencies]
 dev = ["pytest>=7", "cryptography>=41"]
