@@ -3323,6 +3323,319 @@ class AdsResource:
             request_options=request_options,
         )
 
+    def list(
+        self,
+        *,
+        ad_account_id: Optional[str] = None,
+        level: Optional[str] = None,
+        parent_id: Optional[str] = None,
+        status: Optional[str] = None,
+        q: Optional[str] = None,
+        from_: Optional[str] = None,
+        to: Optional[str] = None,
+        limit: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdEntityList":
+        """Kampanya / reklam seti / reklam listesi ve metrikler
+
+        ``GET /v1/apps/{appId}/ads/campaigns``
+
+        Parametreler:
+            level: Değerler: "campaign", "ad_set", "ad".
+            status: Değerler: "active", "paused", "pending", "rejected", "archived", "deleted", "unknown".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/campaigns",
+            path_params={},
+            query={"ad_account_id": ad_account_id, "level": level, "parent_id": parent_id, "status": status, "q": q, "from": from_, "to": to, "limit": limit},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        entity_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdEntity":
+        """Kampanya / reklam seti / reklam ayrıntısı
+
+        ``GET /v1/apps/{appId}/ads/campaigns/{entityId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/campaigns/{entityId}",
+            path_params={"entityId": entity_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        entity_id: str,
+        body: "UpdateAdCampaignDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdEntity":
+        """Durum ve günlük bütçe değişikliği
+
+        ``PATCH /v1/apps/{appId}/ads/campaigns/{entityId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/ads/campaigns/{entityId}",
+            path_params={"entityId": entity_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def refresh(
+        self,
+        account_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdRefreshQueued":
+        """Kampanyaları ve metrikleri şimdi yenile
+
+        ``POST /v1/apps/{appId}/ads/accounts/{accountId}/refresh``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/ads/accounts/{accountId}/refresh",
+            path_params={"accountId": account_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def spend(
+        self,
+        *,
+        from_: str,
+        to: str,
+        currency: Optional[str] = None,
+        group_by: Optional[str] = None,
+        ad_account_id: Optional[str] = None,
+        campaign_id: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdSpendReport":
+        """Harcama ve performans raporu
+
+        ``GET /v1/apps/{appId}/ads/reports/spend``
+
+        Parametreler:
+            group_by: Değerler: "day", "platform", "account", "campaign", "ad_set".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/reports/spend",
+            path_params={},
+            query={"from": from_, "to": to, "currency": currency, "group_by": group_by, "ad_account_id": ad_account_id, "campaign_id": campaign_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def attribution(
+        self,
+        *,
+        from_: str,
+        to: str,
+        model: Optional[str] = None,
+        window_days: Optional[int] = None,
+        half_life_days: Optional[int] = None,
+        currency: Optional[str] = None,
+        group_by: Optional[str] = None,
+        conversion_events: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdAttributionReport":
+        """Birleşik atribüsyon raporu (ROAS, CAC)
+
+        ``GET /v1/apps/{appId}/ads/reports/attribution``
+
+        Parametreler:
+            model: Değerler: "last_click", "first_click", "linear", "time_decay".
+            group_by: Değerler: "channel", "campaign", "ad_set".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/reports/attribution",
+            path_params={},
+            query={"from": from_, "to": to, "model": model, "window_days": window_days, "half_life_days": half_life_days, "currency": currency, "group_by": group_by, "conversion_events": conversion_events},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def ltv(
+        self,
+        *,
+        months: Optional[int] = None,
+        cohorts: Optional[int] = None,
+        currency: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdLtvReport":
+        """Kohort LTV raporu
+
+        ``GET /v1/apps/{appId}/ads/reports/ltv``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/reports/ltv",
+            path_params={},
+            query={"months": months, "cohorts": cohorts, "currency": currency},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def capi_configs(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdCapiConfigList":
+        """Conversions API yapılandırmaları
+
+        ``GET /v1/apps/{appId}/ads/conversions-api/configs``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/conversions-api/configs",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def capi_deliveries(
+        self,
+        *,
+        config_id: Optional[str] = None,
+        status: Optional[str] = None,
+        limit: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdCapiDeliveryList":
+        """Conversions API teslim geçmişi
+
+        ``GET /v1/apps/{appId}/ads/conversions-api/deliveries``
+
+        Parametreler:
+            status: Değerler: "pending", "sent", "failed", "skipped".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/conversions-api/deliveries",
+            path_params={},
+            query={"config_id": config_id, "status": status, "limit": limit},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def rules(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdBudgetAlertRuleList":
+        """Bütçe uyarı kuralları
+
+        ``GET /v1/apps/{appId}/ads/alert-rules``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/alert-rules",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_rule(
+        self,
+        body: "CreateBudgetAlertRuleDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdBudgetAlertRule":
+        """Bütçe uyarı kuralı oluştur
+
+        ``POST /v1/apps/{appId}/ads/alert-rules``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/ads/alert-rules",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_rule(
+        self,
+        rule_id: str,
+        body: "UpdateBudgetAlertRuleDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdBudgetAlertRule":
+        """Bütçe uyarı kuralını güncelle
+
+        ``PATCH /v1/apps/{appId}/ads/alert-rules/{ruleId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/ads/alert-rules/{ruleId}",
+            path_params={"ruleId": rule_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def remove_rule(
+        self,
+        rule_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdOk":
+        """Bütçe uyarı kuralını sil
+
+        ``DELETE /v1/apps/{appId}/ads/alert-rules/{ruleId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/ads/alert-rules/{ruleId}",
+            path_params={"ruleId": rule_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def alert_history(
+        self,
+        *,
+        rule_id: Optional[str] = None,
+        limit: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdBudgetAlertList":
+        """Tetiklenen bütçe uyarıları
+
+        ``GET /v1/apps/{appId}/ads/alerts``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/alerts",
+            path_params={},
+            query={"rule_id": rule_id, "limit": limit},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
 
 class CannedResponsesResource:
     """cannedResponses kaynağı."""
