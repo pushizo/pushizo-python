@@ -50,6 +50,84 @@ class AdAccountList(TypedDict, total=False):
     data: List["AdAccount"]
 
 
+AdAttributionReport = TypedDict(
+    "AdAttributionReport",
+    {
+        # Zorunlu.
+        "from": str,
+        # Zorunlu.
+        "to": str,
+        # Zorunlu. Değerler: "last_click", "first_click", "linear", "time_decay".
+        "model": str,
+        # Zorunlu.
+        "window_days": int,
+        # Zorunlu.
+        "half_life_days": int,
+        # Zorunlu.
+        "currency": str,
+        # Zorunlu.
+        "group_by": str,
+        # Zorunlu.
+        "conversion_events": List[str],
+        # Zorunlu.
+        "rows": List["AdAttributionReportRowsItem"],
+        # Zorunlu.
+        "totals": "AdAttributionReportTotals",
+        # Zorunlu.
+        "truncated": bool,
+        # Zorunlu.
+        "fx_missing": List[str],
+    },
+    total=False,
+)
+
+
+class AdAttributionReportRowsItem(TypedDict, total=False):
+    """AdAttributionReportRowsItem şeması."""
+
+    #: Zorunlu.
+    key: str
+    #: Zorunlu. Değerler: "meta", "google", "tiktok", "linkedin", "microsoft", "other_paid", "utm", "push", "email", "sms", "whatsapp", "rcs", "direct".
+    channel: str
+    #: Zorunlu.
+    label: str
+    #: Zorunlu.
+    paid: bool
+    #: Zorunlu.
+    conversions: float
+    #: Zorunlu.
+    revenue: float
+    #: Zorunlu.
+    new_customers: float
+    #: Zorunlu.
+    spend: Optional[float]
+    #: Zorunlu.
+    roas: Optional[float]
+    #: Zorunlu.
+    cac: Optional[float]
+
+
+class AdAttributionReportTotals(TypedDict, total=False):
+    """AdAttributionReportTotals şeması."""
+
+    #: Zorunlu.
+    conversions: float
+    #: Zorunlu.
+    revenue: float
+    #: Zorunlu.
+    spend: float
+    #: Zorunlu.
+    new_customers: float
+    #: Zorunlu.
+    roas: Optional[float]
+    #: Zorunlu.
+    platform_roas: Optional[float]
+    #: Zorunlu.
+    cac: Optional[float]
+    #: Zorunlu.
+    paid_cac: Optional[float]
+
+
 class AdAudience(TypedDict, total=False):
     """AdAudience şeması."""
 
@@ -182,6 +260,219 @@ class AdAudienceSyncQueued(TypedDict, total=False):
     mode: str
 
 
+class AdBudgetAlertList(TypedDict, total=False):
+    """AdBudgetAlertList şeması."""
+
+    #: Zorunlu.
+    data: List["AdBudgetAlertListDataItem"]
+
+
+class AdBudgetAlertListDataItem(TypedDict, total=False):
+    """AdBudgetAlertListDataItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    rule_id: str
+    #: Zorunlu.
+    rule_name: str
+    #: Zorunlu. Değerler: "daily_spend", "roas_drop", "budget_depletion".
+    kind: str
+    #: Zorunlu.
+    day: str
+    #: Zorunlu.
+    value: float
+    #: Zorunlu.
+    threshold: float
+    #: Zorunlu.
+    details: Dict[str, Any]
+    #: Zorunlu.
+    emailed: int
+    #: Zorunlu.
+    created_at: str
+
+
+class AdBudgetAlertRule(TypedDict, total=False):
+    """AdBudgetAlertRule şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "daily_spend", "roas_drop", "budget_depletion".
+    kind: str
+    #: Zorunlu.
+    ad_account_id: Optional[str]
+    #: Zorunlu.
+    campaign_external_id: Optional[str]
+    #: Zorunlu.
+    threshold: float
+    #: Zorunlu.
+    window_days: int
+    #: Zorunlu.
+    recipients: List[str]
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    last_value: Optional[float]
+    #: Zorunlu.
+    last_evaluated_at: Optional[str]
+    #: Zorunlu.
+    last_triggered_on: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class AdBudgetAlertRuleList(TypedDict, total=False):
+    """AdBudgetAlertRuleList şeması."""
+
+    #: Zorunlu.
+    data: List["AdBudgetAlertRule"]
+
+
+class AdCapiConfig(TypedDict, total=False):
+    """AdCapiConfig şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu. Değerler: "meta", "google", "tiktok".
+    platform: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    ad_account_id: Optional[str]
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    settings: "AdCapiConfigSettings"
+    #: Zorunlu.
+    event_mappings: List["AdCapiConfigEventMappingsItem"]
+    #: Zorunlu.
+    test_event_code: Optional[str]
+    #: Zorunlu.
+    test_mode: bool
+    #: Zorunlu. Değerler: "website", "app".
+    action_source: str
+    #: Zorunlu.
+    default_currency: str
+    #: Zorunlu.
+    has_access_token: bool
+    #: Zorunlu.
+    last_sent_at: Optional[str]
+    #: Zorunlu.
+    last_error: Optional[str]
+    #: Zorunlu.
+    last_error_at: Optional[str]
+    #: Zorunlu.
+    stats: "AdCapiConfigStats"
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class AdCapiConfigEventMappingsItem(TypedDict, total=False):
+    """AdCapiConfigEventMappingsItem şeması."""
+
+    #: Zorunlu.
+    event_name: str
+    #: Zorunlu.
+    platform_event: str
+    #: Zorunlu.
+    value_property: Optional[str]
+    #: Zorunlu.
+    currency_property: Optional[str]
+
+
+class AdCapiConfigList(TypedDict, total=False):
+    """AdCapiConfigList şeması."""
+
+    #: Zorunlu.
+    data: List["AdCapiConfig"]
+
+
+class AdCapiConfigSettings(TypedDict, total=False):
+    """AdCapiConfigSettings şeması."""
+
+    #: Zorunlu.
+    pixel_id: Optional[str]
+    #: Zorunlu.
+    customer_id: Optional[str]
+    #: Zorunlu.
+    login_customer_id: Optional[str]
+    #: Zorunlu.
+    pixel_code: Optional[str]
+
+
+class AdCapiConfigStats(TypedDict, total=False):
+    """AdCapiConfigStats şeması."""
+
+    #: Zorunlu.
+    pending: int
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    failed: int
+    #: Zorunlu.
+    skipped: int
+
+
+class AdCapiDelivery(TypedDict, total=False):
+    """AdCapiDelivery şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    config_id: str
+    #: Zorunlu. Değerler: "meta", "google", "tiktok".
+    platform: str
+    #: Zorunlu.
+    event_id: str
+    #: Zorunlu.
+    event_name: str
+    #: Zorunlu.
+    platform_event: str
+    #: Zorunlu.
+    dedup_id: str
+    #: Zorunlu.
+    user_id: Optional[str]
+    #: Zorunlu.
+    value: Optional[float]
+    #: Zorunlu.
+    currency: Optional[str]
+    #: Zorunlu. Değerler: "pending", "sent", "failed", "skipped".
+    status: str
+    #: Zorunlu.
+    skip_reason: Optional[str]
+    #: Zorunlu.
+    attempts: int
+    #: Zorunlu.
+    next_attempt_at: Optional[str]
+    #: Zorunlu.
+    last_error: Optional[str]
+    #: Zorunlu.
+    test: bool
+    #: Zorunlu.
+    event_occurred_at: str
+    #: Zorunlu.
+    sent_at: Optional[str]
+    #: Zorunlu.
+    created_at: str
+
+
+class AdCapiDeliveryList(TypedDict, total=False):
+    """AdCapiDeliveryList şeması."""
+
+    #: Zorunlu.
+    data: List["AdCapiDelivery"]
+
+
 class AddAliasDto(TypedDict, total=False):
     """AddAliasDto şeması."""
 
@@ -227,11 +518,252 @@ class AddSubscriptionDtoOptIn(TypedDict, total=False):
     at: str
 
 
+class AdEntity(TypedDict, total=False):
+    """AdEntity şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    ad_account_id: str
+    #: Zorunlu. Değerler: "meta", "google", "tiktok".
+    platform: str
+    #: Zorunlu. Değerler: "campaign", "ad_set", "ad".
+    level: str
+    #: Zorunlu.
+    external_id: str
+    #: Zorunlu.
+    campaign_external_id: str
+    #: Zorunlu.
+    ad_set_external_id: Optional[str]
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "active", "paused", "pending", "rejected", "archived", "deleted", "unknown".
+    status: str
+    #: Zorunlu.
+    platform_status: Optional[str]
+    #: Zorunlu.
+    objective: Optional[str]
+    #: Zorunlu.
+    optimization_goal: Optional[str]
+    #: Zorunlu.
+    currency: Optional[str]
+    #: Zorunlu.
+    daily_budget: Optional[str]
+    #: Zorunlu.
+    lifetime_budget: Optional[str]
+    #: Zorunlu.
+    start_at: Optional[str]
+    #: Zorunlu.
+    end_at: Optional[str]
+    #: Zorunlu.
+    audience_external_ids: List[str]
+    #: Zorunlu.
+    creative: Optional["AdEntityCreative"]
+    #: Zorunlu.
+    budget_editable: bool
+    #: Zorunlu.
+    created_by_pushizo: bool
+    #: Zorunlu.
+    last_seen_at: Optional[str]
+    #: Zorunlu.
+    platform_url: str
+    #: Zorunlu.
+    metrics: Optional["AdEntityMetrics"]
+    #: Zorunlu.
+    updated_at: str
+
+
+class AdEntityCreative(TypedDict, total=False):
+    """AdEntityCreative şeması."""
+
+    #: Zorunlu.
+    title: Optional[str]
+    #: Zorunlu.
+    body: Optional[str]
+    #: Zorunlu.
+    description: Optional[str]
+    #: Zorunlu.
+    link_url: Optional[str]
+    #: Zorunlu.
+    image_url: Optional[str]
+    #: Zorunlu.
+    call_to_action: Optional[str]
+
+
+AdEntityList = TypedDict(
+    "AdEntityList",
+    {
+        # Zorunlu.
+        "data": List["AdEntity"],
+        # Zorunlu.
+        "from": str,
+        # Zorunlu.
+        "to": str,
+        # Zorunlu.
+        "accounts": List["AdEntityListAccountsItem"],
+    },
+    total=False,
+)
+
+
+class AdEntityListAccountsItem(TypedDict, total=False):
+    """AdEntityListAccountsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    campaigns_synced_at: Optional[str]
+    #: Zorunlu.
+    insights_synced_at: Optional[str]
+    #: Zorunlu.
+    campaigns_sync_error: Optional[str]
+    #: Zorunlu.
+    insights_sync_error: Optional[str]
+
+
+class AdEntityMetrics(TypedDict, total=False):
+    """AdEntityMetrics şeması."""
+
+    #: Zorunlu.
+    impressions: float
+    #: Zorunlu.
+    clicks: float
+    #: Zorunlu.
+    spend: float
+    #: Zorunlu.
+    conversions: float
+    #: Zorunlu.
+    conversion_value: float
+    #: Zorunlu.
+    ctr: Optional[float]
+    #: Zorunlu.
+    cpc: Optional[float]
+    #: Zorunlu.
+    roas: Optional[float]
+
+
+class AdLtvReport(TypedDict, total=False):
+    """AdLtvReport şeması."""
+
+    #: Zorunlu.
+    currency: str
+    #: Zorunlu.
+    months: int
+    #: Zorunlu.
+    conversion_events: List[str]
+    #: Zorunlu.
+    cohorts: List["AdLtvReportCohortsItem"]
+    #: Zorunlu.
+    average: List[Optional[float]]
+    #: Zorunlu.
+    fx_missing: List[str]
+
+
+class AdLtvReportCohortsItem(TypedDict, total=False):
+    """AdLtvReportCohortsItem şeması."""
+
+    #: Zorunlu.
+    cohort: str
+    #: Zorunlu.
+    size: int
+    #: Zorunlu.
+    revenue: List[float]
+    #: Zorunlu.
+    ltv: List[float]
+
+
 class AdOk(TypedDict, total=False):
     """AdOk şeması."""
 
     #: Zorunlu.
     ok: bool
+
+
+class AdRefreshQueued(TypedDict, total=False):
+    """AdRefreshQueued şeması."""
+
+    #: Zorunlu.
+    queued: bool
+    #: Zorunlu.
+    next_sync_at: str
+
+
+AdSpendReport = TypedDict(
+    "AdSpendReport",
+    {
+        # Zorunlu.
+        "from": str,
+        # Zorunlu.
+        "to": str,
+        # Zorunlu.
+        "currency": str,
+        # Zorunlu.
+        "group_by": str,
+        # Zorunlu.
+        "rows": List["AdSpendReportRowsItem"],
+        # Zorunlu.
+        "totals": "AdSpendReportTotals",
+        # Zorunlu.
+        "fx_missing": List[str],
+        # Zorunlu. Değerler: "postgres", "clickhouse".
+        "store": str,
+    },
+    total=False,
+)
+
+
+class AdSpendReportRowsItem(TypedDict, total=False):
+    """AdSpendReportRowsItem şeması."""
+
+    #: Zorunlu.
+    key: str
+    #: Zorunlu.
+    label: str
+    #: Zorunlu.
+    platform: Optional[str]
+    #: Zorunlu.
+    impressions: float
+    #: Zorunlu.
+    clicks: float
+    #: Zorunlu.
+    spend: float
+    #: Zorunlu.
+    conversions: float
+    #: Zorunlu.
+    conversion_value: float
+    #: Zorunlu.
+    ctr: Optional[float]
+    #: Zorunlu.
+    cpc: Optional[float]
+    #: Zorunlu.
+    cpa: Optional[float]
+    #: Zorunlu.
+    roas: Optional[float]
+
+
+class AdSpendReportTotals(TypedDict, total=False):
+    """AdSpendReportTotals şeması."""
+
+    #: Zorunlu.
+    impressions: float
+    #: Zorunlu.
+    clicks: float
+    #: Zorunlu.
+    spend: float
+    #: Zorunlu.
+    conversions: float
+    #: Zorunlu.
+    conversion_value: float
+    #: Zorunlu.
+    ctr: Optional[float]
+    #: Zorunlu.
+    cpc: Optional[float]
+    #: Zorunlu.
+    cpa: Optional[float]
+    #: Zorunlu.
+    roas: Optional[float]
 
 
 class ApiEventsDto(TypedDict, total=False):
@@ -1932,6 +2464,22 @@ class CreateAppDtoPlatformFlags(TypedDict, total=False):
     sms: bool
 
 
+class CreateBudgetAlertRuleDto(TypedDict, total=False):
+    """CreateBudgetAlertRuleDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "daily_spend", "roas_drop", "budget_depletion".
+    kind: str
+    ad_account_id: Optional[str]
+    campaign_external_id: Optional[str]
+    #: Zorunlu.
+    threshold: float
+    window_days: int
+    recipients: List[str]
+    enabled: bool
+
+
 class CreateCategoryDto(TypedDict, total=False):
     """CreateCategoryDto şeması."""
 
@@ -2944,7 +3492,7 @@ class CreateWebhookDto(TypedDict, total=False):
     #: Zorunlu.
     url: str
     description: Optional[str]
-    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked".
+    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked", "ad_budget.alert", "ad_insights.imported".
     events: List[str]
     event_filters: "CreateWebhookDtoEventFilters"
     batch: bool
@@ -7083,6 +7631,14 @@ class UpdateAdAudienceDto(TypedDict, total=False):
     status: str
 
 
+class UpdateAdCampaignDto(TypedDict, total=False):
+    """UpdateAdCampaignDto şeması."""
+
+    #: Değerler: "active", "paused".
+    status: str
+    daily_budget: Any
+
+
 class UpdateApiKeyDto(TypedDict, total=False):
     """UpdateApiKeyDto şeması."""
 
@@ -7356,6 +7912,18 @@ class UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue(TypedDict, total=
 
     title: str
     message: str
+
+
+class UpdateBudgetAlertRuleDto(TypedDict, total=False):
+    """UpdateBudgetAlertRuleDto şeması."""
+
+    name: str
+    ad_account_id: Optional[str]
+    campaign_external_id: Optional[str]
+    threshold: float
+    window_days: int
+    recipients: List[str]
+    enabled: bool
 
 
 class UpdateCategoryDto(TypedDict, total=False):
@@ -7967,7 +8535,7 @@ class UpdateWebhookDto(TypedDict, total=False):
 
     url: str
     description: Optional[str]
-    #: Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked".
+    #: Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked", "ad_budget.alert", "ad_insights.imported".
     events: List[str]
     event_filters: "UpdateWebhookDtoEventFilters"
     batch: bool
@@ -8992,7 +9560,7 @@ class WebhookList(TypedDict, total=False):
 class WebhookPreviewDto(TypedDict, total=False):
     """WebhookPreviewDto şeması."""
 
-    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked", "webhook.test".
+    #: Zorunlu. Değerler: "message.queued", "message.completed", "message.failed", "delivery.sent", "delivery.delivered", "delivery.failed", "delivery.opened", "delivery.clicked", "delivery.bounced", "delivery.complained", "delivery.unsubscribed", "in_app.impression", "in_app.clicked", "in_app.dismissed", "subscription.created", "subscription.unsubscribed", "subscription.invalidated", "user.created", "user.updated", "user.merged", "user.deleted", "event.received", "conversion.created", "campaign.scheduled", "campaign.started", "campaign.completed", "journey.entered", "journey.step_completed", "journey.completed", "journey.exited", "conversation.created", "conversation.message", "conversation.assigned", "conversation.resolved", "audit.created", "form.submitted", "survey.responded", "ad_audience.synced", "ad_account.revoked", "ad_budget.alert", "ad_insights.imported", "webhook.test".
     event_type: str
     data: Dict[str, Any]
     body_template: Optional[str]
@@ -9261,17 +9829,42 @@ class ZapierSubscribeDto(TypedDict, total=False):
 __all__ = [
     "AdAccount",
     "AdAccountList",
+    "AdAttributionReport",
+    "AdAttributionReportRowsItem",
+    "AdAttributionReportTotals",
     "AdAudience",
     "AdAudienceList",
     "AdAudienceLookalikeSpec",
     "AdAudienceSyncList",
     "AdAudienceSyncListDataItem",
     "AdAudienceSyncQueued",
+    "AdBudgetAlertList",
+    "AdBudgetAlertListDataItem",
+    "AdBudgetAlertRule",
+    "AdBudgetAlertRuleList",
+    "AdCapiConfig",
+    "AdCapiConfigEventMappingsItem",
+    "AdCapiConfigList",
+    "AdCapiConfigSettings",
+    "AdCapiConfigStats",
+    "AdCapiDelivery",
+    "AdCapiDeliveryList",
     "AddAliasDto",
     "AddSubscriptionDto",
     "AddSubscriptionDtoDevice",
     "AddSubscriptionDtoOptIn",
+    "AdEntity",
+    "AdEntityCreative",
+    "AdEntityList",
+    "AdEntityListAccountsItem",
+    "AdEntityMetrics",
+    "AdLtvReport",
+    "AdLtvReportCohortsItem",
     "AdOk",
+    "AdRefreshQueued",
+    "AdSpendReport",
+    "AdSpendReportRowsItem",
+    "AdSpendReportTotals",
     "ApiEventsDto",
     "ApiEventsDtoEventsItem",
     "ApiKey",
@@ -9392,6 +9985,7 @@ __all__ = [
     "CreateAppApiKeyDto",
     "CreateAppDto",
     "CreateAppDtoPlatformFlags",
+    "CreateBudgetAlertRuleDto",
     "CreateCategoryDto",
     "CreatedApiKey",
     "CreateDataFeedDto",
@@ -9757,6 +10351,7 @@ __all__ = [
     "TriggerRunDto",
     "TriggerRunDtoAlias",
     "UpdateAdAudienceDto",
+    "UpdateAdCampaignDto",
     "UpdateApiKeyDto",
     "UpdateAppDto",
     "UpdateAppDtoPlatformFlags",
@@ -9782,6 +10377,7 @@ __all__ = [
     "UpdateAppDtoSettingsWebPushPromptTextsValue",
     "UpdateAppDtoSettingsWebPushWelcomeNotification",
     "UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue",
+    "UpdateBudgetAlertRuleDto",
     "UpdateCategoryDto",
     "UpdateContentTableDto",
     "UpdateDataFeedDto",
