@@ -1,0 +1,37 @@
+# PyPI yayını
+#
+# Trusted publishing (OIDC): uzun ömürlü belirteç saklanmaz. Ana depodaki yayın betiği paketi test edip derler, bu
+# deponun GitHub Release'ine ekler ve bu iş akışını sürüm etiketiyle çalıştırır:
+#   npm run sdk:publish -- <hedef> --yalnizca-github --tetikle --yayinla
+# Elle: Actions → Release → Run workflow → tag.
+# Kurulum (bir kez): pypi.org → Publishing → Add a new pending publisher: proje pushizo, owner pushizo, depo pushizo-python, iş akışı release.yml, ortam pypi.
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Sürüm etiketi (ör. v0.1.0)
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  pypi:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Paket dosyalarını release'ten al
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern '*.whl' --pattern '*.tar.gz' --dir dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist
+          skip-existing: true
