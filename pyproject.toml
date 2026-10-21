@@ -23,7 +23,8 @@ dependencies = ["httpx>=0.24,<1"]
 [project.urls]
 Homepage = "https://docs.pushizo.com/docs/sdk/python"
 Documentation = "https://docs.pushizo.com/docs/sdk/python"
-Repository = "https://github.com/exec0de/pushizo"
+Repository = "https://github.com/pushizo/pushizo-python"
+Issues = "https://github.com/pushizo/pushizo-python/issues"
 Changelog = "https://docs.pushizo.com/docs/changelog"
 
 [project.optional-dependencies]
