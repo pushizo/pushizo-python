@@ -13,8 +13,16 @@
 
 **Pushizo Python SDK** — Server-side SDK for Python with synchronous and asyncio clients. Models and resources are generated from the Pushizo OpenAPI schema; retries, idempotency, pagination and webhook verification are built in.
 
-> **Status:** Publishing to PyPI is in progress; until then you can build from this repository.<br>
-> **Durum:** PyPI yayını hazırlanıyor; o zamana kadar bu depodan derleyerek kullanabilirsiniz.
+> **Status:** Publishing to PyPI is in progress.<br>
+> **Durum:** PyPI yayını hazırlanıyor.
+
+**Install from GitHub until then · O zamana kadar GitHub'dan kurulum:**
+
+```bash
+pip install https://github.com/pushizo/pushizo-python/releases/download/v0.1.0/pushizo-0.1.0-py3-none-any.whl
+```
+
+**After publication · Yayından sonra:**
 
 ```bash
 pip install pushizo
