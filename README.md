@@ -1,7 +1,35 @@
+<!-- pushizo:header -->
+<p align="center">
+  <a href="https://pushizo.com"><img src="https://raw.githubusercontent.com/pushizo/.github/main/profile/assets/mark.svg" alt="Pushizo" width="56" height="56"></a>
+</p>
+<p align="center">
+  <a href="https://docs.pushizo.com/docs/sdk/python"><img src="https://img.shields.io/badge/docs-docs.pushizo.com-5b4bdb" alt="Docs"></a>
+  <a href="https://docs.pushizo.com/docs/api"><img src="https://img.shields.io/badge/API-reference-b44fc4" alt="API reference"></a>
+  <a href="https://github.com/pushizo/pushizo-python/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-16130f" alt="License: MIT"></a>
+</p>
+<p align="center"><a href="#english">English</a> · <a href="#türkçe">Türkçe</a></p>
+
+## English
+
+**Pushizo Python SDK** — Server-side SDK for Python with synchronous and asyncio clients. Models and resources are generated from the Pushizo OpenAPI schema; retries, idempotency, pagination and webhook verification are built in.
+
+> **Status:** Publishing to PyPI is in progress; until then you can build from this repository.<br>
+> **Durum:** PyPI yayını hazırlanıyor; o zamana kadar bu depodan derleyerek kullanabilirsiniz.
+
+```bash
+pip install pushizo
+```
+
+The detailed guide below is in Turkish; code samples are language-neutral. Full documentation:
+[docs.pushizo.com/docs/sdk/python](https://docs.pushizo.com/docs/sdk/python) · API reference: [docs.pushizo.com/docs/api](https://docs.pushizo.com/docs/api).
+
+## Türkçe
+<!-- /pushizo:header -->
+
 # Pushizo Python SDK
 
 Pushizo public API'si için Python sunucu SDK'sı (Python 3.9+, [httpx](https://www.python-httpx.org/)).
-Modeller ve kaynak metotları `api/openapi.yaml`'dan üretilir; kimlik doğrulama, yeniden deneme, idempotency,
+Modeller ve kaynak metotları [Pushizo OpenAPI şemasından](https://github.com/pushizo/pushizo-openapi) üretilir; kimlik doğrulama, yeniden deneme, idempotency,
 sayfalama ve webhook imza doğrulaması el yazımı katmandadır.
 
 ## Kurulum
@@ -118,3 +146,24 @@ node sdk/scripts/generate-server-sdks.mjs --lang python   # depo kökünde; mode
 
 `src/pushizo/_generated/` elle düzenlenmez. Webhook testleri `sdk/testdata/webhook-signature-vectors.json`
 ortak vektörlerini kullanır (Node, PHP, Go, Java, .NET ve Ruby SDK'larıyla aynı).
+
+<!-- pushizo:footer -->
+---
+
+## Support · Destek
+
+- **Guide · Rehber:** [docs.pushizo.com/docs/sdk/python](https://docs.pushizo.com/docs/sdk/python)
+- **API reference & OpenAPI · API referansı ve OpenAPI:** [docs.pushizo.com/docs/api](https://docs.pushizo.com/docs/api) ·
+  [pushizo-openapi](https://github.com/pushizo/pushizo-openapi)
+- **Bugs & ideas · Hata ve öneri:** [Issues](https://github.com/pushizo/pushizo-python/issues)
+- **Security · Güvenlik:** please do not open public issues; email [security@pushizo.com](mailto:security@pushizo.com) ·
+  herkese açık issue açmayın, bu adrese yazın.
+- **Help · Destek:** [support@pushizo.com](mailto:support@pushizo.com)
+
+This repository is mirrored automatically from the Pushizo main repository on every release. Please open an issue
+instead of a pull request; fixes land in the main repository and ship with the next release.
+Bu depo her sürümde Pushizo ana deposundan otomatik yansıtılır. Pull request yerine issue açın; düzeltmeler ana depoda
+yapılır ve bir sonraki sürümle buraya gelir.
+
+Released under the MIT License · MIT lisanslıdır — [LICENSE](https://github.com/pushizo/pushizo-python/blob/main/LICENSE).
+<!-- /pushizo:footer -->
