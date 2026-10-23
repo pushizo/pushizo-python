@@ -4450,7 +4450,7 @@ class Import(TypedDict, total=False):
     id: str
     #: Zorunlu.
     app_id: str
-    #: Zorunlu. Değerler: "eski sağlayıcı_players", "csv_users".
+    #: Zorunlu. Değerler: "legacy_players", "csv_users".
     type: str
     #: Zorunlu.
     file_name: Optional[str]
@@ -5950,6 +5950,27 @@ class McpCreateCampaignDraftBodyVariantsItem(TypedDict, total=False):
     weight_percent: int
     content: Optional[Dict[str, Any]]
     is_control: bool
+
+
+class McpCreateJourneyDraftBody(TypedDict, total=False):
+    """McpCreateJourneyDraftBody şeması."""
+
+    #: Zorunlu.
+    name: str
+    description: str
+    #: React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)
+    graph: "McpCreateJourneyDraftBodyGraph"
+    #: Yeniden giriş, yalnızca yeni girenler, çıkış kuralları, çıkış tag'leri, hedefler, takvim (docs/journeys.md)
+    settings: Dict[str, Any]
+
+
+class McpCreateJourneyDraftBodyGraph(TypedDict, total=False):
+    """React Flow uyumlu journey grafı: { nodes: [{ id, type, position, data }], edges: [{ id, source, target, sourceHandle }] } (docs/journeys.md)"""
+
+    #: Zorunlu.
+    nodes: List[Dict[str, Any]]
+    #: Zorunlu.
+    edges: List[Dict[str, Any]]
 
 
 class McpCreateSegmentDraftBody(TypedDict, total=False):
@@ -7602,6 +7623,17 @@ class TestDataFeedDto(TypedDict, total=False):
 
     external_id: str
     user_id: str
+
+
+class TestPushDto(TypedDict, total=False):
+    """TestPushDto şeması."""
+
+    subscription_ids: List[str]
+    headings: Dict[str, str]
+    #: Zorunlu.
+    contents: Dict[str, str]
+    url: str
+    data: Dict[str, str]
 
 
 class TriggerRunDto(TypedDict, total=False):
@@ -10238,6 +10270,8 @@ __all__ = [
     "McpCreateCampaignDraftBodyDelivery",
     "McpCreateCampaignDraftBodyRecurrence",
     "McpCreateCampaignDraftBodyVariantsItem",
+    "McpCreateJourneyDraftBody",
+    "McpCreateJourneyDraftBodyGraph",
     "McpCreateSegmentDraftBody",
     "McpCreateSegmentDraftBodyDefinition",
     "Member",
@@ -10352,6 +10386,7 @@ __all__ = [
     "TemplateVersionList",
     "TemplateVersionListDataItem",
     "TestDataFeedDto",
+    "TestPushDto",
     "TriggerRunDto",
     "TriggerRunDtoAlias",
     "UpdateAdAudienceDto",

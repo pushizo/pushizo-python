@@ -2226,7 +2226,7 @@ class ImportsResource:
         ``POST /v1/apps/{appId}/imports``
 
         Parametreler:
-            type: Değerler: "eski sağlayıcı_players", "csv_users".
+            type: Değerler: "legacy_players", "csv_users".
             file: CSV dosyası (UTF-8, en fazla 50 MB)
         """
         return self._client._call(
@@ -5615,6 +5615,86 @@ class McpResource:
         return self._client._call(
             "POST",
             "/v1/apps/{appId}/mcp/segment-drafts",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_template_draft(
+        self,
+        body: "CreateTemplateDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Template":
+        """Şablon oluştur (MCP onaylı mod; şablon tek başına gönderim yapmaz)
+
+        ``POST /v1/apps/{appId}/mcp/template-drafts``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/mcp/template-drafts",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_journey_draft(
+        self,
+        body: "McpCreateJourneyDraftBody",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Journey taslağı oluştur (MCP onaylı mod; yayımlanmaz)
+
+        ``POST /v1/apps/{appId}/mcp/journey-drafts``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/mcp/journey-drafts",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_in_app_draft(
+        self,
+        body: "CreateInAppDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InAppMessage":
+        """In-app mesaj taslağı oluştur (MCP onaylı mod; etkinleştirilmez)
+
+        ``POST /v1/apps/{appId}/mcp/in-app-drafts``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/mcp/in-app-drafts",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def test_send(
+        self,
+        body: "TestPushDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CreateNotificationResult":
+        """Test gönderimi (yalnızca app’in test cihazlarına; MCP onaylı mod)
+
+        ``POST /v1/apps/{appId}/mcp/test-sends``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/mcp/test-sends",
             path_params={},
             body=body,
             app_id=app_id,
