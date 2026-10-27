@@ -984,7 +984,7 @@ class TemplatesResource:
         ``GET /v1/apps/{appId}/templates``
 
         Parametreler:
-            channel: Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+            channel: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
         """
         return self._client._call(
             "GET",
@@ -1204,7 +1204,7 @@ class CampaignsResource:
         Parametreler:
             status: Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
             type: Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
-            channel: Değerler: "ios_push", "android_push", "hms_push", "web_push", "email", "sms", "whatsapp", "rcs".
+            channel: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
         """
         return self._client._call(
             "GET",
@@ -4540,6 +4540,42 @@ class EmailDeliverabilityResource:
             request_options=request_options,
         )
 
+    def postmaster(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PostmasterStats":
+        """Google Postmaster itibar kayıtları
+
+        ``GET /v1/apps/{appId}/email-deliverability/postmaster``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/email-deliverability/postmaster",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def sync_postmaster(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PostmasterStats":
+        """Google Postmaster dünkü itibarını oku
+
+        ``POST /v1/apps/{appId}/email-deliverability/postmaster/sync``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/email-deliverability/postmaster/sync",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
 
 class FormsResource:
     """forms kaynağı."""
@@ -6248,6 +6284,53 @@ class SurveysResource:
         )
 
 
+class VerifyResource:
+    """verify kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def start(
+        self,
+        body: "StartVerifyDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SmsVerification":
+        """SMS doğrulama kodu gönder
+
+        ``POST /v1/apps/{appId}/verify/sms``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/verify/sms",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def check(
+        self,
+        body: "CheckVerifyDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SmsVerificationCheck":
+        """SMS doğrulama kodunu kontrol et
+
+        ``POST /v1/apps/{appId}/verify/sms/check``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/verify/sms/check",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class WarehouseExportsResource:
     """warehouseExports kaynağı."""
 
@@ -6711,6 +6794,7 @@ class GeneratedResources:
     reverse_etl: ReverseEtlResource
     sms_keywords: SmsKeywordsResource
     surveys: SurveysResource
+    verify: VerifyResource
     warehouse_exports: WarehouseExportsResource
     web_campaigns: WebCampaignsResource
     whatsapp: WhatsappResource
@@ -6753,6 +6837,7 @@ class GeneratedResources:
         self.reverse_etl = ReverseEtlResource(self)  # type: ignore[arg-type]
         self.sms_keywords = SmsKeywordsResource(self)  # type: ignore[arg-type]
         self.surveys = SurveysResource(self)  # type: ignore[arg-type]
+        self.verify = VerifyResource(self)  # type: ignore[arg-type]
         self.warehouse_exports = WarehouseExportsResource(self)  # type: ignore[arg-type]
         self.web_campaigns = WebCampaignsResource(self)  # type: ignore[arg-type]
         self.whatsapp = WhatsappResource(self)  # type: ignore[arg-type]
@@ -6796,6 +6881,7 @@ RESOURCE_NAMES = (
     "reverse_etl",
     "sms_keywords",
     "surveys",
+    "verify",
     "warehouse_exports",
     "web_campaigns",
     "whatsapp",
