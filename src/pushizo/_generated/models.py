@@ -6846,6 +6846,92 @@ class RetentionReportCohortsItem(TypedDict, total=False):
     retention: List[Optional[float]]
 
 
+class ReverseEtlRun(TypedDict, total=False):
+    """ReverseEtlRun şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    sync_id: str
+    #: Zorunlu. Değerler: "schedule", "manual".
+    trigger: str
+    #: Zorunlu. Değerler: "queued", "running", "succeeded", "failed".
+    status: str
+    #: Zorunlu.
+    row_count: int
+    #: Zorunlu.
+    attempt: int
+    #: Zorunlu.
+    error: Optional[str]
+    #: Zorunlu.
+    started_at: Optional[str]
+    #: Zorunlu.
+    finished_at: Optional[str]
+    #: Zorunlu.
+    duration_ms: Optional[int]
+    #: Zorunlu.
+    created_at: str
+
+
+class ReverseEtlRunPage(TypedDict, total=False):
+    """ReverseEtlRunPage şeması."""
+
+    #: Zorunlu.
+    data: List["ReverseEtlRun"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+    #: Zorunlu.
+    has_more: bool
+
+
+class ReverseEtlSync(TypedDict, total=False):
+    """ReverseEtlSync şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "snowflake", "bigquery", "postgres", "mysql", "s3", "google_sheets".
+    source: str
+    #: Zorunlu. Değerler: "event", "user".
+    target: str
+    #: Zorunlu.
+    config: Dict[str, Any]
+    #: Zorunlu.
+    credentials_hint: str
+    #: Zorunlu. Değerler: "hourly", "daily".
+    schedule: str
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu. Değerler: "active", "paused", "failing".
+    status: str
+    #: Zorunlu.
+    cursor: Optional[str]
+    #: Zorunlu.
+    consecutive_failures: int
+    #: Zorunlu.
+    last_error: Optional[str]
+    #: Zorunlu.
+    last_run_at: Optional[str]
+    #: Zorunlu.
+    last_success_at: Optional[str]
+    #: Zorunlu.
+    next_run_at: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class ReverseEtlSyncList(TypedDict, total=False):
+    """ReverseEtlSyncList şeması."""
+
+    #: Zorunlu.
+    data: List["ReverseEtlSync"]
+
+
 class ScheduleCampaignDto(TypedDict, total=False):
     """ScheduleCampaignDto şeması."""
 
@@ -8223,6 +8309,17 @@ class UpdateNodeDtoPosition(TypedDict, total=False):
     y: float
 
 
+class UpdateReverseEtlDto(TypedDict, total=False):
+    """UpdateReverseEtlDto şeması."""
+
+    name: str
+    #: Değerler: "hourly", "daily".
+    schedule: str
+    enabled: bool
+    config: Dict[str, Any]
+    credentials: Dict[str, Any]
+
+
 class UpdateTemplateDto(TypedDict, total=False):
     """UpdateTemplateDto şeması."""
 
@@ -9002,7 +9099,7 @@ class WarehouseExport(TypedDict, total=False):
     app_id: str
     #: Zorunlu.
     name: str
-    #: Zorunlu. Değerler: "bigquery", "snowflake", "s3_parquet".
+    #: Zorunlu. Değerler: "bigquery", "snowflake", "s3_parquet", "redshift", "databricks".
     destination: str
     #: Zorunlu.
     config: Dict[str, Any]
@@ -10330,6 +10427,10 @@ __all__ = [
     "RenderTemplateDtoUser",
     "RetentionReport",
     "RetentionReportCohortsItem",
+    "ReverseEtlRun",
+    "ReverseEtlRunPage",
+    "ReverseEtlSync",
+    "ReverseEtlSyncList",
     "ScheduleCampaignDto",
     "ScheduleCampaignDtoRecurrence",
     "Segment",
@@ -10442,6 +10543,7 @@ __all__ = [
     "UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue",
     "UpdateNodeDto",
     "UpdateNodeDtoPosition",
+    "UpdateReverseEtlDto",
     "UpdateTemplateDto",
     "UpdateTemplateDtoContent",
     "UpdateTemplateDtoContentButtonsItem",

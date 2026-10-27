@@ -5751,6 +5751,211 @@ class PreferencesResource:
         )
 
 
+class ReverseEtlResource:
+    """reverseEtl kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ReverseEtlSyncList":
+        """Depodan içeri aktarımlar
+
+        ``GET /v1/apps/{appId}/reverse-etl``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/reverse-etl",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: Any,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ReverseEtlSync":
+        """İçeri aktarım oluştur
+
+        ``POST /v1/apps/{appId}/reverse-etl``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/reverse-etl",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def test(
+        self,
+        body: Any,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseConnectionResult":
+        """Kaydetmeden bağlantı testi
+
+        ``POST /v1/apps/{appId}/reverse-etl/test-connection``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/reverse-etl/test-connection",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        sync_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ReverseEtlSync":
+        """İçeri aktarım detayı
+
+        ``GET /v1/apps/{appId}/reverse-etl/{syncId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/reverse-etl/{syncId}",
+            path_params={"syncId": sync_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        sync_id: str,
+        body: "UpdateReverseEtlDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ReverseEtlSync":
+        """İçeri aktarımı güncelle
+
+        ``PATCH /v1/apps/{appId}/reverse-etl/{syncId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/reverse-etl/{syncId}",
+            path_params={"syncId": sync_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        sync_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """İçeri aktarımı sil
+
+        ``DELETE /v1/apps/{appId}/reverse-etl/{syncId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/reverse-etl/{syncId}",
+            path_params={"syncId": sync_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def test_saved(
+        self,
+        sync_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseConnectionResult":
+        """Kayıtlı içeri aktarımın bağlantı testi
+
+        ``POST /v1/apps/{appId}/reverse-etl/{syncId}/test``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/reverse-etl/{syncId}/test",
+            path_params={"syncId": sync_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def run(
+        self,
+        sync_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ReverseEtlRun":
+        """Şimdi içeri aktar
+
+        ``POST /v1/apps/{appId}/reverse-etl/{syncId}/run``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/reverse-etl/{syncId}/run",
+            path_params={"syncId": sync_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def runs(
+        self,
+        sync_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ReverseEtlRunPage":
+        """İçeri aktarım geçmişi
+
+        ``GET /v1/apps/{appId}/reverse-etl/{syncId}/runs``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/reverse-etl/{syncId}/runs",
+            path_params={"syncId": sync_id},
+            query={"limit": limit, "cursor": cursor},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def runs_all(
+        self,
+        sync_id: str,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["ReverseEtlRun"]:
+        """``runs`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.runs(
+                sync_id,
+                limit=limit,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+
 class SmsKeywordsResource:
     """smsKeywords kaynağı."""
 
@@ -6503,6 +6708,7 @@ class GeneratedResources:
     live_activities: LiveActivitiesResource
     mcp: McpResource
     preferences: PreferencesResource
+    reverse_etl: ReverseEtlResource
     sms_keywords: SmsKeywordsResource
     surveys: SurveysResource
     warehouse_exports: WarehouseExportsResource
@@ -6544,6 +6750,7 @@ class GeneratedResources:
         self.live_activities = LiveActivitiesResource(self)  # type: ignore[arg-type]
         self.mcp = McpResource(self)  # type: ignore[arg-type]
         self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
+        self.reverse_etl = ReverseEtlResource(self)  # type: ignore[arg-type]
         self.sms_keywords = SmsKeywordsResource(self)  # type: ignore[arg-type]
         self.surveys = SurveysResource(self)  # type: ignore[arg-type]
         self.warehouse_exports = WarehouseExportsResource(self)  # type: ignore[arg-type]
@@ -6586,6 +6793,7 @@ RESOURCE_NAMES = (
     "live_activities",
     "mcp",
     "preferences",
+    "reverse_etl",
     "sms_keywords",
     "surveys",
     "warehouse_exports",
