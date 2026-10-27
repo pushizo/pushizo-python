@@ -886,6 +886,7 @@ class AppSettings(TypedDict, total=False):
     androidChannels: List["AppSettingsAndroidChannelsItem"]
     sms: "AppSettingsSms"
     preferenceCenter: "AppSettingsPreferenceCenter"
+    brandKit: "AppSettingsBrandKit"
     defaultTtlSeconds: int
     identityVerificationRequired: bool
     allowedOrigins: List[str]
@@ -908,6 +909,18 @@ class AppSettingsAndroidChannelsItem(TypedDict, total=False):
     sound: str
     vibration: bool
     group: str
+
+
+class AppSettingsBrandKit(TypedDict, total=False):
+    """AppSettingsBrandKit şeması."""
+
+    website_url: str
+    name: str
+    primary_color: str
+    accent_color: str
+    font: str
+    logo_url: str
+    tone: str
 
 
 class AppSettingsFrequencyCap(TypedDict, total=False):
@@ -7804,6 +7817,7 @@ class UpdateAppDtoSettings(TypedDict, total=False):
     androidChannels: List["UpdateAppDtoSettingsAndroidChannelsItem"]
     sms: "UpdateAppDtoSettingsSms"
     preferenceCenter: "UpdateAppDtoSettingsPreferenceCenter"
+    brandKit: "UpdateAppDtoSettingsBrandKit"
     defaultTtlSeconds: int
     identityVerificationRequired: bool
     allowedOrigins: List[str]
@@ -7826,6 +7840,18 @@ class UpdateAppDtoSettingsAndroidChannelsItem(TypedDict, total=False):
     sound: str
     vibration: bool
     group: str
+
+
+class UpdateAppDtoSettingsBrandKit(TypedDict, total=False):
+    """UpdateAppDtoSettingsBrandKit şeması."""
+
+    website_url: str
+    name: str
+    primary_color: str
+    accent_color: str
+    font: str
+    logo_url: str
+    tone: str
 
 
 class UpdateAppDtoSettingsFrequencyCap(TypedDict, total=False):
@@ -10007,6 +10033,7 @@ __all__ = [
     "AppPlatformFlags",
     "AppSettings",
     "AppSettingsAndroidChannelsItem",
+    "AppSettingsBrandKit",
     "AppSettingsFrequencyCap",
     "AppSettingsFrequencyCapsItem",
     "AppSettingsFrequencyCapsItemWindow",
@@ -10497,6 +10524,7 @@ __all__ = [
     "UpdateAppDtoPlatformFlags",
     "UpdateAppDtoSettings",
     "UpdateAppDtoSettingsAndroidChannelsItem",
+    "UpdateAppDtoSettingsBrandKit",
     "UpdateAppDtoSettingsFrequencyCap",
     "UpdateAppDtoSettingsFrequencyCapsItem",
     "UpdateAppDtoSettingsFrequencyCapsItemWindow",
