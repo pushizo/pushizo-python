@@ -1328,17 +1328,22 @@ class CampaignsResource:
         campaign_id: str,
         body: "ScheduleCampaignDto",
         *,
+        force: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Campaign":
-        """Zamanla
+        """Zamanla; e-posta liste koruması 409 → force=true (admin kapsamı)
 
         ``POST /v1/apps/{appId}/campaigns/{campaignId}/schedule``
+
+        Parametreler:
+            force: Değerler: "true", "false".
         """
         return self._client._call(
             "POST",
             "/v1/apps/{appId}/campaigns/{campaignId}/schedule",
             path_params={"campaignId": campaign_id},
+            query={"force": force},
             body=body,
             app_id=app_id,
             request_options=request_options,
@@ -1348,16 +1353,40 @@ class CampaignsResource:
         self,
         campaign_id: str,
         *,
+        force: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Campaign":
-        """Hemen gönder
+        """Hemen gönder; e-posta liste koruması 409 → force=true (admin kapsamı)
 
         ``POST /v1/apps/{appId}/campaigns/{campaignId}/send``
+
+        Parametreler:
+            force: Değerler: "true", "false".
         """
         return self._client._call(
             "POST",
             "/v1/apps/{appId}/campaigns/{campaignId}/send",
+            path_params={"campaignId": campaign_id},
+            query={"force": force},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def email_risk(
+        self,
+        campaign_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CampaignEmailRisk":
+        """E-posta liste riski (tahmini geçersiz oranı, 7/30 gün bounce oranı)
+
+        ``GET /v1/apps/{appId}/campaigns/{campaignId}/email-risk``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/campaigns/{campaignId}/email-risk",
             path_params={"campaignId": campaign_id},
             app_id=app_id,
             request_options=request_options,

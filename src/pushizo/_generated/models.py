@@ -1302,6 +1302,35 @@ class CampaignDelivery(TypedDict, total=False):
     one_per_user: bool
 
 
+class CampaignEmailRisk(TypedDict, total=False):
+    """CampaignEmailRisk şeması."""
+
+    #: Zorunlu.
+    applies: bool
+    #: Zorunlu.
+    recipients: int
+    #: Zorunlu.
+    flagged_invalid: int
+    #: Zorunlu.
+    sendable: int
+    #: Zorunlu.
+    valid: int
+    #: Zorunlu.
+    unknown: int
+    #: Zorunlu.
+    unchecked: int
+    #: Zorunlu.
+    estimated_invalid_ratio: float
+    #: Zorunlu.
+    max_invalid_ratio: float
+    #: Zorunlu.
+    blocked: bool
+    #: Zorunlu.
+    bounce_rate_7d: Optional[float]
+    #: Zorunlu.
+    bounce_rate_30d: Optional[float]
+
+
 class CampaignPage(TypedDict, total=False):
     """CampaignPage şeması."""
 
@@ -3682,6 +3711,7 @@ class DeliverabilitySettingsDto(TypedDict, total=False):
     validation: "DeliverabilitySettingsDtoValidation"
     verifier: "DeliverabilitySettingsDtoVerifier"
     volume_spike: "DeliverabilitySettingsDtoVolumeSpike"
+    max_invalid_ratio: Optional[float]
     postmaster: "DeliverabilitySettingsDtoPostmaster"
 
 
@@ -3802,6 +3832,8 @@ class EmailDeliverabilitySettings(TypedDict, total=False):
     volume_spike: "EmailDeliverabilitySettingsVolumeSpike"
     #: Zorunlu.
     postmaster: "EmailDeliverabilitySettingsPostmaster"
+    #: Zorunlu.
+    max_invalid_ratio: float
 
 
 class EmailDeliverabilitySettingsPostmaster(TypedDict, total=False):
@@ -4602,6 +4634,8 @@ class ImportStats(TypedDict, total=False):
     created_subscriptions: int
     skipped: int
     errors: int
+    rejected_emails: int
+    rejected_email_reasons: Dict[str, int]
 
 
 class InAppMessage(TypedDict, total=False):
@@ -10264,6 +10298,7 @@ __all__ = [
     "CampaignAbTestWinner",
     "CampaignApproval",
     "CampaignDelivery",
+    "CampaignEmailRisk",
     "CampaignPage",
     "CampaignRecurrence",
     "CampaignsCreateBody",
