@@ -3753,6 +3753,224 @@ class CannedResponsesResource:
         )
 
 
+class CatalogsResource:
+    """catalogs kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CatalogList":
+        """Ürün katalogları
+
+        ``GET /v1/apps/{appId}/catalogs``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/catalogs",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: "CreateCatalogDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Catalog":
+        """Katalog oluştur
+
+        ``POST /v1/apps/{appId}/catalogs``
+
+        Şablonda `{% catalog_item '<ad>' id: custom_data.product_id as urun %}{{ urun.title }}`.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/catalogs",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        catalog_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Catalog":
+        """Katalog ayrıntısı
+
+        ``GET /v1/apps/{appId}/catalogs/{catalogId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/catalogs/{catalogId}",
+            path_params={"catalogId": catalog_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        catalog_id: str,
+        body: "UpdateCatalogDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Catalog":
+        """Kataloğu güncelle
+
+        ``PATCH /v1/apps/{appId}/catalogs/{catalogId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/catalogs/{catalogId}",
+            path_params={"catalogId": catalog_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        catalog_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Kataloğu sil
+
+        ``DELETE /v1/apps/{appId}/catalogs/{catalogId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/catalogs/{catalogId}",
+            path_params={"catalogId": catalog_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def items(
+        self,
+        catalog_id: str,
+        *,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        q: Optional[str] = None,
+        category: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CatalogItemsPage":
+        """Ürünler
+
+        ``GET /v1/apps/{appId}/catalogs/{catalogId}/items``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/catalogs/{catalogId}/items",
+            path_params={"catalogId": catalog_id},
+            query={"limit": limit, "offset": offset, "q": q, "category": category},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def upsert(
+        self,
+        catalog_id: str,
+        body: "UpsertCatalogItemsDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CatalogUpsertResult":
+        """Ürünleri ekle veya güncelle (en fazla 1000)
+
+        ``PUT /v1/apps/{appId}/catalogs/{catalogId}/items``
+
+        Listede olmayan ürünlere dokunulmaz. Listedeki ürünün verilmeyen alanları temizlenir.
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/catalogs/{catalogId}/items",
+            path_params={"catalogId": catalog_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def upload(
+        self,
+        catalog_id: str,
+        file: FileInput,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CatalogUpsertResult":
+        """CSV ile ürün ekle veya güncelle
+
+        ``POST /v1/apps/{appId}/catalogs/{catalogId}/items/upload``
+
+        Parametreler:
+            file: UTF-8 CSV. Zorunlu sütunlar: id, title. Bilinen: description, image_url, url, price, sale_price, currency, category, brand, in_stock. Diğerleri özellik olur. En fazla 100.000 satır, 20 MB.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/catalogs/{catalogId}/items/upload",
+            path_params={"catalogId": catalog_id},
+            form={},
+            files={"file": file},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def item(
+        self,
+        catalog_id: str,
+        item_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CatalogItem":
+        """Ürün ayrıntısı
+
+        ``GET /v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}",
+            path_params={"catalogId": catalog_id, "itemId": item_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def remove_item(
+        self,
+        catalog_id: str,
+        item_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Ürünü sil
+
+        ``DELETE /v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}",
+            path_params={"catalogId": catalog_id, "itemId": item_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class CategoriesResource:
     """categories kaynağı."""
 
@@ -7071,6 +7289,7 @@ class GeneratedResources:
     organization: OrganizationResource
     ads: AdsResource
     canned_responses: CannedResponsesResource
+    catalogs: CatalogsResource
     categories: CategoriesResource
     content_tables: ContentTablesResource
     conversations: ConversationsResource
@@ -7116,6 +7335,7 @@ class GeneratedResources:
         self.organization = OrganizationResource(self)  # type: ignore[arg-type]
         self.ads = AdsResource(self)  # type: ignore[arg-type]
         self.canned_responses = CannedResponsesResource(self)  # type: ignore[arg-type]
+        self.catalogs = CatalogsResource(self)  # type: ignore[arg-type]
         self.categories = CategoriesResource(self)  # type: ignore[arg-type]
         self.content_tables = ContentTablesResource(self)  # type: ignore[arg-type]
         self.conversations = ConversationsResource(self)  # type: ignore[arg-type]
@@ -7162,6 +7382,7 @@ RESOURCE_NAMES = (
     "organization",
     "ads",
     "canned_responses",
+    "catalogs",
     "categories",
     "content_tables",
     "conversations",

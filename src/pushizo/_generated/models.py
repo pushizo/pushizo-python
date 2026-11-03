@@ -1795,6 +1795,85 @@ class CannedUpdateDto(TypedDict, total=False):
     language: Optional[str]
 
 
+class Catalog(TypedDict, total=False):
+    """Catalog şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    description: Optional[str]
+    #: Zorunlu.
+    currency: str
+    #: Zorunlu.
+    item_count: int
+    #: Zorunlu.
+    liquid: str
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class CatalogItem(TypedDict, total=False):
+    """CatalogItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    title: str
+    #: Zorunlu.
+    description: Optional[str]
+    #: Zorunlu.
+    image_url: Optional[str]
+    #: Zorunlu.
+    url: Optional[str]
+    #: Zorunlu.
+    price: Optional[float]
+    #: Zorunlu.
+    sale_price: Optional[float]
+    #: Zorunlu.
+    currency: str
+    #: Zorunlu.
+    category: Optional[str]
+    #: Zorunlu.
+    brand: Optional[str]
+    #: Zorunlu.
+    in_stock: bool
+    #: Zorunlu.
+    attributes: Dict[str, str]
+    #: Zorunlu.
+    updated_at: str
+
+
+class CatalogItemsPage(TypedDict, total=False):
+    """CatalogItemsPage şeması."""
+
+    #: Zorunlu.
+    total: int
+    #: Zorunlu.
+    data: List["CatalogItem"]
+
+
+class CatalogList(TypedDict, total=False):
+    """CatalogList şeması."""
+
+    #: Zorunlu.
+    data: List["Catalog"]
+
+
+class CatalogUpsertResult(TypedDict, total=False):
+    """CatalogUpsertResult şeması."""
+
+    #: Zorunlu.
+    catalog: "Catalog"
+    #: Zorunlu.
+    upserted: int
+
+
 class ChannelConfig(TypedDict, total=False):
     """ChannelConfig şeması."""
 
@@ -2541,6 +2620,15 @@ class CreateBudgetAlertRuleDto(TypedDict, total=False):
     window_days: int
     recipients: List[str]
     enabled: bool
+
+
+class CreateCatalogDto(TypedDict, total=False):
+    """CreateCatalogDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    description: str
+    currency: str
 
 
 class CreateCategoryDto(TypedDict, total=False):
@@ -8439,6 +8527,13 @@ class UpdateBudgetAlertRuleDto(TypedDict, total=False):
     enabled: bool
 
 
+class UpdateCatalogDto(TypedDict, total=False):
+    """UpdateCatalogDto şeması."""
+
+    description: Optional[str]
+    currency: str
+
+
 class UpdateCategoryDto(TypedDict, total=False):
     """UpdateCategoryDto şeması."""
 
@@ -9132,6 +9227,32 @@ class UpdateWebhookDtoFiltersConditionsItem(TypedDict, total=False):
     #: Zorunlu. Değerler: "eq", "neq", "in", "not_in", "starts_with", "contains", "exists", "not_exists".
     op: str
     value: Any
+
+
+class UpsertCatalogItemsDto(TypedDict, total=False):
+    """UpsertCatalogItemsDto şeması."""
+
+    #: Zorunlu.
+    items: List["UpsertCatalogItemsDtoItemsItem"]
+
+
+class UpsertCatalogItemsDtoItemsItem(TypedDict, total=False):
+    """UpsertCatalogItemsDtoItemsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    title: str
+    description: Optional[str]
+    image_url: Optional[str]
+    url: Optional[str]
+    price: Optional[float]
+    sale_price: Optional[float]
+    currency: str
+    category: Optional[str]
+    brand: Optional[str]
+    in_stock: bool
+    attributes: Dict[str, str]
 
 
 class UpsertUserDto(TypedDict, total=False):
@@ -10500,6 +10621,11 @@ __all__ = [
     "CannedResponse",
     "CannedResponseList",
     "CannedUpdateDto",
+    "Catalog",
+    "CatalogItem",
+    "CatalogItemsPage",
+    "CatalogList",
+    "CatalogUpsertResult",
     "ChannelConfig",
     "ChannelConfigConfig",
     "ChannelConfigDnsCheck",
@@ -10550,6 +10676,7 @@ __all__ = [
     "CreateAppDto",
     "CreateAppDtoPlatformFlags",
     "CreateBudgetAlertRuleDto",
+    "CreateCatalogDto",
     "CreateCategoryDto",
     "CreatedApiKey",
     "CreateDataFeedDto",
@@ -10976,6 +11103,7 @@ __all__ = [
     "UpdateAppDtoSettingsWebPushWelcomeNotification",
     "UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue",
     "UpdateBudgetAlertRuleDto",
+    "UpdateCatalogDto",
     "UpdateCategoryDto",
     "UpdateContentTableDto",
     "UpdateDataFeedDto",
@@ -11036,6 +11164,8 @@ __all__ = [
     "UpdateWebhookDtoEventFilters",
     "UpdateWebhookDtoFilters",
     "UpdateWebhookDtoFiltersConditionsItem",
+    "UpsertCatalogItemsDto",
+    "UpsertCatalogItemsDtoItemsItem",
     "UpsertUserDto",
     "UsageReport",
     "UsageReportAppsItem",
