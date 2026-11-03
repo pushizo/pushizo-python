@@ -2771,6 +2771,28 @@ class AnalyticsResource:
             request_options=request_options,
         )
 
+    def paths(
+        self,
+        body: "PathBodyDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PathReport":
+        """Yol analizi
+
+        ``POST /v1/apps/{appId}/analytics/paths``
+
+        Başlangıç olayından sonra veya önce kullanıcıların izlediği yollar.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/analytics/paths",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def funnel(
         self,
         body: "FunnelBodyDto",

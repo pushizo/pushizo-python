@@ -7045,6 +7045,100 @@ class PatchUserDtoDeltasPurchasesItem(TypedDict, total=False):
     count: int
 
 
+PathBodyDto = TypedDict(
+    "PathBodyDto",
+    {
+        # Zorunlu.
+        "event": str,
+        # Değerler: "after", "before".
+        "direction": str,
+        "depth": int,
+        "top": int,
+        "window_hours": int,
+        "exclude": List[str],
+        "from": str,
+        "to": str,
+        # Değerler: "json", "csv".
+        "format": str,
+    },
+    total=False,
+)
+
+
+PathReport = TypedDict(
+    "PathReport",
+    {
+        # Zorunlu.
+        "from": str,
+        # Zorunlu.
+        "to": str,
+        # Zorunlu.
+        "event": str,
+        # Zorunlu. Değerler: "after", "before".
+        "direction": str,
+        # Zorunlu.
+        "window_hours": int,
+        # Zorunlu.
+        "total_users": int,
+        # Zorunlu.
+        "truncated": bool,
+        # Zorunlu.
+        "levels": List["PathReportLevelsItem"],
+        # Zorunlu.
+        "links": List["PathReportLinksItem"],
+        # Zorunlu.
+        "top_paths": List["PathReportTopPathsItem"],
+    },
+    total=False,
+)
+
+
+class PathReportLevelsItem(TypedDict, total=False):
+    """PathReportLevelsItem şeması."""
+
+    #: Zorunlu.
+    step: int
+    #: Zorunlu.
+    nodes: List["PathReportLevelsItemNodesItem"]
+
+
+class PathReportLevelsItemNodesItem(TypedDict, total=False):
+    """PathReportLevelsItemNodesItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: Optional[str]
+    #: Zorunlu. Değerler: "event", "other", "end".
+    kind: str
+    #: Zorunlu.
+    users: int
+    #: Zorunlu.
+    share: float
+
+
+class PathReportLinksItem(TypedDict, total=False):
+    """PathReportLinksItem şeması."""
+
+    #: Zorunlu.
+    source: str
+    #: Zorunlu.
+    target: str
+    #: Zorunlu.
+    users: int
+
+
+class PathReportTopPathsItem(TypedDict, total=False):
+    """PathReportTopPathsItem şeması."""
+
+    #: Zorunlu.
+    path: List[str]
+    #: Zorunlu.
+    users: int
+    #: Zorunlu.
+    share: float
+
+
 class PostmasterStats(TypedDict, total=False):
     """PostmasterStats şeması."""
 
@@ -11465,6 +11559,12 @@ __all__ = [
     "PatchUserDto",
     "PatchUserDtoDeltas",
     "PatchUserDtoDeltasPurchasesItem",
+    "PathBodyDto",
+    "PathReport",
+    "PathReportLevelsItem",
+    "PathReportLevelsItemNodesItem",
+    "PathReportLinksItem",
+    "PathReportTopPathsItem",
     "PostmasterStats",
     "PostmasterStatsDataItem",
     "PromoCodeList",
