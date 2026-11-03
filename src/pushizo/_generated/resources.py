@@ -4918,6 +4918,132 @@ class EmailDeliverabilityResource:
         )
 
 
+class FeatureFlagsResource:
+    """featureFlags kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AppFlagList":
+        """Özellik bayrakları
+
+        ``GET /v1/apps/{appId}/feature-flags``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/feature-flags",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: "CreateAppFlagDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AppFlag":
+        """Bayrak oluştur
+
+        ``POST /v1/apps/{appId}/feature-flags``
+
+        Değerler uygulama kimliğini bilen herkesçe okunabilir; gizli bilgi yazmayın.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/feature-flags",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def evaluate(
+        self,
+        body: "EvaluateAppFlagsDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AppFlagEvaluation":
+        """Bayrakları bir kullanıcı için değerlendir
+
+        ``POST /v1/apps/{appId}/feature-flags/evaluate``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/feature-flags/evaluate",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        flag_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AppFlag":
+        """Bayrak ayrıntısı
+
+        ``GET /v1/apps/{appId}/feature-flags/{flagId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/feature-flags/{flagId}",
+            path_params={"flagId": flag_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        flag_id: str,
+        body: "UpdateAppFlagDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AppFlag":
+        """Bayrağı güncelle
+
+        ``PATCH /v1/apps/{appId}/feature-flags/{flagId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/feature-flags/{flagId}",
+            path_params={"flagId": flag_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        flag_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Bayrağı sil
+
+        ``DELETE /v1/apps/{appId}/feature-flags/{flagId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/feature-flags/{flagId}",
+            path_params={"flagId": flag_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class FormsResource:
     """forms kaynağı."""
 
@@ -7626,6 +7752,7 @@ class GeneratedResources:
     conversations: ConversationsResource
     data_feeds: DataFeedsResource
     email_deliverability: EmailDeliverabilityResource
+    feature_flags: FeatureFlagsResource
     forms: FormsResource
     geofences: GeofencesResource
     global_control: GlobalControlResource
@@ -7674,6 +7801,7 @@ class GeneratedResources:
         self.conversations = ConversationsResource(self)  # type: ignore[arg-type]
         self.data_feeds = DataFeedsResource(self)  # type: ignore[arg-type]
         self.email_deliverability = EmailDeliverabilityResource(self)  # type: ignore[arg-type]
+        self.feature_flags = FeatureFlagsResource(self)  # type: ignore[arg-type]
         self.forms = FormsResource(self)  # type: ignore[arg-type]
         self.geofences = GeofencesResource(self)  # type: ignore[arg-type]
         self.global_control = GlobalControlResource(self)  # type: ignore[arg-type]
@@ -7723,6 +7851,7 @@ RESOURCE_NAMES = (
     "conversations",
     "data_feeds",
     "email_deliverability",
+    "feature_flags",
     "forms",
     "geofences",
     "global_control",

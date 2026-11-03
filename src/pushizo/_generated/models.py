@@ -863,6 +863,73 @@ class App(TypedDict, total=False):
     updated_at: str
 
 
+class AppFlag(TypedDict, total=False):
+    """AppFlag şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    key: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    description: Optional[str]
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu. Değerler: "boolean", "string", "number", "json".
+    value_type: str
+    #: Zorunlu.
+    on_value: Any
+    #: Zorunlu.
+    off_value: Any
+    #: Zorunlu.
+    rollout_percent: int
+    #: Zorunlu.
+    segment_id: Optional[str]
+    #: Zorunlu.
+    rollout_schedule: List["AppFlagRolloutScheduleItem"]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class AppFlagEvaluation(TypedDict, total=False):
+    """AppFlagEvaluation şeması."""
+
+    #: Zorunlu.
+    flags: Dict[str, "AppFlagEvaluationFlagsValue"]
+
+
+class AppFlagEvaluationFlagsValue(TypedDict, total=False):
+    """AppFlagEvaluationFlagsValue şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    value: Any
+    #: Zorunlu. Değerler: "on", "disabled", "segment", "rollout".
+    reason: str
+
+
+class AppFlagList(TypedDict, total=False):
+    """AppFlagList şeması."""
+
+    #: Zorunlu.
+    data: List["AppFlag"]
+
+
+class AppFlagRolloutScheduleItem(TypedDict, total=False):
+    """AppFlagRolloutScheduleItem şeması."""
+
+    #: Zorunlu.
+    at: str
+    #: Zorunlu.
+    percent: int
+
+
 class AppList(TypedDict, total=False):
     """AppList şeması."""
 
@@ -2606,6 +2673,33 @@ class CreateAppDtoPlatformFlags(TypedDict, total=False):
     sms: bool
 
 
+class CreateAppFlagDto(TypedDict, total=False):
+    """CreateAppFlagDto şeması."""
+
+    #: Zorunlu.
+    key: str
+    #: Zorunlu.
+    name: str
+    description: Optional[str]
+    enabled: bool
+    #: Değerler: "boolean", "string", "number", "json".
+    value_type: str
+    on_value: Any
+    off_value: Any
+    rollout_percent: int
+    segment_id: Optional[str]
+    rollout_schedule: List["CreateAppFlagDtoRolloutScheduleItem"]
+
+
+class CreateAppFlagDtoRolloutScheduleItem(TypedDict, total=False):
+    """CreateAppFlagDtoRolloutScheduleItem şeması."""
+
+    #: Zorunlu.
+    at: str
+    #: Zorunlu.
+    percent: int
+
+
 class CreateBudgetAlertRuleDto(TypedDict, total=False):
     """CreateBudgetAlertRuleDto şeması."""
 
@@ -4198,6 +4292,14 @@ class EstimateAudienceResult(TypedDict, total=False):
     new_contacts: int
     #: Zorunlu.
     external_id_missing: List[str]
+
+
+class EvaluateAppFlagsDto(TypedDict, total=False):
+    """EvaluateAppFlagsDto şeması."""
+
+    external_id: str
+    user_id: str
+    subject: str
 
 
 class EventDefinition(TypedDict, total=False):
@@ -8729,6 +8831,30 @@ class UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue(TypedDict, total=
     message: str
 
 
+class UpdateAppFlagDto(TypedDict, total=False):
+    """UpdateAppFlagDto şeması."""
+
+    name: str
+    description: Optional[str]
+    enabled: bool
+    #: Değerler: "boolean", "string", "number", "json".
+    value_type: str
+    on_value: Any
+    off_value: Any
+    rollout_percent: int
+    segment_id: Optional[str]
+    rollout_schedule: List["UpdateAppFlagDtoRolloutScheduleItem"]
+
+
+class UpdateAppFlagDtoRolloutScheduleItem(TypedDict, total=False):
+    """UpdateAppFlagDtoRolloutScheduleItem şeması."""
+
+    #: Zorunlu.
+    at: str
+    #: Zorunlu.
+    percent: int
+
+
 class UpdateBudgetAlertRuleDto(TypedDict, total=False):
     """UpdateBudgetAlertRuleDto şeması."""
 
@@ -10800,6 +10926,11 @@ __all__ = [
     "ApiKey",
     "ApiKeyList",
     "App",
+    "AppFlag",
+    "AppFlagEvaluation",
+    "AppFlagEvaluationFlagsValue",
+    "AppFlagList",
+    "AppFlagRolloutScheduleItem",
     "AppList",
     "AppPlatformFlags",
     "AppSettings",
@@ -10923,6 +11054,8 @@ __all__ = [
     "CreateAppApiKeyDto",
     "CreateAppDto",
     "CreateAppDtoPlatformFlags",
+    "CreateAppFlagDto",
+    "CreateAppFlagDtoRolloutScheduleItem",
     "CreateBudgetAlertRuleDto",
     "CreateCatalogDto",
     "CreateCategoryDto",
@@ -11043,6 +11176,7 @@ __all__ = [
     "EstimateAudienceDto",
     "EstimateAudienceDtoTarget",
     "EstimateAudienceResult",
+    "EvaluateAppFlagsDto",
     "EventDefinition",
     "EventDefinitionDetail",
     "EventDefinitionDetailDailyItem",
@@ -11362,6 +11496,8 @@ __all__ = [
     "UpdateAppDtoSettingsWebPushPromptTextsValue",
     "UpdateAppDtoSettingsWebPushWelcomeNotification",
     "UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue",
+    "UpdateAppFlagDto",
+    "UpdateAppFlagDtoRolloutScheduleItem",
     "UpdateBudgetAlertRuleDto",
     "UpdateCatalogDto",
     "UpdateCategoryDto",
