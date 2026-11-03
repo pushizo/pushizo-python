@@ -4771,6 +4771,92 @@ class FormsResource:
         )
 
 
+class GlobalControlResource:
+    """globalControl kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def get(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "GlobalControl":
+        """Genel kontrol grubu ayarı
+
+        ``GET /v1/apps/{appId}/global-control``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/global-control",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        body: "UpdateGlobalControlDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "GlobalControl":
+        """Genel kontrol grubunu ayarla
+
+        ``PUT /v1/apps/{appId}/global-control``
+
+        Gruptaki kullanıcılar kampanya, otomasyon ve uygulama içi mesajları almaz. API ve işlemsel gönderimler etkilenmez.
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/global-control",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def reset(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "GlobalControl":
+        """Grubu yeniden kur (üyelik değişir, ölçüm baştan başlar)
+
+        ``POST /v1/apps/{appId}/global-control/reset``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/global-control/reset",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def report(
+        self,
+        *,
+        days: Optional[int] = None,
+        event: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "GlobalControlReport":
+        """Kontrol ve mesaj alan grubun dönüşüm karşılaştırması
+
+        ``GET /v1/apps/{appId}/global-control/report``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/global-control/report",
+            path_params={},
+            query={"days": days, "event": event},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class IdentityKeysResource:
     """identityKeys kaynağı."""
 
@@ -6991,6 +7077,7 @@ class GeneratedResources:
     data_feeds: DataFeedsResource
     email_deliverability: EmailDeliverabilityResource
     forms: FormsResource
+    global_control: GlobalControlResource
     identity_keys: IdentityKeysResource
     integrations: IntegrationsResource
     journeys: JourneysResource
@@ -7035,6 +7122,7 @@ class GeneratedResources:
         self.data_feeds = DataFeedsResource(self)  # type: ignore[arg-type]
         self.email_deliverability = EmailDeliverabilityResource(self)  # type: ignore[arg-type]
         self.forms = FormsResource(self)  # type: ignore[arg-type]
+        self.global_control = GlobalControlResource(self)  # type: ignore[arg-type]
         self.identity_keys = IdentityKeysResource(self)  # type: ignore[arg-type]
         self.integrations = IntegrationsResource(self)  # type: ignore[arg-type]
         self.journeys = JourneysResource(self)  # type: ignore[arg-type]
@@ -7080,6 +7168,7 @@ RESOURCE_NAMES = (
     "data_feeds",
     "email_deliverability",
     "forms",
+    "global_control",
     "identity_keys",
     "integrations",
     "journeys",

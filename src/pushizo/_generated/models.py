@@ -1298,6 +1298,7 @@ class CampaignDelivery(TypedDict, total=False):
     priority: int
     collapse_id: str
     frequency_cap_exempt: bool
+    global_control_exempt: bool
     quiet_hours_exempt: bool
     one_per_user: bool
 
@@ -1424,6 +1425,7 @@ class CampaignsCreateBodyDelivery(TypedDict, total=False):
     priority: int
     collapse_id: str
     frequency_cap_exempt: bool
+    global_control_exempt: bool
     quiet_hours_exempt: bool
     one_per_user: bool
 
@@ -1612,6 +1614,7 @@ class CampaignsUpdateBodyDelivery(TypedDict, total=False):
     priority: int
     collapse_id: str
     frequency_cap_exempt: bool
+    global_control_exempt: bool
     quiet_hours_exempt: bool
     one_per_user: bool
 
@@ -2747,6 +2750,7 @@ class CreateInAppDtoAudience(TypedDict, total=False):
 
     included_segments: List[str]
     excluded_segments: List[str]
+    global_control_exempt: bool
 
 
 class CreateInAppDtoDisplay(TypedDict, total=False):
@@ -4570,6 +4574,73 @@ class FunnelReportStepsItem(TypedDict, total=False):
     drop_off: int
 
 
+class GlobalControl(TypedDict, total=False):
+    """GlobalControl şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    percent: int
+    #: Zorunlu.
+    started_at: Optional[str]
+
+
+GlobalControlReport = TypedDict(
+    "GlobalControlReport",
+    {
+        # Zorunlu.
+        "enabled": bool,
+        # Zorunlu.
+        "percent": int,
+        # Zorunlu.
+        "started_at": Optional[str],
+        # Zorunlu.
+        "from": str,
+        # Zorunlu.
+        "to": str,
+        # Zorunlu.
+        "events": List[str],
+        # Zorunlu.
+        "control": "GlobalControlReportControl",
+        # Zorunlu.
+        "treatment": "GlobalControlReportTreatment",
+        # Zorunlu.
+        "lift_percent": Optional[float],
+        # Zorunlu.
+        "incremental_conversions": int,
+        # Zorunlu.
+        "p_value": Optional[float],
+        # Zorunlu.
+        "significant": bool,
+        # Zorunlu.
+        "withheld_messages": int,
+    },
+    total=False,
+)
+
+
+class GlobalControlReportControl(TypedDict, total=False):
+    """GlobalControlReportControl şeması."""
+
+    #: Zorunlu.
+    users: int
+    #: Zorunlu.
+    converted: int
+    #: Zorunlu.
+    conversion_rate: float
+
+
+class GlobalControlReportTreatment(TypedDict, total=False):
+    """GlobalControlReportTreatment şeması."""
+
+    #: Zorunlu.
+    users: int
+    #: Zorunlu.
+    converted: int
+    #: Zorunlu.
+    conversion_rate: float
+
+
 class IdentityKey(TypedDict, total=False):
     """IdentityKey şeması."""
 
@@ -4718,6 +4789,7 @@ class InAppMessageAudience(TypedDict, total=False):
 
     included_segments: List[str]
     excluded_segments: List[str]
+    global_control_exempt: bool
 
 
 class InAppMessageDisplay(TypedDict, total=False):
@@ -6083,6 +6155,7 @@ class McpCreateCampaignDraftBodyDelivery(TypedDict, total=False):
     priority: int
     collapse_id: str
     frequency_cap_exempt: bool
+    global_control_exempt: bool
     quiet_hours_exempt: bool
     one_per_user: bool
 
@@ -8398,6 +8471,15 @@ class UpdateDataFeedDto(TypedDict, total=False):
     enabled: bool
 
 
+class UpdateGlobalControlDto(TypedDict, total=False):
+    """UpdateGlobalControlDto şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    percent: int
+
+
 class UpdateInAppDto(TypedDict, total=False):
     """UpdateInAppDto şeması."""
 
@@ -8435,6 +8517,7 @@ class UpdateInAppDtoAudience(TypedDict, total=False):
 
     included_segments: List[str]
     excluded_segments: List[str]
+    global_control_exempt: bool
 
 
 class UpdateInAppDtoDisplay(TypedDict, total=False):
@@ -10616,6 +10699,10 @@ __all__ = [
     "FunnelReport",
     "FunnelReportPrevious",
     "FunnelReportStepsItem",
+    "GlobalControl",
+    "GlobalControlReport",
+    "GlobalControlReportControl",
+    "GlobalControlReportTreatment",
     "IdentityKey",
     "IdentityKeyList",
     "Import",
@@ -10892,6 +10979,7 @@ __all__ = [
     "UpdateCategoryDto",
     "UpdateContentTableDto",
     "UpdateDataFeedDto",
+    "UpdateGlobalControlDto",
     "UpdateInAppDto",
     "UpdateInAppDtoAbTest",
     "UpdateInAppDtoAbTestWinner",
