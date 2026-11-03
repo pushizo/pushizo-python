@@ -2789,6 +2789,21 @@ class CreateFormDtoSettingsSubscribe(TypedDict, total=False):
     sms: bool
 
 
+class CreateGeofenceDto(TypedDict, total=False):
+    """CreateGeofenceDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    lat: float
+    #: Zorunlu.
+    lng: float
+    #: Zorunlu.
+    radius_m: int
+    cooldown_minutes: int
+    enabled: bool
+
+
 class CreateIdentityKeyDto(TypedDict, total=False):
     """CreateIdentityKeyDto şeması."""
 
@@ -4660,6 +4675,44 @@ class FunnelReportStepsItem(TypedDict, total=False):
     conversion_rate: Optional[float]
     #: Zorunlu.
     drop_off: int
+
+
+class Geofence(TypedDict, total=False):
+    """Geofence şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    lat: float
+    #: Zorunlu.
+    lng: float
+    #: Zorunlu.
+    radius_m: int
+    #: Zorunlu.
+    cooldown_minutes: int
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    enter_count: int
+    #: Zorunlu.
+    exit_count: int
+    #: Zorunlu.
+    inside_count: int
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class GeofenceList(TypedDict, total=False):
+    """GeofenceList şeması."""
+
+    #: Zorunlu.
+    data: List["Geofence"]
 
 
 class GlobalControl(TypedDict, total=False):
@@ -8727,6 +8780,17 @@ class UpdateDataFeedDto(TypedDict, total=False):
     enabled: bool
 
 
+class UpdateGeofenceDto(TypedDict, total=False):
+    """UpdateGeofenceDto şeması."""
+
+    name: str
+    lat: float
+    lng: float
+    radius_m: int
+    cooldown_minutes: int
+    enabled: bool
+
+
 class UpdateGlobalControlDto(TypedDict, total=False):
     """UpdateGlobalControlDto şeması."""
 
@@ -10872,6 +10936,7 @@ __all__ = [
     "CreateFormDtoSettings",
     "CreateFormDtoSettingsDoubleOptIn",
     "CreateFormDtoSettingsSubscribe",
+    "CreateGeofenceDto",
     "CreateIdentityKeyDto",
     "CreateInAppDto",
     "CreateInAppDtoAbTest",
@@ -11010,6 +11075,8 @@ __all__ = [
     "FunnelReport",
     "FunnelReportPrevious",
     "FunnelReportStepsItem",
+    "Geofence",
+    "GeofenceList",
     "GlobalControl",
     "GlobalControlReport",
     "GlobalControlReportControl",
@@ -11300,6 +11367,7 @@ __all__ = [
     "UpdateCategoryDto",
     "UpdateContentTableDto",
     "UpdateDataFeedDto",
+    "UpdateGeofenceDto",
     "UpdateGlobalControlDto",
     "UpdateInAppDto",
     "UpdateInAppDtoAbTest",

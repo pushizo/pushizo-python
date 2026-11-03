@@ -5083,6 +5083,112 @@ class FormsResource:
         )
 
 
+class GeofencesResource:
+    """geofences kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "GeofenceList":
+        """Bölgeler
+
+        ``GET /v1/apps/{appId}/geofences``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/geofences",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: "CreateGeofenceDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Geofence":
+        """Bölge oluştur
+
+        ``POST /v1/apps/{appId}/geofences``
+
+        Konum paylaşan abonelik bölgeye girip çıktığında `geofence_enter` ve `geofence_exit` olayları oluşur.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/geofences",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        geofence_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Geofence":
+        """Bölge ayrıntısı
+
+        ``GET /v1/apps/{appId}/geofences/{geofenceId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/geofences/{geofenceId}",
+            path_params={"geofenceId": geofence_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        geofence_id: str,
+        body: "UpdateGeofenceDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Geofence":
+        """Bölgeyi güncelle
+
+        ``PATCH /v1/apps/{appId}/geofences/{geofenceId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/geofences/{geofenceId}",
+            path_params={"geofenceId": geofence_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        geofence_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Bölgeyi sil
+
+        ``DELETE /v1/apps/{appId}/geofences/{geofenceId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/geofences/{geofenceId}",
+            path_params={"geofenceId": geofence_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class GlobalControlResource:
     """globalControl kaynağı."""
 
@@ -7521,6 +7627,7 @@ class GeneratedResources:
     data_feeds: DataFeedsResource
     email_deliverability: EmailDeliverabilityResource
     forms: FormsResource
+    geofences: GeofencesResource
     global_control: GlobalControlResource
     identity_keys: IdentityKeysResource
     integrations: IntegrationsResource
@@ -7568,6 +7675,7 @@ class GeneratedResources:
         self.data_feeds = DataFeedsResource(self)  # type: ignore[arg-type]
         self.email_deliverability = EmailDeliverabilityResource(self)  # type: ignore[arg-type]
         self.forms = FormsResource(self)  # type: ignore[arg-type]
+        self.geofences = GeofencesResource(self)  # type: ignore[arg-type]
         self.global_control = GlobalControlResource(self)  # type: ignore[arg-type]
         self.identity_keys = IdentityKeysResource(self)  # type: ignore[arg-type]
         self.integrations = IntegrationsResource(self)  # type: ignore[arg-type]
@@ -7616,6 +7724,7 @@ RESOURCE_NAMES = (
     "data_feeds",
     "email_deliverability",
     "forms",
+    "geofences",
     "global_control",
     "identity_keys",
     "integrations",
