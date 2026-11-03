@@ -4150,6 +4150,135 @@ class CategoriesResource:
         )
 
 
+class ChannelScoresResource:
+    """channelScores kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def config(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ChannelScoreConfig":
+        """Kanal skoru ayarı
+
+        ``GET /v1/apps/{appId}/channel-scores/config``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/channel-scores/config",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        body: "UpdateChannelScoreConfigDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ChannelScoreConfig":
+        """Kanal skorunu ayarla
+
+        ``PUT /v1/apps/{appId}/channel-scores/config``
+
+        Açıkken skorlar kayıttan sonra yeniden hesaplanır; kapatınca silinir.
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/channel-scores/config",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def compute(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ChannelScoreConfig":
+        """Kanal skorlarını yeniden hesapla
+
+        ``POST /v1/apps/{appId}/channel-scores/compute``
+
+        İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/channel-scores/compute",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def overview(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ChannelScoreOverview":
+        """En iyi kanal dağılımı
+
+        ``GET /v1/apps/{appId}/channel-scores/overview``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/channel-scores/overview",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def users(
+        self,
+        *,
+        channel: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ChannelScoreUsersPage":
+        """En iyi kanalı belli kullanıcılar
+
+        ``GET /v1/apps/{appId}/channel-scores/users``
+
+        Parametreler:
+            channel: Değerler: "push", "email", "whatsapp", "rcs", "sms".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/channel-scores/users",
+            path_params={},
+            query={"channel": channel, "limit": limit, "cursor": cursor},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def user(
+        self,
+        user_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ChannelScoreUser":
+        """Kullanıcının kanal skorları
+
+        ``GET /v1/apps/{appId}/channel-scores/users/{userId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/channel-scores/users/{userId}",
+            path_params={"userId": user_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class ContentTablesResource:
     """contentTables kaynağı."""
 
@@ -7748,6 +7877,7 @@ class GeneratedResources:
     canned_responses: CannedResponsesResource
     catalogs: CatalogsResource
     categories: CategoriesResource
+    channel_scores: ChannelScoresResource
     content_tables: ContentTablesResource
     conversations: ConversationsResource
     data_feeds: DataFeedsResource
@@ -7797,6 +7927,7 @@ class GeneratedResources:
         self.canned_responses = CannedResponsesResource(self)  # type: ignore[arg-type]
         self.catalogs = CatalogsResource(self)  # type: ignore[arg-type]
         self.categories = CategoriesResource(self)  # type: ignore[arg-type]
+        self.channel_scores = ChannelScoresResource(self)  # type: ignore[arg-type]
         self.content_tables = ContentTablesResource(self)  # type: ignore[arg-type]
         self.conversations = ConversationsResource(self)  # type: ignore[arg-type]
         self.data_feeds = DataFeedsResource(self)  # type: ignore[arg-type]
@@ -7847,6 +7978,7 @@ RESOURCE_NAMES = (
     "canned_responses",
     "catalogs",
     "categories",
+    "channel_scores",
     "content_tables",
     "conversations",
     "data_feeds",

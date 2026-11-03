@@ -2078,6 +2078,94 @@ class ChannelList(TypedDict, total=False):
     data: List["ChannelConfig"]
 
 
+class ChannelScoreConfig(TypedDict, total=False):
+    """ChannelScoreConfig şeması."""
+
+    #: Zorunlu.
+    configured: bool
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    window_days: int
+    #: Zorunlu.
+    min_sends: int
+    #: Zorunlu.
+    count_email_opens: bool
+    #: Zorunlu. Değerler: "idle", "queued", "running", "failed".
+    status: str
+    #: Zorunlu.
+    last_error: Optional[str]
+    #: Zorunlu.
+    last_computed_at: Optional[str]
+    #: Zorunlu.
+    scored_users: int
+
+
+class ChannelScoreOverview(TypedDict, total=False):
+    """ChannelScoreOverview şeması."""
+
+    #: Zorunlu.
+    total: int
+    #: Zorunlu.
+    low_population: bool
+    #: Zorunlu.
+    last_computed_at: Optional[str]
+    #: Zorunlu.
+    channels: List["ChannelScoreOverviewChannelsItem"]
+
+
+class ChannelScoreOverviewChannelsItem(TypedDict, total=False):
+    """ChannelScoreOverviewChannelsItem şeması."""
+
+    #: Zorunlu. Değerler: "push", "email", "whatsapp", "rcs", "sms".
+    channel: str
+    #: Zorunlu.
+    best_users: int
+    #: Zorunlu.
+    share: float
+    #: Zorunlu.
+    sends: int
+    #: Zorunlu.
+    engaged: int
+    #: Zorunlu.
+    engagement_rate: Optional[float]
+
+
+class ChannelScoreUser(TypedDict, total=False):
+    """ChannelScoreUser şeması."""
+
+    #: Zorunlu.
+    user_id: str
+    #: Zorunlu.
+    external_id: Optional[str]
+    #: Zorunlu. Değerler: "push", "email", "whatsapp", "rcs", "sms".
+    best_channel: Optional[str]
+    #: Zorunlu.
+    scores: List["ChannelScoreUserScoresItem"]
+
+
+class ChannelScoreUserScoresItem(TypedDict, total=False):
+    """ChannelScoreUserScoresItem şeması."""
+
+    #: Zorunlu. Değerler: "push", "email", "whatsapp", "rcs", "sms".
+    channel: str
+    #: Zorunlu.
+    sends: int
+    #: Zorunlu.
+    engaged: int
+    #: Zorunlu.
+    score: float
+
+
+class ChannelScoreUsersPage(TypedDict, total=False):
+    """ChannelScoreUsersPage şeması."""
+
+    #: Zorunlu.
+    data: List["ChannelScoreUser"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+
+
 class ChannelValidation(TypedDict, total=False):
     """ChannelValidation şeması."""
 
@@ -8888,6 +8976,16 @@ class UpdateCategoryDto(TypedDict, total=False):
     position: int
 
 
+class UpdateChannelScoreConfigDto(TypedDict, total=False):
+    """UpdateChannelScoreConfigDto şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    window_days: int
+    min_sends: int
+    count_email_opens: bool
+
+
 class UpdateContentTableDto(TypedDict, total=False):
     """UpdateContentTableDto şeması."""
 
@@ -11016,6 +11114,12 @@ __all__ = [
     "ChannelConfigDnsCheckDmarc",
     "ChannelConfigDnsCheckSpf",
     "ChannelList",
+    "ChannelScoreConfig",
+    "ChannelScoreOverview",
+    "ChannelScoreOverviewChannelsItem",
+    "ChannelScoreUser",
+    "ChannelScoreUserScoresItem",
+    "ChannelScoreUsersPage",
     "ChannelValidation",
     "CheckVerifyDto",
     "ContentTable",
@@ -11505,6 +11609,7 @@ __all__ = [
     "UpdateBudgetAlertRuleDto",
     "UpdateCatalogDto",
     "UpdateCategoryDto",
+    "UpdateChannelScoreConfigDto",
     "UpdateContentTableDto",
     "UpdateDataFeedDto",
     "UpdateGeofenceDto",
