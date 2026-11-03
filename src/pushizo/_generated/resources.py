@@ -6503,6 +6503,137 @@ class ReverseEtlResource:
         )
 
 
+class RfmResource:
+    """rfm kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def config(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RfmConfig":
+        """RFM modeli
+
+        ``GET /v1/apps/{appId}/rfm/config``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/rfm/config",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        body: "UpdateRfmConfigDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RfmConfig":
+        """RFM modelini ayarla
+
+        ``PUT /v1/apps/{appId}/rfm/config``
+
+        Model açıksa skorlar kayıttan sonra yeniden hesaplanır.
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/rfm/config",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def compute(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RfmConfig":
+        """Skorları yeniden hesapla
+
+        ``POST /v1/apps/{appId}/rfm/compute``
+
+        İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/rfm/compute",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def overview(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RfmOverview":
+        """Segment dağılımı
+
+        ``GET /v1/apps/{appId}/rfm/overview``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/rfm/overview",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def transitions(
+        self,
+        *,
+        from_: Optional[str] = None,
+        to: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RfmTransitions":
+        """İki tarih arası segment geçişleri
+
+        ``GET /v1/apps/{appId}/rfm/transitions``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/rfm/transitions",
+            path_params={},
+            query={"from": from_, "to": to},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def users(
+        self,
+        *,
+        segment: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RfmUsersPage":
+        """Skoru olan kullanıcılar
+
+        ``GET /v1/apps/{appId}/rfm/users``
+
+        Parametreler:
+            segment: Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/rfm/users",
+            path_params={},
+            query={"segment": segment, "limit": limit, "cursor": cursor},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class SmsKeywordsResource:
     """smsKeywords kaynağı."""
 
@@ -7306,6 +7437,7 @@ class GeneratedResources:
     preferences: PreferencesResource
     promo_code_lists: PromoCodeListsResource
     reverse_etl: ReverseEtlResource
+    rfm: RfmResource
     sms_keywords: SmsKeywordsResource
     surveys: SurveysResource
     verify: VerifyResource
@@ -7352,6 +7484,7 @@ class GeneratedResources:
         self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
         self.promo_code_lists = PromoCodeListsResource(self)  # type: ignore[arg-type]
         self.reverse_etl = ReverseEtlResource(self)  # type: ignore[arg-type]
+        self.rfm = RfmResource(self)  # type: ignore[arg-type]
         self.sms_keywords = SmsKeywordsResource(self)  # type: ignore[arg-type]
         self.surveys = SurveysResource(self)  # type: ignore[arg-type]
         self.verify = VerifyResource(self)  # type: ignore[arg-type]
@@ -7399,6 +7532,7 @@ RESOURCE_NAMES = (
     "preferences",
     "promo_code_lists",
     "reverse_etl",
+    "rfm",
     "sms_keywords",
     "surveys",
     "verify",

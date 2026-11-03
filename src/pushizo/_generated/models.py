@@ -7370,6 +7370,129 @@ class ReverseEtlSyncList(TypedDict, total=False):
     data: List["ReverseEtlSync"]
 
 
+class RfmConfig(TypedDict, total=False):
+    """RfmConfig şeması."""
+
+    #: Zorunlu.
+    configured: bool
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    event_names: List[str]
+    #: Zorunlu.
+    value_property: Optional[str]
+    #: Zorunlu.
+    use_monetary: bool
+    #: Zorunlu.
+    window_days: int
+    #: Zorunlu. Değerler: "idle", "queued", "running", "failed".
+    status: str
+    #: Zorunlu.
+    last_error: Optional[str]
+    #: Zorunlu.
+    first_computed_at: Optional[str]
+    #: Zorunlu.
+    last_computed_at: Optional[str]
+    #: Zorunlu.
+    scored_users: int
+
+
+class RfmOverview(TypedDict, total=False):
+    """RfmOverview şeması."""
+
+    #: Zorunlu.
+    total: int
+    #: Zorunlu.
+    low_population: bool
+    #: Zorunlu.
+    last_computed_at: Optional[str]
+    #: Zorunlu.
+    segments: List["RfmOverviewSegmentsItem"]
+
+
+class RfmOverviewSegmentsItem(TypedDict, total=False):
+    """RfmOverviewSegmentsItem şeması."""
+
+    #: Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+    segment: str
+    #: Zorunlu.
+    users: int
+    #: Zorunlu.
+    share: float
+    #: Zorunlu.
+    avg_recency_days: Optional[float]
+    #: Zorunlu.
+    avg_frequency: Optional[float]
+    #: Zorunlu.
+    avg_monetary: Optional[float]
+
+
+RfmTransitions = TypedDict(
+    "RfmTransitions",
+    {
+        # Zorunlu.
+        "from": str,
+        # Zorunlu.
+        "to": str,
+        # Zorunlu.
+        "first_computed_at": Optional[str],
+        # Zorunlu.
+        "transitions": List["RfmTransitionsTransitionsItem"],
+    },
+    total=False,
+)
+
+
+RfmTransitionsTransitionsItem = TypedDict(
+    "RfmTransitionsTransitionsItem",
+    {
+        # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+        "from": Optional[str],
+        # Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+        "to": Optional[str],
+        # Zorunlu.
+        "users": int,
+    },
+    total=False,
+)
+
+
+class RfmUsersPage(TypedDict, total=False):
+    """RfmUsersPage şeması."""
+
+    #: Zorunlu.
+    data: List["RfmUsersPageDataItem"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+
+
+class RfmUsersPageDataItem(TypedDict, total=False):
+    """RfmUsersPageDataItem şeması."""
+
+    #: Zorunlu.
+    user_id: str
+    #: Zorunlu.
+    external_id: Optional[str]
+    #: Zorunlu. Değerler: "champions", "loyal", "potential", "new", "promising", "need_attention", "about_to_sleep", "at_risk", "cant_lose", "hibernating", "lost".
+    segment: str
+    #: Zorunlu.
+    r: int
+    #: Zorunlu.
+    f: int
+    #: Zorunlu.
+    m: Optional[int]
+    #: Zorunlu.
+    recency_days: int
+    #: Zorunlu.
+    frequency: int
+    #: Zorunlu.
+    monetary: float
+    #: Zorunlu.
+    last_event_at: str
+    #: Zorunlu.
+    segment_since: str
+
+
 class ScheduleCampaignDto(TypedDict, total=False):
     """ScheduleCampaignDto şeması."""
 
@@ -8821,6 +8944,18 @@ class UpdateReverseEtlDto(TypedDict, total=False):
     enabled: bool
     config: Dict[str, Any]
     credentials: Dict[str, Any]
+
+
+class UpdateRfmConfigDto(TypedDict, total=False):
+    """UpdateRfmConfigDto şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    event_names: List[str]
+    value_property: Optional[str]
+    use_monetary: bool
+    window_days: int
 
 
 class UpdateTemplateDto(TypedDict, total=False):
@@ -11012,6 +11147,13 @@ __all__ = [
     "ReverseEtlRunPage",
     "ReverseEtlSync",
     "ReverseEtlSyncList",
+    "RfmConfig",
+    "RfmOverview",
+    "RfmOverviewSegmentsItem",
+    "RfmTransitions",
+    "RfmTransitionsTransitionsItem",
+    "RfmUsersPage",
+    "RfmUsersPageDataItem",
     "ScheduleCampaignDto",
     "ScheduleCampaignDtoRecurrence",
     "Segment",
@@ -11132,6 +11274,7 @@ __all__ = [
     "UpdateNodeDtoPosition",
     "UpdatePromoCodeListDto",
     "UpdateReverseEtlDto",
+    "UpdateRfmConfigDto",
     "UpdateTemplateDto",
     "UpdateTemplateDtoContent",
     "UpdateTemplateDtoContentAndroidLiveUpdate",
