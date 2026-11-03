@@ -2771,6 +2771,28 @@ class AnalyticsResource:
             request_options=request_options,
         )
 
+    def run_report(
+        self,
+        body: "ReportRunBodyDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ReportResult":
+        """Rapor çalıştır
+
+        ``POST /v1/apps/{appId}/analytics/reports/run``
+
+        Kaynak, metrik, boyut ve filtre seçilerek rapor üretir; alanlar izinli listeyle sınırlıdır.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/analytics/reports/run",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def paths(
         self,
         body: "PathBodyDto",
@@ -2887,6 +2909,103 @@ class AnalyticsResource:
             "/v1/apps/{appId}/analytics/engagement",
             path_params={},
             query={"from": from_, "to": to, "compare": compare, "format": format},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SavedReportList":
+        """Kaydedilmiş raporlar
+
+        ``GET /v1/apps/{appId}/analytics/reports``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/analytics/reports",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: "CreateSavedReportDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SavedReport":
+        """Raporu kaydet
+
+        ``POST /v1/apps/{appId}/analytics/reports``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/analytics/reports",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SavedReport":
+        """Kaydedilmiş rapor
+
+        ``GET /v1/apps/{appId}/analytics/reports/{id}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/analytics/reports/{id}",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        id: str,
+        body: "UpdateSavedReportDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SavedReport":
+        """Raporu güncelle
+
+        ``PATCH /v1/apps/{appId}/analytics/reports/{id}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/analytics/reports/{id}",
+            path_params={"id": id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Any:
+        """Raporu sil
+
+        ``DELETE /v1/apps/{appId}/analytics/reports/{id}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/analytics/reports/{id}",
+            path_params={"id": id},
             app_id=app_id,
             request_options=request_options,
         )

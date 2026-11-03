@@ -3459,6 +3459,44 @@ class CreatePromoCodeListDto(TypedDict, total=False):
     expires_at: Optional[str]
 
 
+class CreateSavedReportDto(TypedDict, total=False):
+    """CreateSavedReportDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    definition: "CreateSavedReportDtoDefinition"
+
+
+CreateSavedReportDtoDefinition = TypedDict(
+    "CreateSavedReportDtoDefinition",
+    {
+        # Zorunlu. Değerler: "deliveries", "events", "conversions".
+        "source": str,
+        # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+        "metrics": List[str],
+        # Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+        "dimensions": List[str],
+        "filters": Dict[str, List[str]],
+        "sort": "CreateSavedReportDtoDefinitionSort",
+        "limit": int,
+        "days": int,
+        "from": str,
+        "to": str,
+    },
+    total=False,
+)
+
+
+class CreateSavedReportDtoDefinitionSort(TypedDict, total=False):
+    """CreateSavedReportDtoDefinitionSort şeması."""
+
+    #: Zorunlu.
+    by: str
+    #: Değerler: "asc", "desc".
+    direction: str
+
+
 class CreateSuppressionDto(TypedDict, total=False):
     """CreateSuppressionDto şeması."""
 
@@ -7640,6 +7678,68 @@ class RenderTemplateDtoUser(TypedDict, total=False):
     properties: Dict[str, Any]
 
 
+ReportResult = TypedDict(
+    "ReportResult",
+    {
+        # Zorunlu.
+        "from": str,
+        # Zorunlu.
+        "to": str,
+        # Zorunlu.
+        "columns": List["ReportResultColumnsItem"],
+        # Zorunlu.
+        "rows": List[Dict[str, Any]],
+        # Zorunlu.
+        "totals": Optional[Dict[str, Optional[float]]],
+        # Zorunlu.
+        "truncated": bool,
+    },
+    total=False,
+)
+
+
+class ReportResultColumnsItem(TypedDict, total=False):
+    """ReportResultColumnsItem şeması."""
+
+    #: Zorunlu.
+    key: str
+    #: Zorunlu. Değerler: "dimension", "metric".
+    kind: str
+    #: Zorunlu. Değerler: "text", "date", "number", "percent".
+    format: str
+
+
+ReportRunBodyDto = TypedDict(
+    "ReportRunBodyDto",
+    {
+        # Zorunlu. Değerler: "deliveries", "events", "conversions".
+        "source": str,
+        # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+        "metrics": List[str],
+        # Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+        "dimensions": List[str],
+        "filters": Dict[str, List[str]],
+        "sort": "ReportRunBodyDtoSort",
+        "limit": int,
+        "days": int,
+        "from": str,
+        "to": str,
+        # Değerler: "json", "csv".
+        "format": str,
+    },
+    total=False,
+)
+
+
+class ReportRunBodyDtoSort(TypedDict, total=False):
+    """ReportRunBodyDtoSort şeması."""
+
+    #: Zorunlu.
+    by: str
+    #: Değerler: "asc", "desc".
+    direction: str
+
+
 class RetentionReport(TypedDict, total=False):
     """RetentionReport şeması."""
 
@@ -7869,6 +7969,61 @@ class RfmUsersPageDataItem(TypedDict, total=False):
     last_event_at: str
     #: Zorunlu.
     segment_since: str
+
+
+class SavedReport(TypedDict, total=False):
+    """SavedReport şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    definition: "SavedReportDefinition"
+    #: Zorunlu.
+    created_by: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+SavedReportDefinition = TypedDict(
+    "SavedReportDefinition",
+    {
+        # Zorunlu. Değerler: "deliveries", "events", "conversions".
+        "source": str,
+        # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+        "metrics": List[str],
+        # Zorunlu. Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+        "dimensions": List[str],
+        # Zorunlu.
+        "filters": Dict[str, List[str]],
+        "sort": "SavedReportDefinitionSort",
+        # Zorunlu.
+        "limit": int,
+        "days": int,
+        "from": str,
+        "to": str,
+    },
+    total=False,
+)
+
+
+class SavedReportDefinitionSort(TypedDict, total=False):
+    """SavedReportDefinitionSort şeması."""
+
+    #: Zorunlu.
+    by: str
+    #: Zorunlu. Değerler: "asc", "desc".
+    direction: str
+
+
+class SavedReportList(TypedDict, total=False):
+    """SavedReportList şeması."""
+
+    #: Zorunlu.
+    data: List["SavedReport"]
 
 
 class ScheduleCampaignDto(TypedDict, total=False):
@@ -9391,6 +9546,42 @@ class UpdateRfmConfigDto(TypedDict, total=False):
     value_property: Optional[str]
     use_monetary: bool
     window_days: int
+
+
+class UpdateSavedReportDto(TypedDict, total=False):
+    """UpdateSavedReportDto şeması."""
+
+    name: str
+    definition: "UpdateSavedReportDtoDefinition"
+
+
+UpdateSavedReportDtoDefinition = TypedDict(
+    "UpdateSavedReportDtoDefinition",
+    {
+        # Zorunlu. Değerler: "deliveries", "events", "conversions".
+        "source": str,
+        # Zorunlu. Değerler: "sent", "delivered", "failed", "opened", "clicked", "delivery_rate", "open_rate", "click_rate", "failure_rate", "count", "unique_users", "value_sum", "value_avg", "conversions", "revenue".
+        "metrics": List[str],
+        # Değerler: "day", "week", "month", "channel", "provider", "campaign", "status", "name", "source", "event_name", "kind".
+        "dimensions": List[str],
+        "filters": Dict[str, List[str]],
+        "sort": "UpdateSavedReportDtoDefinitionSort",
+        "limit": int,
+        "days": int,
+        "from": str,
+        "to": str,
+    },
+    total=False,
+)
+
+
+class UpdateSavedReportDtoDefinitionSort(TypedDict, total=False):
+    """UpdateSavedReportDtoDefinitionSort şeması."""
+
+    #: Zorunlu.
+    by: str
+    #: Değerler: "asc", "desc".
+    direction: str
 
 
 class UpdateTemplateDto(TypedDict, total=False):
@@ -11308,6 +11499,9 @@ __all__ = [
     "CreateNotificationDtoWhatsappTemplateButtonParamsItem",
     "CreateNotificationResult",
     "CreatePromoCodeListDto",
+    "CreateSavedReportDto",
+    "CreateSavedReportDtoDefinition",
+    "CreateSavedReportDtoDefinitionSort",
     "CreateSuppressionDto",
     "CreateSurveyDto",
     "CreateSurveyDtoQuestionsItem",
@@ -11601,6 +11795,10 @@ __all__ = [
     "RenderTemplateDtoContentWhatsappTemplate",
     "RenderTemplateDtoContentWhatsappTemplateButtonParamsItem",
     "RenderTemplateDtoUser",
+    "ReportResult",
+    "ReportResultColumnsItem",
+    "ReportRunBodyDto",
+    "ReportRunBodyDtoSort",
     "RetentionReport",
     "RetentionReportCohortsItem",
     "ReverseEtlRun",
@@ -11614,6 +11812,10 @@ __all__ = [
     "RfmTransitionsTransitionsItem",
     "RfmUsersPage",
     "RfmUsersPageDataItem",
+    "SavedReport",
+    "SavedReportDefinition",
+    "SavedReportDefinitionSort",
+    "SavedReportList",
     "ScheduleCampaignDto",
     "ScheduleCampaignDtoRecurrence",
     "Segment",
@@ -11740,6 +11942,9 @@ __all__ = [
     "UpdateRecommendationConfigDto",
     "UpdateReverseEtlDto",
     "UpdateRfmConfigDto",
+    "UpdateSavedReportDto",
+    "UpdateSavedReportDtoDefinition",
+    "UpdateSavedReportDtoDefinitionSort",
     "UpdateTemplateDto",
     "UpdateTemplateDtoContent",
     "UpdateTemplateDtoContentAndroidLiveUpdate",
