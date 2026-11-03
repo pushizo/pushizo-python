@@ -7094,7 +7094,7 @@ class ReverseEtlSync(TypedDict, total=False):
     app_id: str
     #: Zorunlu.
     name: str
-    #: Zorunlu. Değerler: "snowflake", "bigquery", "postgres", "mysql", "s3", "google_sheets".
+    #: Zorunlu. Değerler: "snowflake", "bigquery", "postgres", "mysql", "s3", "google_sheets", "clickhouse", "sqlserver", "trino", "athena", "elasticsearch", "kafka", "pubsub".
     source: str
     #: Zorunlu. Değerler: "event", "user".
     target: str
@@ -7102,7 +7102,7 @@ class ReverseEtlSync(TypedDict, total=False):
     config: Dict[str, Any]
     #: Zorunlu.
     credentials_hint: str
-    #: Zorunlu. Değerler: "hourly", "daily".
+    #: Zorunlu. Değerler: "every_5_minutes", "hourly", "daily".
     schedule: str
     #: Zorunlu.
     enabled: bool
@@ -8555,7 +8555,7 @@ class UpdateReverseEtlDto(TypedDict, total=False):
     """UpdateReverseEtlDto şeması."""
 
     name: str
-    #: Değerler: "hourly", "daily".
+    #: Değerler: "every_5_minutes", "hourly", "daily".
     schedule: str
     enabled: bool
     config: Dict[str, Any]
