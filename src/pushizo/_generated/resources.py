@@ -5836,6 +5836,164 @@ class PreferencesResource:
         )
 
 
+class PromoCodeListsResource:
+    """promoCodeLists kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list_promo_lists(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PromoCodeListList":
+        """Promosyon kodu listeleri
+
+        ``GET /v1/apps/{appId}/promo-code-lists``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/promo-code-lists",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_promo_list(
+        self,
+        body: "CreatePromoCodeListDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PromoCodeList":
+        """Promosyon kodu listesi oluştur
+
+        ``POST /v1/apps/{appId}/promo-code-lists``
+
+        Şablonda `{% promo_code '<ad>' %}` teslimat başına tek kullanımlık kod verir. Kod kalmazsa teslimat `PromoCodeUnavailable` hatasıyla düşer.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/promo-code-lists",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get_promo_list(
+        self,
+        list_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PromoCodeList":
+        """Promosyon kodu listesi ayrıntısı
+
+        ``GET /v1/apps/{appId}/promo-code-lists/{listId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/promo-code-lists/{listId}",
+            path_params={"listId": list_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_promo_list(
+        self,
+        list_id: str,
+        body: "UpdatePromoCodeListDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PromoCodeList":
+        """Promosyon kodu listesini güncelle (açıklama, son kullanma)
+
+        ``PATCH /v1/apps/{appId}/promo-code-lists/{listId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/promo-code-lists/{listId}",
+            path_params={"listId": list_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete_promo_list(
+        self,
+        list_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Promosyon kodu listesini sil
+
+        ``DELETE /v1/apps/{appId}/promo-code-lists/{listId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/promo-code-lists/{listId}",
+            path_params={"listId": list_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def upload_promo_list(
+        self,
+        list_id: str,
+        file: FileInput,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PromoCodeUploadResult":
+        """CSV ile kod ekle (zaten olanlar atlanır)
+
+        ``POST /v1/apps/{appId}/promo-code-lists/{listId}/codes``
+
+        Parametreler:
+            file: UTF-8 CSV; kodlar ilk sütunda, başlık isteğe bağlı. En fazla 1.000.000 kod, 20 MB.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/promo-code-lists/{listId}/codes",
+            path_params={"listId": list_id},
+            form={},
+            files={"file": file},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def promo_codes(
+        self,
+        list_id: str,
+        *,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        q: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PromoCodesPage":
+        """Listedeki kodlar ve atamaları
+
+        ``GET /v1/apps/{appId}/promo-code-lists/{listId}/codes``
+
+        Parametreler:
+            status: Değerler: "available", "assigned".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/promo-code-lists/{listId}/codes",
+            path_params={"listId": list_id},
+            query={"limit": limit, "offset": offset, "q": q, "status": status},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class ReverseEtlResource:
     """reverseEtl kaynağı."""
 
@@ -6840,6 +6998,7 @@ class GeneratedResources:
     live_activities: LiveActivitiesResource
     mcp: McpResource
     preferences: PreferencesResource
+    promo_code_lists: PromoCodeListsResource
     reverse_etl: ReverseEtlResource
     sms_keywords: SmsKeywordsResource
     surveys: SurveysResource
@@ -6883,6 +7042,7 @@ class GeneratedResources:
         self.live_activities = LiveActivitiesResource(self)  # type: ignore[arg-type]
         self.mcp = McpResource(self)  # type: ignore[arg-type]
         self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
+        self.promo_code_lists = PromoCodeListsResource(self)  # type: ignore[arg-type]
         self.reverse_etl = ReverseEtlResource(self)  # type: ignore[arg-type]
         self.sms_keywords = SmsKeywordsResource(self)  # type: ignore[arg-type]
         self.surveys = SurveysResource(self)  # type: ignore[arg-type]
@@ -6927,6 +7087,7 @@ RESOURCE_NAMES = (
     "live_activities",
     "mcp",
     "preferences",
+    "promo_code_lists",
     "reverse_etl",
     "sms_keywords",
     "surveys",

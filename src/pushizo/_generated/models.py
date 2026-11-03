@@ -3160,6 +3160,15 @@ class CreateNotificationResult(TypedDict, total=False):
     external_id_missing: List[str]
 
 
+class CreatePromoCodeListDto(TypedDict, total=False):
+    """CreatePromoCodeListDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    description: str
+    expires_at: Optional[str]
+
+
 class CreateSuppressionDto(TypedDict, total=False):
     """CreateSuppressionDto şeması."""
 
@@ -6649,6 +6658,73 @@ class PostmasterStatsDataItem(TypedDict, total=False):
     spam_rate: Optional[str]
 
 
+class PromoCodeList(TypedDict, total=False):
+    """PromoCodeList şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    description: Optional[str]
+    #: Zorunlu.
+    expires_at: Optional[str]
+    #: Zorunlu.
+    total_count: int
+    #: Zorunlu.
+    assigned_count: int
+    #: Zorunlu.
+    available_count: int
+    #: Zorunlu.
+    liquid: str
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class PromoCodeListList(TypedDict, total=False):
+    """PromoCodeListList şeması."""
+
+    #: Zorunlu.
+    data: List["PromoCodeList"]
+
+
+class PromoCodesPage(TypedDict, total=False):
+    """PromoCodesPage şeması."""
+
+    #: Zorunlu.
+    total: int
+    #: Zorunlu.
+    data: List["PromoCodesPageDataItem"]
+
+
+class PromoCodesPageDataItem(TypedDict, total=False):
+    """PromoCodesPageDataItem şeması."""
+
+    #: Zorunlu.
+    code: str
+    #: Zorunlu.
+    delivery_id: Optional[str]
+    #: Zorunlu.
+    message_id: Optional[str]
+    #: Zorunlu.
+    assigned_at: Optional[str]
+
+
+class PromoCodeUploadResult(TypedDict, total=False):
+    """PromoCodeUploadResult şeması."""
+
+    #: Zorunlu.
+    list: "PromoCodeList"
+    #: Zorunlu.
+    added: int
+    #: Zorunlu.
+    skipped: int
+
+
 ProvidersReport = TypedDict(
     "ProvidersReport",
     {
@@ -8551,6 +8627,13 @@ class UpdateNodeDtoPosition(TypedDict, total=False):
     y: float
 
 
+class UpdatePromoCodeListDto(TypedDict, total=False):
+    """UpdatePromoCodeListDto şeması."""
+
+    description: Optional[str]
+    expires_at: Optional[str]
+
+
 class UpdateReverseEtlDto(TypedDict, total=False):
     """UpdateReverseEtlDto şeması."""
 
@@ -10430,6 +10513,7 @@ __all__ = [
     "CreateNotificationDtoWhatsappTemplate",
     "CreateNotificationDtoWhatsappTemplateButtonParamsItem",
     "CreateNotificationResult",
+    "CreatePromoCodeListDto",
     "CreateSuppressionDto",
     "CreateSurveyDto",
     "CreateSurveyDtoQuestionsItem",
@@ -10676,6 +10760,11 @@ __all__ = [
     "PatchUserDtoDeltasPurchasesItem",
     "PostmasterStats",
     "PostmasterStatsDataItem",
+    "PromoCodeList",
+    "PromoCodeListList",
+    "PromoCodesPage",
+    "PromoCodesPageDataItem",
+    "PromoCodeUploadResult",
     "ProvidersReport",
     "ProvidersReportPrevious",
     "ProvidersReportRowsItem",
@@ -10825,6 +10914,7 @@ __all__ = [
     "UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue",
     "UpdateNodeDto",
     "UpdateNodeDtoPosition",
+    "UpdatePromoCodeListDto",
     "UpdateReverseEtlDto",
     "UpdateTemplateDto",
     "UpdateTemplateDtoContent",
