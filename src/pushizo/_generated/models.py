@@ -6974,6 +6974,44 @@ class PublicSurveyResponseDto(TypedDict, total=False):
     external_id: str
 
 
+class RecommendationConfig(TypedDict, total=False):
+    """RecommendationConfig şeması."""
+
+    #: Zorunlu.
+    configured: bool
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    view_events: List[str]
+    #: Zorunlu.
+    purchase_events: List[str]
+    #: Zorunlu.
+    item_property: str
+    #: Zorunlu.
+    window_days: int
+    #: Zorunlu. Değerler: "idle", "queued", "running", "failed".
+    status: str
+    #: Zorunlu.
+    last_error: Optional[str]
+    #: Zorunlu.
+    last_computed_at: Optional[str]
+    #: Zorunlu.
+    scored_items: int
+    #: Zorunlu.
+    scored_users: int
+
+
+class Recommendations(TypedDict, total=False):
+    """Recommendations şeması."""
+
+    #: Zorunlu. Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
+    strategy: str
+    #: Zorunlu. Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
+    source: Optional[str]
+    #: Zorunlu.
+    data: List["CatalogItem"]
+
+
 class RenderPreview(TypedDict, total=False):
     """RenderPreview şeması."""
 
@@ -8933,6 +8971,17 @@ class UpdatePromoCodeListDto(TypedDict, total=False):
 
     description: Optional[str]
     expires_at: Optional[str]
+
+
+class UpdateRecommendationConfigDto(TypedDict, total=False):
+    """UpdateRecommendationConfigDto şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    view_events: List[str]
+    purchase_events: List[str]
+    item_property: str
+    window_days: int
 
 
 class UpdateReverseEtlDto(TypedDict, total=False):
@@ -11121,6 +11170,8 @@ __all__ = [
     "ProvidersReportTotals",
     "PublicFormSubmitDto",
     "PublicSurveyResponseDto",
+    "RecommendationConfig",
+    "Recommendations",
     "RenderPreview",
     "RenderPreviewButtonsItem",
     "RenderPreviewEmail",
@@ -11273,6 +11324,7 @@ __all__ = [
     "UpdateNodeDto",
     "UpdateNodeDtoPosition",
     "UpdatePromoCodeListDto",
+    "UpdateRecommendationConfigDto",
     "UpdateReverseEtlDto",
     "UpdateRfmConfigDto",
     "UpdateTemplateDto",

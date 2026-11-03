@@ -3970,6 +3970,100 @@ class CatalogsResource:
             request_options=request_options,
         )
 
+    def list_recommendations(
+        self,
+        catalog_id: str,
+        *,
+        strategy: str,
+        limit: Optional[int] = None,
+        user_id: Optional[str] = None,
+        external_id: Optional[str] = None,
+        item_id: Optional[str] = None,
+        category: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Recommendations":
+        """Ürün önerileri
+
+        ``GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations``
+
+        Stokta olmayan ve kullanıcının satın aldığı ürünler çıkmaz. Sonuç yetmezse yedek kaynakla tamamlanır.
+
+        Parametreler:
+            strategy: Değerler: "personalized", "popular", "trending", "similar", "category", "recently_viewed", "new_arrivals".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/catalogs/{catalogId}/recommendations",
+            path_params={"catalogId": catalog_id},
+            query={"strategy": strategy, "limit": limit, "user_id": user_id, "external_id": external_id, "item_id": item_id, "category": category},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def config(
+        self,
+        catalog_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RecommendationConfig":
+        """Öneri modeli
+
+        ``GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config",
+            path_params={"catalogId": catalog_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_config(
+        self,
+        catalog_id: str,
+        body: "UpdateRecommendationConfigDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RecommendationConfig":
+        """Öneri modelini ayarla
+
+        ``PUT /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config``
+
+        Model açıksa öneriler kayıttan sonra yeniden hesaplanır.
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config",
+            path_params={"catalogId": catalog_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def compute(
+        self,
+        catalog_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RecommendationConfig":
+        """Önerileri yeniden hesapla
+
+        ``POST /v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute``
+
+        İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute",
+            path_params={"catalogId": catalog_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
 
 class CategoriesResource:
     """categories kaynağı."""
