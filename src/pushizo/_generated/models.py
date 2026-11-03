@@ -2922,6 +2922,7 @@ class CreateInAppDto(TypedDict, total=False):
     audience: "CreateInAppDtoAudience"
     frequency: "CreateInAppDtoFrequency"
     journey_only: bool
+    placement: Optional[str]
     priority: int
     start_at: Optional[str]
     end_at: Optional[str]
@@ -4988,6 +4989,8 @@ class InAppMessage(TypedDict, total=False):
     frequency: "InAppMessageFrequency"
     #: Zorunlu.
     journey_only: bool
+    #: Zorunlu.
+    placement: Optional[str]
     #: Zorunlu.
     start_at: Optional[str]
     #: Zorunlu.
@@ -8938,6 +8941,7 @@ class UpdateInAppDto(TypedDict, total=False):
     audience: "UpdateInAppDtoAudience"
     frequency: "UpdateInAppDtoFrequency"
     journey_only: bool
+    placement: Optional[str]
     priority: int
     start_at: Optional[str]
     end_at: Optional[str]
