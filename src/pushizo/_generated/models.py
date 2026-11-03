@@ -8774,7 +8774,7 @@ class UpdateWarehouseExportDto(TypedDict, total=False):
     name: str
     #: Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
     tables: List[str]
-    #: Değerler: "hourly", "daily".
+    #: Değerler: "every_15_minutes", "hourly", "daily".
     schedule: str
     enabled: bool
     config: Dict[str, Any]
@@ -9369,7 +9369,7 @@ class WarehouseExport(TypedDict, total=False):
     credentials_hint: str
     #: Zorunlu. Değerler: "deliveries", "delivery_events", "events", "conversions", "users", "subscriptions".
     tables: List[str]
-    #: Zorunlu. Değerler: "hourly", "daily".
+    #: Zorunlu. Değerler: "every_15_minutes", "hourly", "daily".
     schedule: str
     #: Zorunlu.
     enabled: bool

@@ -5121,6 +5121,26 @@ class JourneysResource:
             request_options=request_options,
         )
 
+    def restore_version(
+        self,
+        journey_id: str,
+        version: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "JourneyDetail":
+        """Eski sürümü yeni taslak olarak geri yükle (yayındaki sürüm değişmez)
+
+        ``POST /v1/apps/{appId}/journeys/{journeyId}/versions/{version}/restore``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/journeys/{journeyId}/versions/{version}/restore",
+            path_params={"journeyId": journey_id, "version": version},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def publish(
         self,
         journey_id: str,
