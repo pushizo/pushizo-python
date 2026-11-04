@@ -6687,6 +6687,159 @@ class McpResource:
         )
 
 
+class PredictionsResource:
+    """predictions kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PredictionModelList":
+        """Öngörü modelleri
+
+        ``GET /v1/apps/{appId}/predictions``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/predictions",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: "CreatePredictionDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PredictionModel":
+        """Öngörü modeli oluştur
+
+        ``POST /v1/apps/{appId}/predictions``
+
+        Eğitim kuyruğa alınır; sonuç `outcome` alanından izlenir.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/predictions",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PredictionModel":
+        """Öngörü modeli
+
+        ``GET /v1/apps/{appId}/predictions/{id}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/predictions/{id}",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        id: str,
+        body: "UpdatePredictionDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PredictionModel":
+        """Öngörü modelini güncelle
+
+        ``PATCH /v1/apps/{appId}/predictions/{id}``
+
+        Olay veya ufuk değişirse yeniden eğitilir; kapatınca skorlar silinir.
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/predictions/{id}",
+            path_params={"id": id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Any:
+        """Öngörü modelini sil
+
+        ``DELETE /v1/apps/{appId}/predictions/{id}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/predictions/{id}",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def compute(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PredictionModel":
+        """Modeli yeniden eğit
+
+        ``POST /v1/apps/{appId}/predictions/{id}/compute``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/predictions/{id}/compute",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def users(
+        self,
+        id: str,
+        *,
+        bucket: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "PredictionUsersPage":
+        """Skoru olan kullanıcılar
+
+        ``GET /v1/apps/{appId}/predictions/{id}/users``
+
+        Parametreler:
+            bucket: Değerler: "low", "medium", "high".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/predictions/{id}/users",
+            path_params={"id": id},
+            query={"bucket": bucket, "limit": limit, "cursor": cursor},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class PreferencesResource:
     """preferences kaynağı."""
 
@@ -8288,6 +8441,7 @@ class GeneratedResources:
     landing_pages: LandingPagesResource
     live_activities: LiveActivitiesResource
     mcp: McpResource
+    predictions: PredictionsResource
     preferences: PreferencesResource
     promo_code_lists: PromoCodeListsResource
     reverse_etl: ReverseEtlResource
@@ -8339,6 +8493,7 @@ class GeneratedResources:
         self.landing_pages = LandingPagesResource(self)  # type: ignore[arg-type]
         self.live_activities = LiveActivitiesResource(self)  # type: ignore[arg-type]
         self.mcp = McpResource(self)  # type: ignore[arg-type]
+        self.predictions = PredictionsResource(self)  # type: ignore[arg-type]
         self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
         self.promo_code_lists = PromoCodeListsResource(self)  # type: ignore[arg-type]
         self.reverse_etl = ReverseEtlResource(self)  # type: ignore[arg-type]
@@ -8391,6 +8546,7 @@ RESOURCE_NAMES = (
     "landing_pages",
     "live_activities",
     "mcp",
+    "predictions",
     "preferences",
     "promo_code_lists",
     "reverse_etl",

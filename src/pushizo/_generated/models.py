@@ -3450,6 +3450,19 @@ class CreateNotificationResult(TypedDict, total=False):
     external_id_missing: List[str]
 
 
+class CreatePredictionDto(TypedDict, total=False):
+    """CreatePredictionDto şeması."""
+
+    #: Zorunlu.
+    slug: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "churn", "event".
+    kind: str
+    event_names: List[str]
+    horizon_days: int
+
+
 class CreatePromoCodeListDto(TypedDict, total=False):
     """CreatePromoCodeListDto şeması."""
 
@@ -7251,6 +7264,118 @@ class PostmasterStatsDataItem(TypedDict, total=False):
     spam_rate: Optional[str]
 
 
+class PredictionModel(TypedDict, total=False):
+    """PredictionModel şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    slug: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "churn", "event".
+    kind: str
+    #: Zorunlu.
+    event_names: List[str]
+    #: Zorunlu.
+    horizon_days: int
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu. Değerler: "idle", "queued", "running", "failed".
+    status: str
+    #: Zorunlu. Değerler: "ready", "insufficient_data", "low_quality".
+    outcome: Optional[str]
+    #: Zorunlu.
+    last_computed_at: Optional[str]
+    #: Zorunlu.
+    scored_users: int
+    #: Zorunlu.
+    metrics: Optional["PredictionModelMetrics"]
+    #: Zorunlu.
+    distribution: List["PredictionModelDistributionItem"]
+
+
+class PredictionModelDistributionItem(TypedDict, total=False):
+    """PredictionModelDistributionItem şeması."""
+
+    #: Zorunlu. Değerler: "low", "medium", "high".
+    bucket: str
+    #: Zorunlu.
+    users: int
+
+
+class PredictionModelList(TypedDict, total=False):
+    """PredictionModelList şeması."""
+
+    #: Zorunlu.
+    data: List["PredictionModel"]
+
+
+class PredictionModelMetrics(TypedDict, total=False):
+    """PredictionModelMetrics şeması."""
+
+    #: Zorunlu.
+    auc: Optional[float]
+    #: Zorunlu.
+    base_rate: Optional[float]
+    #: Zorunlu.
+    train_users: int
+    #: Zorunlu.
+    holdout_users: int
+    #: Zorunlu.
+    positives: int
+    #: Zorunlu.
+    negatives: int
+    #: Zorunlu.
+    calibration: List["PredictionModelMetricsCalibrationItem"]
+    #: Zorunlu.
+    importance: List["PredictionModelMetricsImportanceItem"]
+
+
+class PredictionModelMetricsCalibrationItem(TypedDict, total=False):
+    """PredictionModelMetricsCalibrationItem şeması."""
+
+    #: Zorunlu. Değerler: "low", "medium", "high".
+    bucket: str
+    #: Zorunlu.
+    users: int
+    #: Zorunlu.
+    predicted: Optional[float]
+    #: Zorunlu.
+    actual: Optional[float]
+
+
+class PredictionModelMetricsImportanceItem(TypedDict, total=False):
+    """PredictionModelMetricsImportanceItem şeması."""
+
+    #: Zorunlu. Değerler: "recency_days", "events_7", "events_30", "active_days_30", "target_30", "days_since_target", "tenure_days", "sent_30", "engaged_30".
+    feature: str
+    #: Zorunlu.
+    weight: float
+
+
+class PredictionUsersPage(TypedDict, total=False):
+    """PredictionUsersPage şeması."""
+
+    #: Zorunlu.
+    data: List["PredictionUsersPageDataItem"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+
+
+class PredictionUsersPageDataItem(TypedDict, total=False):
+    """PredictionUsersPageDataItem şeması."""
+
+    #: Zorunlu.
+    user_id: str
+    #: Zorunlu.
+    external_id: Optional[str]
+    #: Zorunlu.
+    score: int
+    #: Zorunlu. Değerler: "low", "medium", "high".
+    bucket: str
+
+
 class PromoCodeList(TypedDict, total=False):
     """PromoCodeList şeması."""
 
@@ -9561,6 +9686,15 @@ class UpdateNodeDtoPosition(TypedDict, total=False):
     y: float
 
 
+class UpdatePredictionDto(TypedDict, total=False):
+    """UpdatePredictionDto şeması."""
+
+    name: str
+    enabled: bool
+    event_names: List[str]
+    horizon_days: int
+
+
 class UpdatePromoCodeListDto(TypedDict, total=False):
     """UpdatePromoCodeListDto şeması."""
 
@@ -11772,6 +11906,7 @@ __all__ = [
     "CreateNotificationDtoWhatsappTemplate",
     "CreateNotificationDtoWhatsappTemplateButtonParamsItem",
     "CreateNotificationResult",
+    "CreatePredictionDto",
     "CreatePromoCodeListDto",
     "CreateSavedReportDto",
     "CreateSavedReportDtoDefinition",
@@ -12039,6 +12174,14 @@ __all__ = [
     "PathReportTopPathsItem",
     "PostmasterStats",
     "PostmasterStatsDataItem",
+    "PredictionModel",
+    "PredictionModelDistributionItem",
+    "PredictionModelList",
+    "PredictionModelMetrics",
+    "PredictionModelMetricsCalibrationItem",
+    "PredictionModelMetricsImportanceItem",
+    "PredictionUsersPage",
+    "PredictionUsersPageDataItem",
     "PromoCodeList",
     "PromoCodeListList",
     "PromoCodesPage",
@@ -12216,6 +12359,7 @@ __all__ = [
     "UpdateLiveActivityTypeDtoContentStateSchemaPropertiesValue",
     "UpdateNodeDto",
     "UpdateNodeDtoPosition",
+    "UpdatePredictionDto",
     "UpdatePromoCodeListDto",
     "UpdateRecommendationConfigDto",
     "UpdateReverseEtlDto",
