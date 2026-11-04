@@ -7569,6 +7569,261 @@ class VerifyResource:
         )
 
 
+class WalletResource:
+    """wallet kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def config(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletConfig":
+        """Wallet yapılandırması
+
+        ``GET /v1/apps/{appId}/wallet/config``
+
+        Kimlik bilgisi geri okunamaz, yalnızca durum döner.
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/wallet/config",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_config(
+        self,
+        body: "UpdateWalletConfigDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletConfig":
+        """Wallet kimlik bilgilerini ayarla
+
+        ``PUT /v1/apps/{appId}/wallet/config``
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/wallet/config",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def templates(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletTemplateList":
+        """Wallet şablonları
+
+        ``GET /v1/apps/{appId}/wallet/templates``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/wallet/templates",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_template(
+        self,
+        body: "CreateWalletTemplateDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletTemplate":
+        """Wallet şablonu oluştur
+
+        ``POST /v1/apps/{appId}/wallet/templates``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/wallet/templates",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def template(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletTemplate":
+        """Wallet şablonu
+
+        ``GET /v1/apps/{appId}/wallet/templates/{id}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/wallet/templates/{id}",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_template(
+        self,
+        id: str,
+        body: "UpdateWalletTemplateDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletTemplate":
+        """Wallet şablonunu güncelle
+
+        ``PATCH /v1/apps/{appId}/wallet/templates/{id}``
+
+        Tasarım değişirse verilmiş kartlar da güncellenir.
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/wallet/templates/{id}",
+            path_params={"id": id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def remove_template(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Any:
+        """Wallet şablonunu sil
+
+        ``DELETE /v1/apps/{appId}/wallet/templates/{id}``
+
+        Verilmiş kartı olan şablon silinemez, arşivlenir.
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/wallet/templates/{id}",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def passes(
+        self,
+        *,
+        template_id: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletPassPage":
+        """Verilmiş kartlar
+
+        ``GET /v1/apps/{appId}/wallet/passes``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/wallet/passes",
+            path_params={},
+            query={"template_id": template_id, "limit": limit, "cursor": cursor},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def issue(
+        self,
+        body: "IssueWalletPassDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletPass":
+        """Kart ver
+
+        ``POST /v1/apps/{appId}/wallet/passes``
+
+        Kullanıcılı kart şablon başına tektir; tekrar istek aynı kartı döndürür.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/wallet/passes",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def pass(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletPass":
+        """Kart
+
+        ``GET /v1/apps/{appId}/wallet/passes/{id}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/wallet/passes/{id}",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_pass(
+        self,
+        id: str,
+        body: "UpdateWalletPassDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletPass":
+        """Kartı güncelle
+
+        ``PATCH /v1/apps/{appId}/wallet/passes/{id}``
+
+        Cihazdaki kart arka planda yenilenir.
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/wallet/passes/{id}",
+            path_params={"id": id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def void_pass(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WalletPass":
+        """Kartı iptal et
+
+        ``POST /v1/apps/{appId}/wallet/passes/{id}/void``
+
+        Geri alınmaz; cihazdaki kart geçersiz görünür.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/wallet/passes/{id}/void",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class WarehouseExportsResource:
     """warehouseExports kaynağı."""
 
@@ -8040,6 +8295,7 @@ class GeneratedResources:
     sms_keywords: SmsKeywordsResource
     surveys: SurveysResource
     verify: VerifyResource
+    wallet: WalletResource
     warehouse_exports: WarehouseExportsResource
     web_campaigns: WebCampaignsResource
     whatsapp: WhatsappResource
@@ -8090,6 +8346,7 @@ class GeneratedResources:
         self.sms_keywords = SmsKeywordsResource(self)  # type: ignore[arg-type]
         self.surveys = SurveysResource(self)  # type: ignore[arg-type]
         self.verify = VerifyResource(self)  # type: ignore[arg-type]
+        self.wallet = WalletResource(self)  # type: ignore[arg-type]
         self.warehouse_exports = WarehouseExportsResource(self)  # type: ignore[arg-type]
         self.web_campaigns = WebCampaignsResource(self)  # type: ignore[arg-type]
         self.whatsapp = WhatsappResource(self)  # type: ignore[arg-type]
@@ -8141,6 +8398,7 @@ RESOURCE_NAMES = (
     "sms_keywords",
     "surveys",
     "verify",
+    "wallet",
     "warehouse_exports",
     "web_campaigns",
     "whatsapp",

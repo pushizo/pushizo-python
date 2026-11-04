@@ -3763,6 +3763,50 @@ class CreateTemplateDtoContentWhatsappTemplateButtonParamsItem(TypedDict, total=
     value: str
 
 
+class CreateWalletTemplateDto(TypedDict, total=False):
+    """CreateWalletTemplateDto şeması."""
+
+    #: Zorunlu.
+    slug: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "coupon", "loyalty", "event", "generic".
+    kind: str
+    #: Zorunlu.
+    design: "CreateWalletTemplateDtoDesign"
+    images: Dict[str, str]
+
+
+class CreateWalletTemplateDtoDesign(TypedDict, total=False):
+    """CreateWalletTemplateDtoDesign şeması."""
+
+    #: Zorunlu.
+    title: str
+    #: Zorunlu.
+    description: str
+    #: Zorunlu.
+    organization: str
+    background_color: str
+    foreground_color: str
+    label_color: str
+    #: Değerler: "qr", "pdf417", "aztec", "code128".
+    barcode: str
+    fields: List["CreateWalletTemplateDtoDesignFieldsItem"]
+    expires_at: Optional[str]
+    relevant_at: Optional[str]
+
+
+class CreateWalletTemplateDtoDesignFieldsItem(TypedDict, total=False):
+    """CreateWalletTemplateDtoDesignFieldsItem şeması."""
+
+    #: Zorunlu.
+    key: str
+    label: str
+    value: str
+    #: Değerler: "header", "primary", "secondary", "auxiliary", "back".
+    section: str
+
+
 class CreateWarmupPlanDto(TypedDict, total=False):
     """CreateWarmupPlanDto şeması."""
 
@@ -5677,6 +5721,16 @@ class IntegrationOk(TypedDict, total=False):
 
     #: Zorunlu.
     ok: bool
+
+
+class IssueWalletPassDto(TypedDict, total=False):
+    """IssueWalletPassDto şeması."""
+
+    #: Zorunlu.
+    template_id: str
+    external_id: str
+    barcode_value: str
+    values: Dict[str, str]
 
 
 class Journey(TypedDict, total=False):
@@ -9790,6 +9844,85 @@ class UpdateTemplateDtoContentWhatsappTemplateButtonParamsItem(TypedDict, total=
     value: str
 
 
+class UpdateWalletConfigDto(TypedDict, total=False):
+    """UpdateWalletConfigDto şeması."""
+
+    apple: Optional["UpdateWalletConfigDtoApple"]
+    google: Optional["UpdateWalletConfigDtoGoogle"]
+
+
+class UpdateWalletConfigDtoApple(TypedDict, total=False):
+    """UpdateWalletConfigDtoApple şeması."""
+
+    #: Zorunlu.
+    pass_type_id: str
+    #: Zorunlu.
+    team_id: str
+    #: Zorunlu.
+    certificate_pem: str
+    #: Zorunlu.
+    private_key_pem: str
+    key_passphrase: str
+    #: Zorunlu.
+    wwdr_pem: str
+
+
+class UpdateWalletConfigDtoGoogle(TypedDict, total=False):
+    """UpdateWalletConfigDtoGoogle şeması."""
+
+    #: Zorunlu.
+    issuer_id: str
+    #: Zorunlu.
+    service_account_json: str
+
+
+class UpdateWalletPassDto(TypedDict, total=False):
+    """UpdateWalletPassDto şeması."""
+
+    barcode_value: str
+    values: Dict[str, str]
+
+
+class UpdateWalletTemplateDto(TypedDict, total=False):
+    """UpdateWalletTemplateDto şeması."""
+
+    name: str
+    #: Değerler: "active", "archived".
+    status: str
+    design: "UpdateWalletTemplateDtoDesign"
+    images: Dict[str, str]
+
+
+class UpdateWalletTemplateDtoDesign(TypedDict, total=False):
+    """UpdateWalletTemplateDtoDesign şeması."""
+
+    #: Zorunlu.
+    title: str
+    #: Zorunlu.
+    description: str
+    #: Zorunlu.
+    organization: str
+    background_color: str
+    foreground_color: str
+    label_color: str
+    #: Değerler: "qr", "pdf417", "aztec", "code128".
+    barcode: str
+    fields: List["UpdateWalletTemplateDtoDesignFieldsItem"]
+    expires_at: Optional[str]
+    relevant_at: Optional[str]
+
+
+class UpdateWalletTemplateDtoDesignFieldsItem(TypedDict, total=False):
+    """UpdateWalletTemplateDtoDesignFieldsItem şeması."""
+
+    #: Zorunlu.
+    key: str
+    label: str
+    value: str
+    #: Değerler: "header", "primary", "secondary", "auxiliary", "back".
+    section: str
+
+
 class UpdateWarehouseExportDto(TypedDict, total=False):
     """UpdateWarehouseExportDto şeması."""
 
@@ -10378,6 +10511,147 @@ class VerifyAddressDto(TypedDict, total=False):
 
     #: Zorunlu.
     address: str
+
+
+class WalletConfig(TypedDict, total=False):
+    """WalletConfig şeması."""
+
+    #: Zorunlu.
+    apple: "WalletConfigApple"
+    #: Zorunlu.
+    google: "WalletConfigGoogle"
+
+
+class WalletConfigApple(TypedDict, total=False):
+    """WalletConfigApple şeması."""
+
+    #: Zorunlu.
+    configured: bool
+    #: Zorunlu.
+    pass_type_id: Optional[str]
+    #: Zorunlu.
+    team_id: Optional[str]
+    #: Zorunlu.
+    certificate_expires_at: Optional[str]
+
+
+class WalletConfigGoogle(TypedDict, total=False):
+    """WalletConfigGoogle şeması."""
+
+    #: Zorunlu.
+    configured: bool
+    #: Zorunlu.
+    issuer_id: Optional[str]
+
+
+class WalletPass(TypedDict, total=False):
+    """WalletPass şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    template_id: str
+    #: Zorunlu.
+    user_id: Optional[str]
+    #: Zorunlu.
+    external_id: Optional[str]
+    #: Zorunlu.
+    barcode_value: str
+    #: Zorunlu.
+    values: Dict[str, str]
+    #: Zorunlu. Değerler: "active", "voided".
+    status: str
+    #: Zorunlu.
+    url: str
+    #: Zorunlu.
+    apple_url: str
+    #: Zorunlu.
+    google_url: str
+    #: Zorunlu.
+    apple_devices: int
+    #: Zorunlu.
+    version: int
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class WalletPassPage(TypedDict, total=False):
+    """WalletPassPage şeması."""
+
+    #: Zorunlu.
+    data: List["WalletPass"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+
+
+class WalletTemplate(TypedDict, total=False):
+    """WalletTemplate şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    slug: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "coupon", "loyalty", "event", "generic".
+    kind: str
+    #: Zorunlu. Değerler: "active", "archived".
+    status: str
+    #: Zorunlu.
+    design: "WalletTemplateDesign"
+    #: Zorunlu.
+    images: List[str]
+    #: Zorunlu.
+    passes: int
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class WalletTemplateDesign(TypedDict, total=False):
+    """WalletTemplateDesign şeması."""
+
+    #: Zorunlu.
+    title: str
+    #: Zorunlu.
+    description: str
+    #: Zorunlu.
+    organization: str
+    #: Zorunlu.
+    background_color: str
+    #: Zorunlu.
+    foreground_color: str
+    #: Zorunlu.
+    label_color: str
+    #: Zorunlu. Değerler: "qr", "pdf417", "aztec", "code128".
+    barcode: str
+    #: Zorunlu.
+    fields: List["WalletTemplateDesignFieldsItem"]
+    expires_at: Optional[str]
+    relevant_at: Optional[str]
+
+
+class WalletTemplateDesignFieldsItem(TypedDict, total=False):
+    """WalletTemplateDesignFieldsItem şeması."""
+
+    #: Zorunlu.
+    key: str
+    #: Zorunlu.
+    label: str
+    #: Zorunlu.
+    value: str
+    #: Zorunlu. Değerler: "header", "primary", "secondary", "auxiliary", "back".
+    section: str
+
+
+class WalletTemplateList(TypedDict, total=False):
+    """WalletTemplateList şeması."""
+
+    #: Zorunlu.
+    data: List["WalletTemplate"]
 
 
 class WarehouseConnectionResult(TypedDict, total=False):
@@ -11522,6 +11796,9 @@ __all__ = [
     "CreateTemplateDtoContentWhatsappMedia",
     "CreateTemplateDtoContentWhatsappTemplate",
     "CreateTemplateDtoContentWhatsappTemplateButtonParamsItem",
+    "CreateWalletTemplateDto",
+    "CreateWalletTemplateDtoDesign",
+    "CreateWalletTemplateDtoDesignFieldsItem",
     "CreateWarmupPlanDto",
     "CreateWarmupPlanDtoCurve",
     "CreateWarmupPlanDtoProviderShares",
@@ -11660,6 +11937,7 @@ __all__ = [
     "InboxTeam",
     "InboxTeamList",
     "IntegrationOk",
+    "IssueWalletPassDto",
     "Journey",
     "JourneyDetail",
     "JourneyDetailEditing",
@@ -11960,6 +12238,13 @@ __all__ = [
     "UpdateTemplateDtoContentWhatsappMedia",
     "UpdateTemplateDtoContentWhatsappTemplate",
     "UpdateTemplateDtoContentWhatsappTemplateButtonParamsItem",
+    "UpdateWalletConfigDto",
+    "UpdateWalletConfigDtoApple",
+    "UpdateWalletConfigDtoGoogle",
+    "UpdateWalletPassDto",
+    "UpdateWalletTemplateDto",
+    "UpdateWalletTemplateDtoDesign",
+    "UpdateWalletTemplateDtoDesignFieldsItem",
     "UpdateWarehouseExportDto",
     "UpdateWarmupPlanDto",
     "UpdateWarmupPlanDtoProviderShares",
@@ -12004,6 +12289,15 @@ __all__ = [
     "UsersSearchBody",
     "UsersSearchBodyDefinition",
     "VerifyAddressDto",
+    "WalletConfig",
+    "WalletConfigApple",
+    "WalletConfigGoogle",
+    "WalletPass",
+    "WalletPassPage",
+    "WalletTemplate",
+    "WalletTemplateDesign",
+    "WalletTemplateDesignFieldsItem",
+    "WalletTemplateList",
     "WarehouseConnectionResult",
     "WarehouseConnectionResultError",
     "WarehouseExport",
