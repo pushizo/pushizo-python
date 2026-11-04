@@ -4969,6 +4969,156 @@ class DataFeedsResource:
         )
 
 
+class DecisionAgentsResource:
+    """decisionAgents kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DecisionAgentList":
+        """Karar ajanları
+
+        ``GET /v1/apps/{appId}/decision-agents``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/decision-agents",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create(
+        self,
+        body: "CreateDecisionAgentDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DecisionAgent":
+        """Karar ajanı oluştur
+
+        ``POST /v1/apps/{appId}/decision-agents``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/decision-agents",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DecisionAgent":
+        """Karar ajanı
+
+        ``GET /v1/apps/{appId}/decision-agents/{id}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/decision-agents/{id}",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        id: str,
+        body: "UpdateDecisionAgentDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DecisionAgent":
+        """Karar ajanını güncelle
+
+        ``PATCH /v1/apps/{appId}/decision-agents/{id}``
+
+        Seçenekler değiştirilemez: geçmiş öğrenme onlara bağlıdır. Yeni seçenekler için yeni ajan oluşturun.
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/decision-agents/{id}",
+            path_params={"id": id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Any:
+        """Karar ajanını sil
+
+        ``DELETE /v1/apps/{appId}/decision-agents/{id}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/decision-agents/{id}",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def report(
+        self,
+        id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DecisionReport":
+        """Kazanç raporu
+
+        ``GET /v1/apps/{appId}/decision-agents/{id}/report``
+
+        Öğrenen politika ve kontrol grubu karşılaştırması.
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/decision-agents/{id}/report",
+            path_params={"id": id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def decide(
+        self,
+        id: str,
+        body: "DecideDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "DecisionResult":
+        """Kullanıcı için karar al
+
+        ``POST /v1/apps/{appId}/decision-agents/{id}/decide``
+
+        Karar kaydedilir, ödül olayı geldikçe ajan öğrenir.
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/decision-agents/{id}/decide",
+            path_params={"id": id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class EmailDeliverabilityResource:
     """emailDeliverability kaynağı."""
 
@@ -8430,6 +8580,7 @@ class GeneratedResources:
     content_tables: ContentTablesResource
     conversations: ConversationsResource
     data_feeds: DataFeedsResource
+    decision_agents: DecisionAgentsResource
     email_deliverability: EmailDeliverabilityResource
     feature_flags: FeatureFlagsResource
     forms: FormsResource
@@ -8482,6 +8633,7 @@ class GeneratedResources:
         self.content_tables = ContentTablesResource(self)  # type: ignore[arg-type]
         self.conversations = ConversationsResource(self)  # type: ignore[arg-type]
         self.data_feeds = DataFeedsResource(self)  # type: ignore[arg-type]
+        self.decision_agents = DecisionAgentsResource(self)  # type: ignore[arg-type]
         self.email_deliverability = EmailDeliverabilityResource(self)  # type: ignore[arg-type]
         self.feature_flags = FeatureFlagsResource(self)  # type: ignore[arg-type]
         self.forms = FormsResource(self)  # type: ignore[arg-type]
@@ -8535,6 +8687,7 @@ RESOURCE_NAMES = (
     "content_tables",
     "conversations",
     "data_feeds",
+    "decision_agents",
     "email_deliverability",
     "feature_flags",
     "forms",

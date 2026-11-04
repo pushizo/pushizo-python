@@ -2878,6 +2878,32 @@ class CreateDataFeedDto(TypedDict, total=False):
     enabled: bool
 
 
+class CreateDecisionAgentDto(TypedDict, total=False):
+    """CreateDecisionAgentDto şeması."""
+
+    #: Zorunlu.
+    slug: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    arms: List["CreateDecisionAgentDtoArmsItem"]
+    #: Zorunlu.
+    reward_events: List[str]
+    reward_window_hours: int
+    holdout_percent: int
+    context_prediction: Optional[str]
+    use_best_channel: bool
+
+
+class CreateDecisionAgentDtoArmsItem(TypedDict, total=False):
+    """CreateDecisionAgentDtoArmsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    label: str
+
+
 class CreateExportDto(TypedDict, total=False):
     """CreateExportDto şeması."""
 
@@ -4096,6 +4122,152 @@ class DataFeedTestResultUser(TypedDict, total=False):
     id: str
     #: Zorunlu.
     external_id: Optional[str]
+
+
+class DecideDto(TypedDict, total=False):
+    """DecideDto şeması."""
+
+    #: Zorunlu.
+    external_id: str
+
+
+class DecisionAgent(TypedDict, total=False):
+    """DecisionAgent şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    slug: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    arms: List["DecisionAgentArmsItem"]
+    #: Zorunlu.
+    reward_events: List[str]
+    #: Zorunlu.
+    reward_window_hours: int
+    #: Zorunlu.
+    holdout_percent: int
+    #: Zorunlu.
+    context_prediction: Optional[str]
+    #: Zorunlu.
+    use_best_channel: bool
+    #: Zorunlu. Değerler: "active", "paused".
+    status: str
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class DecisionAgentArmsItem(TypedDict, total=False):
+    """DecisionAgentArmsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    label: str
+
+
+class DecisionAgentList(TypedDict, total=False):
+    """DecisionAgentList şeması."""
+
+    #: Zorunlu.
+    data: List["DecisionAgent"]
+
+
+class DecisionReport(TypedDict, total=False):
+    """DecisionReport şeması."""
+
+    #: Zorunlu.
+    agent_id: str
+    #: Zorunlu.
+    days: int
+    #: Zorunlu.
+    learned: "DecisionReportLearned"
+    #: Zorunlu.
+    holdout: "DecisionReportHoldout"
+    #: Zorunlu.
+    lift: Optional[float]
+    #: Zorunlu.
+    p_value: Optional[float]
+    #: Zorunlu.
+    significant: bool
+    #: Zorunlu.
+    arms: List["DecisionReportArmsItem"]
+    #: Zorunlu.
+    contexts: List["DecisionReportContextsItem"]
+
+
+class DecisionReportArmsItem(TypedDict, total=False):
+    """DecisionReportArmsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    label: str
+    #: Zorunlu.
+    share: float
+    #: Zorunlu.
+    assignments: int
+    #: Zorunlu.
+    settled: int
+    #: Zorunlu.
+    rewards: int
+    #: Zorunlu.
+    rate: Optional[float]
+
+
+class DecisionReportContextsItem(TypedDict, total=False):
+    """DecisionReportContextsItem şeması."""
+
+    #: Zorunlu.
+    context: str
+    #: Zorunlu.
+    arm_id: str
+    #: Zorunlu.
+    settled: int
+    #: Zorunlu.
+    rate: Optional[float]
+
+
+class DecisionReportHoldout(TypedDict, total=False):
+    """DecisionReportHoldout şeması."""
+
+    #: Zorunlu.
+    assignments: int
+    #: Zorunlu.
+    settled: int
+    #: Zorunlu.
+    rewards: int
+    #: Zorunlu.
+    rate: Optional[float]
+
+
+class DecisionReportLearned(TypedDict, total=False):
+    """DecisionReportLearned şeması."""
+
+    #: Zorunlu.
+    assignments: int
+    #: Zorunlu.
+    settled: int
+    #: Zorunlu.
+    rewards: int
+    #: Zorunlu.
+    rate: Optional[float]
+
+
+class DecisionResult(TypedDict, total=False):
+    """DecisionResult şeması."""
+
+    #: Zorunlu.
+    arm_id: str
+    #: Zorunlu.
+    label: str
+    #: Zorunlu. Değerler: "thompson", "holdout".
+    policy: str
+    #: Zorunlu.
+    context: str
 
 
 class DeliverabilitySettingsDto(TypedDict, total=False):
@@ -9435,6 +9607,17 @@ class UpdateDataFeedDto(TypedDict, total=False):
     enabled: bool
 
 
+class UpdateDecisionAgentDto(TypedDict, total=False):
+    """UpdateDecisionAgentDto şeması."""
+
+    name: str
+    #: Değerler: "active", "paused".
+    status: str
+    reward_events: List[str]
+    reward_window_hours: int
+    holdout_percent: int
+
+
 class UpdateGeofenceDto(TypedDict, total=False):
     """UpdateGeofenceDto şeması."""
 
@@ -11862,6 +12045,8 @@ __all__ = [
     "CreateCategoryDto",
     "CreatedApiKey",
     "CreateDataFeedDto",
+    "CreateDecisionAgentDto",
+    "CreateDecisionAgentDtoArmsItem",
     "CreateExportDto",
     "CreateExportDtoFilters",
     "CreateFormDto",
@@ -11955,6 +12140,16 @@ __all__ = [
     "DataFeedList",
     "DataFeedTestResult",
     "DataFeedTestResultUser",
+    "DecideDto",
+    "DecisionAgent",
+    "DecisionAgentArmsItem",
+    "DecisionAgentList",
+    "DecisionReport",
+    "DecisionReportArmsItem",
+    "DecisionReportContextsItem",
+    "DecisionReportHoldout",
+    "DecisionReportLearned",
+    "DecisionResult",
     "DeliverabilitySettingsDto",
     "DeliverabilitySettingsDtoPostmaster",
     "DeliverabilitySettingsDtoValidation",
@@ -12335,6 +12530,7 @@ __all__ = [
     "UpdateChannelScoreConfigDto",
     "UpdateContentTableDto",
     "UpdateDataFeedDto",
+    "UpdateDecisionAgentDto",
     "UpdateGeofenceDto",
     "UpdateGlobalControlDto",
     "UpdateInAppDto",
