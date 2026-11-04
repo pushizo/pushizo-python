@@ -10680,6 +10680,125 @@ class UserExport(TypedDict, total=False):
     user: "UserDetail"
     #: Zorunlu.
     events: List["UserExportEventsItem"]
+    #: Zorunlu.
+    derived: "UserExportDerived"
+
+
+class UserExportDerived(TypedDict, total=False):
+    """UserExportDerived şeması."""
+
+    #: Zorunlu.
+    wallet_passes: List["UserExportDerivedWalletPassesItem"]
+    #: Zorunlu.
+    rfm: Optional["UserExportDerivedRfm"]
+    #: Zorunlu.
+    predictions: List["UserExportDerivedPredictionsItem"]
+    #: Zorunlu.
+    channel_scores: List["UserExportDerivedChannelScoresItem"]
+    #: Zorunlu.
+    decisions: List["UserExportDerivedDecisionsItem"]
+    #: Zorunlu.
+    recommendations: List["UserExportDerivedRecommendationsItem"]
+
+
+class UserExportDerivedChannelScoresItem(TypedDict, total=False):
+    """UserExportDerivedChannelScoresItem şeması."""
+
+    #: Zorunlu.
+    channel: str
+    #: Zorunlu.
+    sends: float
+    #: Zorunlu.
+    engaged: float
+    #: Zorunlu.
+    score: float
+    #: Zorunlu.
+    is_best: bool
+    #: Zorunlu.
+    computed_at: str
+
+
+class UserExportDerivedDecisionsItem(TypedDict, total=False):
+    """UserExportDerivedDecisionsItem şeması."""
+
+    #: Zorunlu.
+    agent: str
+    #: Zorunlu.
+    arm_id: str
+    #: Zorunlu.
+    context: str
+    #: Zorunlu.
+    assigned_at: str
+    #: Zorunlu.
+    rewarded_at: Optional[str]
+
+
+class UserExportDerivedPredictionsItem(TypedDict, total=False):
+    """UserExportDerivedPredictionsItem şeması."""
+
+    #: Zorunlu.
+    model: str
+    #: Zorunlu.
+    score: float
+    #: Zorunlu.
+    computed_at: str
+
+
+class UserExportDerivedRecommendationsItem(TypedDict, total=False):
+    """UserExportDerivedRecommendationsItem şeması."""
+
+    #: Zorunlu.
+    catalog_id: str
+    #: Zorunlu.
+    personalized: List[str]
+    #: Zorunlu.
+    recent: List[str]
+    #: Zorunlu.
+    purchased: List[str]
+    #: Zorunlu.
+    computed_at: str
+
+
+class UserExportDerivedRfm(TypedDict, total=False):
+    """UserExportDerivedRfm şeması."""
+
+    #: Zorunlu.
+    segment: str
+    #: Zorunlu.
+    segment_since: str
+    #: Zorunlu.
+    r: float
+    #: Zorunlu.
+    f: float
+    #: Zorunlu.
+    m: Optional[float]
+    #: Zorunlu.
+    frequency: float
+    #: Zorunlu.
+    monetary: float
+    #: Zorunlu.
+    last_event_at: str
+    #: Zorunlu.
+    computed_at: str
+
+
+class UserExportDerivedWalletPassesItem(TypedDict, total=False):
+    """UserExportDerivedWalletPassesItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    template_id: str
+    #: Zorunlu.
+    status: str
+    #: Zorunlu.
+    barcode_value: str
+    #: Zorunlu.
+    values: Dict[str, str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
 
 
 class UserExportEventsItem(TypedDict, total=False):
@@ -12618,6 +12737,13 @@ __all__ = [
     "UserDetail",
     "UserDetailAliasesItem",
     "UserExport",
+    "UserExportDerived",
+    "UserExportDerivedChannelScoresItem",
+    "UserExportDerivedDecisionsItem",
+    "UserExportDerivedPredictionsItem",
+    "UserExportDerivedRecommendationsItem",
+    "UserExportDerivedRfm",
+    "UserExportDerivedWalletPassesItem",
     "UserExportEventsItem",
     "UserIdentity",
     "UserJourneyRuns",
