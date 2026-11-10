@@ -1564,6 +1564,8 @@ class CampaignStats(TypedDict, total=False):
     #: Zorunlu.
     goals: List["CampaignStatsGoalsItem"]
     #: Zorunlu.
+    cards: Optional["CampaignStatsCards"]
+    #: Zorunlu.
     channels: List["CampaignStatsChannelsItem"]
     #: Zorunlu.
     hourly: List["CampaignStatsHourlyItem"]
@@ -1589,6 +1591,23 @@ class CampaignStats2(TypedDict, total=False):
     complained: int
     unsubscribed: int
     sms_segments: int
+
+
+class CampaignStatsCards(TypedDict, total=False):
+    """CampaignStatsCards şeması."""
+
+    #: Zorunlu.
+    created: int
+    #: Zorunlu.
+    viewed: int
+    #: Zorunlu.
+    clicked: int
+    #: Zorunlu.
+    dismissed: int
+    #: Zorunlu.
+    view_rate: Optional[float]
+    #: Zorunlu.
+    click_rate: Optional[float]
 
 
 class CampaignStatsChannelsItem(TypedDict, total=False):
@@ -12348,6 +12367,7 @@ __all__ = [
     "CampaignsCreateBodyVariantsItem",
     "CampaignStats",
     "CampaignStats2",
+    "CampaignStatsCards",
     "CampaignStatsChannelsItem",
     "CampaignStatsErrorsItem",
     "CampaignStatsGoalsItem",
