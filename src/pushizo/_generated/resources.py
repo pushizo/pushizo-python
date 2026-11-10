@@ -8544,6 +8544,161 @@ class WebCampaignsResource:
         )
 
 
+class WebPersonalizationsResource:
+    """webPersonalizations kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebPersonalizationPage":
+        """Web kişiselleştirme deneyimleri
+
+        ``GET /v1/apps/{appId}/web-personalizations``
+
+        Parametreler:
+            status: Değerler: "draft", "active", "paused", "archived".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/web-personalizations",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "status": status},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        status: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["WebPersonalization"]:
+        """``list`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list(
+                limit=limit,
+                status=status,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def create(
+        self,
+        body: "CreateWebPersonalizationDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebPersonalization":
+        """Kişiselleştirme deneyimi oluştur (taslak)
+
+        ``POST /v1/apps/{appId}/web-personalizations``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/web-personalizations",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        personalization_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebPersonalization":
+        """Kişiselleştirme deneyimi detayı ve istatistikleri
+
+        ``GET /v1/apps/{appId}/web-personalizations/{personalizationId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/web-personalizations/{personalizationId}",
+            path_params={"personalizationId": personalization_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update(
+        self,
+        personalization_id: str,
+        body: "UpdateWebPersonalizationDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebPersonalization":
+        """Kişiselleştirme deneyimini düzenle
+
+        ``PATCH /v1/apps/{appId}/web-personalizations/{personalizationId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/web-personalizations/{personalizationId}",
+            path_params={"personalizationId": personalization_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def report(
+        self,
+        personalization_id: str,
+        *,
+        days: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebPersonalizationReport":
+        """Günlük seri
+
+        ``GET /v1/apps/{appId}/web-personalizations/{personalizationId}/report``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/web-personalizations/{personalizationId}/report",
+            path_params={"personalizationId": personalization_id},
+            query={"days": days},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def status(
+        self,
+        personalization_id: str,
+        body: "WebPersonalizationStatusDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebPersonalization":
+        """Yayınla / duraklat / arşivle
+
+        ``POST /v1/apps/{appId}/web-personalizations/{personalizationId}/status``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/web-personalizations/{personalizationId}/status",
+            path_params={"personalizationId": personalization_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class WhatsappResource:
     """whatsapp kaynağı."""
 
@@ -8643,6 +8798,7 @@ class GeneratedResources:
     wallet: WalletResource
     warehouse_exports: WarehouseExportsResource
     web_campaigns: WebCampaignsResource
+    web_personalizations: WebPersonalizationsResource
     whatsapp: WhatsappResource
 
     def _init_resources(self) -> None:
@@ -8697,6 +8853,7 @@ class GeneratedResources:
         self.wallet = WalletResource(self)  # type: ignore[arg-type]
         self.warehouse_exports = WarehouseExportsResource(self)  # type: ignore[arg-type]
         self.web_campaigns = WebCampaignsResource(self)  # type: ignore[arg-type]
+        self.web_personalizations = WebPersonalizationsResource(self)  # type: ignore[arg-type]
         self.whatsapp = WhatsappResource(self)  # type: ignore[arg-type]
 
 
@@ -8752,5 +8909,6 @@ RESOURCE_NAMES = (
     "wallet",
     "warehouse_exports",
     "web_campaigns",
+    "web_personalizations",
     "whatsapp",
 )

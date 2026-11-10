@@ -4171,6 +4171,81 @@ class CreateWebhookDtoFiltersConditionsItem(TypedDict, total=False):
     value: Any
 
 
+class CreateWebPersonalizationDto(TypedDict, total=False):
+    """CreateWebPersonalizationDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    changes: List[Any]
+    variants: List["CreateWebPersonalizationDtoVariantsItem"]
+    conditions: "CreateWebPersonalizationDtoConditions"
+    targeting: "CreateWebPersonalizationDtoTargeting"
+    goal: Any
+    priority: int
+    start_at: Optional[str]
+    end_at: Optional[str]
+
+
+class CreateWebPersonalizationDtoConditions(TypedDict, total=False):
+    """CreateWebPersonalizationDtoConditions şeması."""
+
+    url_rules: List["CreateWebPersonalizationDtoConditionsUrlRulesItem"]
+    utm_rules: List["CreateWebPersonalizationDtoConditionsUtmRulesItem"]
+    visits: "CreateWebPersonalizationDtoConditionsVisits"
+
+
+class CreateWebPersonalizationDtoConditionsUrlRulesItem(TypedDict, total=False):
+    """CreateWebPersonalizationDtoConditionsUrlRulesItem şeması."""
+
+    #: Zorunlu. Değerler: "equals", "contains", "starts_with", "not_contains", "matches".
+    op: str
+    #: Zorunlu.
+    value: str
+
+
+class CreateWebPersonalizationDtoConditionsUtmRulesItem(TypedDict, total=False):
+    """CreateWebPersonalizationDtoConditionsUtmRulesItem şeması."""
+
+    #: Zorunlu. Değerler: "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content".
+    param: str
+    #: Zorunlu. Değerler: "equals", "contains", "exists".
+    op: str
+    value: str
+
+
+class CreateWebPersonalizationDtoConditionsVisits(TypedDict, total=False):
+    """CreateWebPersonalizationDtoConditionsVisits şeması."""
+
+    #: Zorunlu. Değerler: "gte", "lte", "eq".
+    op: str
+    #: Zorunlu.
+    value: int
+
+
+class CreateWebPersonalizationDtoTargeting(TypedDict, total=False):
+    """CreateWebPersonalizationDtoTargeting şeması."""
+
+    included_segments: List[str]
+    excluded_segments: List[str]
+    #: Değerler: "all", "new", "returning".
+    visitor: str
+    #: Değerler: "desktop", "mobile", "tablet".
+    devices: List[str]
+
+
+class CreateWebPersonalizationDtoVariantsItem(TypedDict, total=False):
+    """CreateWebPersonalizationDtoVariantsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    #: Zorunlu.
+    changes: List[Any]
+
+
 class DataFeed(TypedDict, total=False):
     """DataFeed şeması."""
 
@@ -10684,6 +10759,80 @@ class UpdateWebhookDtoFiltersConditionsItem(TypedDict, total=False):
     value: Any
 
 
+class UpdateWebPersonalizationDto(TypedDict, total=False):
+    """UpdateWebPersonalizationDto şeması."""
+
+    name: str
+    changes: List[Any]
+    variants: List["UpdateWebPersonalizationDtoVariantsItem"]
+    conditions: "UpdateWebPersonalizationDtoConditions"
+    targeting: "UpdateWebPersonalizationDtoTargeting"
+    goal: Any
+    priority: int
+    start_at: Optional[str]
+    end_at: Optional[str]
+
+
+class UpdateWebPersonalizationDtoConditions(TypedDict, total=False):
+    """UpdateWebPersonalizationDtoConditions şeması."""
+
+    url_rules: List["UpdateWebPersonalizationDtoConditionsUrlRulesItem"]
+    utm_rules: List["UpdateWebPersonalizationDtoConditionsUtmRulesItem"]
+    visits: "UpdateWebPersonalizationDtoConditionsVisits"
+
+
+class UpdateWebPersonalizationDtoConditionsUrlRulesItem(TypedDict, total=False):
+    """UpdateWebPersonalizationDtoConditionsUrlRulesItem şeması."""
+
+    #: Zorunlu. Değerler: "equals", "contains", "starts_with", "not_contains", "matches".
+    op: str
+    #: Zorunlu.
+    value: str
+
+
+class UpdateWebPersonalizationDtoConditionsUtmRulesItem(TypedDict, total=False):
+    """UpdateWebPersonalizationDtoConditionsUtmRulesItem şeması."""
+
+    #: Zorunlu. Değerler: "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content".
+    param: str
+    #: Zorunlu. Değerler: "equals", "contains", "exists".
+    op: str
+    value: str
+
+
+class UpdateWebPersonalizationDtoConditionsVisits(TypedDict, total=False):
+    """UpdateWebPersonalizationDtoConditionsVisits şeması."""
+
+    #: Zorunlu. Değerler: "gte", "lte", "eq".
+    op: str
+    #: Zorunlu.
+    value: int
+
+
+class UpdateWebPersonalizationDtoTargeting(TypedDict, total=False):
+    """UpdateWebPersonalizationDtoTargeting şeması."""
+
+    included_segments: List[str]
+    excluded_segments: List[str]
+    #: Değerler: "all", "new", "returning".
+    visitor: str
+    #: Değerler: "desktop", "mobile", "tablet".
+    devices: List[str]
+
+
+class UpdateWebPersonalizationDtoVariantsItem(TypedDict, total=False):
+    """UpdateWebPersonalizationDtoVariantsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    #: Zorunlu.
+    changes: List[Any]
+
+
 class UpsertCatalogItemsDto(TypedDict, total=False):
     """UpsertCatalogItemsDto şeması."""
 
@@ -12140,6 +12289,206 @@ class WebhookWithSecretFiltersConditionsItem(TypedDict, total=False):
     value: Any
 
 
+class WebPersonalization(TypedDict, total=False):
+    """WebPersonalization şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "draft", "active", "paused", "archived".
+    status: str
+    #: Zorunlu.
+    priority: int
+    #: Zorunlu.
+    changes: List[Any]
+    #: Zorunlu.
+    variants: List["WebPersonalizationVariantsItem"]
+    #: Zorunlu.
+    ab_test: "WebPersonalizationAbTest"
+    #: Zorunlu.
+    conditions: "WebPersonalizationConditions"
+    #: Zorunlu.
+    targeting: "WebPersonalizationTargeting"
+    #: Zorunlu.
+    goal: Any
+    #: Zorunlu.
+    start_at: Optional[str]
+    #: Zorunlu.
+    end_at: Optional[str]
+    #: Zorunlu.
+    stats: "WebPersonalizationStats"
+    #: Zorunlu.
+    variant_stats: List["WebPersonalizationVariantStatsItem"]
+    #: Zorunlu.
+    variant_significance: Optional["WebPersonalizationVariantSignificance"]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class WebPersonalizationAbTest(TypedDict, total=False):
+    """WebPersonalizationAbTest şeması."""
+
+    #: Zorunlu.
+    winner_variant_id: Optional[str]
+    #: Zorunlu.
+    decided_at: Optional[str]
+    #: Zorunlu.
+    decided_by: Optional[str]
+
+
+class WebPersonalizationConditions(TypedDict, total=False):
+    """WebPersonalizationConditions şeması."""
+
+    url_rules: List["WebPersonalizationConditionsUrlRulesItem"]
+    utm_rules: List["WebPersonalizationConditionsUtmRulesItem"]
+    visits: "WebPersonalizationConditionsVisits"
+
+
+class WebPersonalizationConditionsUrlRulesItem(TypedDict, total=False):
+    """WebPersonalizationConditionsUrlRulesItem şeması."""
+
+    #: Zorunlu. Değerler: "equals", "contains", "starts_with", "not_contains", "matches".
+    op: str
+    #: Zorunlu.
+    value: str
+
+
+class WebPersonalizationConditionsUtmRulesItem(TypedDict, total=False):
+    """WebPersonalizationConditionsUtmRulesItem şeması."""
+
+    #: Zorunlu. Değerler: "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content".
+    param: str
+    #: Zorunlu. Değerler: "equals", "contains", "exists".
+    op: str
+    value: str
+
+
+class WebPersonalizationConditionsVisits(TypedDict, total=False):
+    """WebPersonalizationConditionsVisits şeması."""
+
+    #: Zorunlu. Değerler: "gte", "lte", "eq".
+    op: str
+    #: Zorunlu.
+    value: int
+
+
+class WebPersonalizationPage(TypedDict, total=False):
+    """WebPersonalizationPage şeması."""
+
+    #: Zorunlu.
+    data: List["WebPersonalization"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+    #: Zorunlu.
+    has_more: bool
+
+
+class WebPersonalizationReport(TypedDict, total=False):
+    """WebPersonalizationReport şeması."""
+
+    #: Zorunlu.
+    personalization_id: str
+    #: Zorunlu.
+    days: int
+    #: Zorunlu.
+    daily: List["WebPersonalizationReportDailyItem"]
+    #: Zorunlu.
+    totals: "WebPersonalizationReportTotals"
+
+
+class WebPersonalizationReportDailyItem(TypedDict, total=False):
+    """WebPersonalizationReportDailyItem şeması."""
+
+    #: Zorunlu.
+    date: str
+    #: Zorunlu.
+    visitors: int
+    #: Zorunlu.
+    conversions: int
+
+
+class WebPersonalizationReportTotals(TypedDict, total=False):
+    """WebPersonalizationReportTotals şeması."""
+
+    #: Zorunlu.
+    visitors: int
+    #: Zorunlu.
+    conversions: int
+    #: Zorunlu.
+    conversion_rate: float
+
+
+class WebPersonalizationStats(TypedDict, total=False):
+    """WebPersonalizationStats şeması."""
+
+    #: Zorunlu.
+    visitors: int
+    #: Zorunlu.
+    conversions: int
+    #: Zorunlu.
+    conversion_rate: float
+
+
+class WebPersonalizationStatusDto(TypedDict, total=False):
+    """WebPersonalizationStatusDto şeması."""
+
+    #: Zorunlu. Değerler: "draft", "active", "paused", "archived".
+    status: str
+
+
+class WebPersonalizationTargeting(TypedDict, total=False):
+    """WebPersonalizationTargeting şeması."""
+
+    included_segments: List[str]
+    excluded_segments: List[str]
+    #: Değerler: "all", "new", "returning".
+    visitor: str
+    #: Değerler: "desktop", "mobile", "tablet".
+    devices: List[str]
+
+
+class WebPersonalizationVariantSignificance(TypedDict, total=False):
+    """WebPersonalizationVariantSignificance şeması."""
+
+    #: Zorunlu.
+    leader: Optional[str]
+    #: Zorunlu.
+    p_value: float
+    #: Zorunlu.
+    significant: bool
+
+
+class WebPersonalizationVariantsItem(TypedDict, total=False):
+    """WebPersonalizationVariantsItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu.
+    weight_percent: int
+    #: Zorunlu.
+    changes: List[Any]
+
+
+class WebPersonalizationVariantStatsItem(TypedDict, total=False):
+    """WebPersonalizationVariantStatsItem şeması."""
+
+    #: Zorunlu.
+    visitors: int
+    #: Zorunlu.
+    conversions: int
+    #: Zorunlu.
+    conversion_rate: float
+    #: Zorunlu.
+    variant_id: str
+
+
 class WhatsAppTemplateList(TypedDict, total=False):
     """WhatsAppTemplateList şeması."""
 
@@ -12554,6 +12903,13 @@ __all__ = [
     "CreateWebhookDtoEventFilters",
     "CreateWebhookDtoFilters",
     "CreateWebhookDtoFiltersConditionsItem",
+    "CreateWebPersonalizationDto",
+    "CreateWebPersonalizationDtoConditions",
+    "CreateWebPersonalizationDtoConditionsUrlRulesItem",
+    "CreateWebPersonalizationDtoConditionsUtmRulesItem",
+    "CreateWebPersonalizationDtoConditionsVisits",
+    "CreateWebPersonalizationDtoTargeting",
+    "CreateWebPersonalizationDtoVariantsItem",
     "DataFeed",
     "DataFeedList",
     "DataFeedTestResult",
@@ -13030,6 +13386,13 @@ __all__ = [
     "UpdateWebhookDtoEventFilters",
     "UpdateWebhookDtoFilters",
     "UpdateWebhookDtoFiltersConditionsItem",
+    "UpdateWebPersonalizationDto",
+    "UpdateWebPersonalizationDtoConditions",
+    "UpdateWebPersonalizationDtoConditionsUrlRulesItem",
+    "UpdateWebPersonalizationDtoConditionsUtmRulesItem",
+    "UpdateWebPersonalizationDtoConditionsVisits",
+    "UpdateWebPersonalizationDtoTargeting",
+    "UpdateWebPersonalizationDtoVariantsItem",
     "UpsertCatalogItemsDto",
     "UpsertCatalogItemsDtoItemsItem",
     "UpsertUserDto",
@@ -13125,6 +13488,22 @@ __all__ = [
     "WebhookWithSecretEventFilters",
     "WebhookWithSecretFilters",
     "WebhookWithSecretFiltersConditionsItem",
+    "WebPersonalization",
+    "WebPersonalizationAbTest",
+    "WebPersonalizationConditions",
+    "WebPersonalizationConditionsUrlRulesItem",
+    "WebPersonalizationConditionsUtmRulesItem",
+    "WebPersonalizationConditionsVisits",
+    "WebPersonalizationPage",
+    "WebPersonalizationReport",
+    "WebPersonalizationReportDailyItem",
+    "WebPersonalizationReportTotals",
+    "WebPersonalizationStats",
+    "WebPersonalizationStatusDto",
+    "WebPersonalizationTargeting",
+    "WebPersonalizationVariantSignificance",
+    "WebPersonalizationVariantsItem",
+    "WebPersonalizationVariantStatsItem",
     "WhatsAppTemplateList",
     "WhatsAppTemplateListDataItem",
     "WhatsAppTemplateSync",
