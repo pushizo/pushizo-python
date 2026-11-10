@@ -3380,6 +3380,7 @@ class CreateNotificationDto(TypedDict, total=False):
     rcs_fallback_text: Dict[str, str]
     add_to_inbox: bool
     inbox_ttl: int
+    content_card: "CreateNotificationDtoContentCard"
     frequency_cap_exempt: bool
     quiet_hours_exempt: bool
     one_per_user: bool
@@ -3411,6 +3412,16 @@ class CreateNotificationDtoButtonsItem(TypedDict, total=False):
     text: str
     icon: str
     url: str
+
+
+class CreateNotificationDtoContentCard(TypedDict, total=False):
+    """CreateNotificationDtoContentCard şeması."""
+
+    #: Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+    type: str
+    pinned: bool
+    priority: int
+    button_text: Dict[str, str]
 
 
 class CreateNotificationDtoIosCarouselItem(TypedDict, total=False):
@@ -3725,6 +3736,7 @@ class CreateTemplateDtoContent(TypedDict, total=False):
     disable_sms_link_shortening: bool
     add_to_inbox: bool
     inbox_ttl: int
+    content_card: "CreateTemplateDtoContentContentCard"
     thread_id: str
     ios_relevance_score: float
     target_content_identifier: str
@@ -3767,6 +3779,16 @@ class CreateTemplateDtoContentButtonsItem(TypedDict, total=False):
     text: str
     icon: str
     url: str
+
+
+class CreateTemplateDtoContentContentCard(TypedDict, total=False):
+    """CreateTemplateDtoContentContentCard şeması."""
+
+    #: Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+    type: str
+    pinned: bool
+    priority: int
+    button_text: Dict[str, str]
 
 
 class CreateTemplateDtoContentIosCarouselItem(TypedDict, total=False):
@@ -7955,6 +7977,7 @@ class RenderTemplateDtoContent(TypedDict, total=False):
     disable_sms_link_shortening: bool
     add_to_inbox: bool
     inbox_ttl: int
+    content_card: "RenderTemplateDtoContentContentCard"
     thread_id: str
     ios_relevance_score: float
     target_content_identifier: str
@@ -7997,6 +8020,16 @@ class RenderTemplateDtoContentButtonsItem(TypedDict, total=False):
     text: str
     icon: str
     url: str
+
+
+class RenderTemplateDtoContentContentCard(TypedDict, total=False):
+    """RenderTemplateDtoContentContentCard şeması."""
+
+    #: Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+    type: str
+    pinned: bool
+    priority: int
+    button_text: Dict[str, str]
 
 
 class RenderTemplateDtoContentIosCarouselItem(TypedDict, total=False):
@@ -10187,6 +10220,7 @@ class UpdateTemplateDtoContent(TypedDict, total=False):
     disable_sms_link_shortening: bool
     add_to_inbox: bool
     inbox_ttl: int
+    content_card: "UpdateTemplateDtoContentContentCard"
     thread_id: str
     ios_relevance_score: float
     target_content_identifier: str
@@ -10229,6 +10263,16 @@ class UpdateTemplateDtoContentButtonsItem(TypedDict, total=False):
     text: str
     icon: str
     url: str
+
+
+class UpdateTemplateDtoContentContentCard(TypedDict, total=False):
+    """UpdateTemplateDtoContentContentCard şeması."""
+
+    #: Zorunlu. Değerler: "classic", "captioned_image", "image_only".
+    type: str
+    pinned: bool
+    priority: int
+    button_text: Dict[str, str]
 
 
 class UpdateTemplateDtoContentIosCarouselItem(TypedDict, total=False):
@@ -12430,6 +12474,7 @@ __all__ = [
     "CreateNotificationDto",
     "CreateNotificationDtoAndroidLiveUpdate",
     "CreateNotificationDtoButtonsItem",
+    "CreateNotificationDtoContentCard",
     "CreateNotificationDtoIosCarouselItem",
     "CreateNotificationDtoRcsCard",
     "CreateNotificationDtoTarget",
@@ -12457,6 +12502,7 @@ __all__ = [
     "CreateTemplateDtoContent",
     "CreateTemplateDtoContentAndroidLiveUpdate",
     "CreateTemplateDtoContentButtonsItem",
+    "CreateTemplateDtoContentContentCard",
     "CreateTemplateDtoContentIosCarouselItem",
     "CreateTemplateDtoContentRcsCard",
     "CreateTemplateDtoContentWebButtonsItem",
@@ -12752,6 +12798,7 @@ __all__ = [
     "RenderTemplateDtoContent",
     "RenderTemplateDtoContentAndroidLiveUpdate",
     "RenderTemplateDtoContentButtonsItem",
+    "RenderTemplateDtoContentContentCard",
     "RenderTemplateDtoContentIosCarouselItem",
     "RenderTemplateDtoContentRcsCard",
     "RenderTemplateDtoContentWebButtonsItem",
@@ -12927,6 +12974,7 @@ __all__ = [
     "UpdateTemplateDtoContent",
     "UpdateTemplateDtoContentAndroidLiveUpdate",
     "UpdateTemplateDtoContentButtonsItem",
+    "UpdateTemplateDtoContentContentCard",
     "UpdateTemplateDtoContentIosCarouselItem",
     "UpdateTemplateDtoContentRcsCard",
     "UpdateTemplateDtoContentWebButtonsItem",
