@@ -963,11 +963,23 @@ class AppSettings(TypedDict, total=False):
     #: Değerler: "off", "full", "masked".
     ipCapture: str
     ipRetentionDays: int
+    adaptiveFrequency: "AppSettingsAdaptiveFrequency"
     allowedOrigins: List[str]
     campaignApprovalRequired: bool
     webPush: "AppSettingsWebPush"
     onboarding: "AppSettingsOnboarding"
     sdkSetup: Optional["AppSettingsSdkSetup"]
+
+
+class AppSettingsAdaptiveFrequency(TypedDict, total=False):
+    """AppSettingsAdaptiveFrequency şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    min: int
+    #: Zorunlu.
+    max: int
 
 
 class AppSettingsAndroidChannelsItem(TypedDict, total=False):
@@ -9437,11 +9449,23 @@ class UpdateAppDtoSettings(TypedDict, total=False):
     #: Değerler: "off", "full", "masked".
     ipCapture: str
     ipRetentionDays: int
+    adaptiveFrequency: "UpdateAppDtoSettingsAdaptiveFrequency"
     allowedOrigins: List[str]
     campaignApprovalRequired: bool
     webPush: "UpdateAppDtoSettingsWebPush"
     onboarding: "UpdateAppDtoSettingsOnboarding"
     sdkSetup: Optional["UpdateAppDtoSettingsSdkSetup"]
+
+
+class UpdateAppDtoSettingsAdaptiveFrequency(TypedDict, total=False):
+    """UpdateAppDtoSettingsAdaptiveFrequency şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    min: int
+    #: Zorunlu.
+    max: int
 
 
 class UpdateAppDtoSettingsAndroidChannelsItem(TypedDict, total=False):
@@ -10776,6 +10800,10 @@ class User(TypedDict, total=False):
     last_ip: Optional[str]
     #: Zorunlu.
     last_ip_at: Optional[str]
+    #: Zorunlu. Değerler: "positive", "negative", "neutral".
+    last_sentiment: Optional[str]
+    #: Zorunlu.
+    last_sentiment_at: Optional[str]
     #: Zorunlu.
     created_at: str
     #: Zorunlu.
@@ -10813,6 +10841,10 @@ class UserDetail(TypedDict, total=False):
     last_ip: Optional[str]
     #: Zorunlu.
     last_ip_at: Optional[str]
+    #: Zorunlu. Değerler: "positive", "negative", "neutral".
+    last_sentiment: Optional[str]
+    #: Zorunlu.
+    last_sentiment_at: Optional[str]
     #: Zorunlu.
     created_at: str
     #: Zorunlu.
@@ -10864,6 +10896,25 @@ class UserExportDerived(TypedDict, total=False):
     decisions: List["UserExportDerivedDecisionsItem"]
     #: Zorunlu.
     recommendations: List["UserExportDerivedRecommendationsItem"]
+    #: Zorunlu.
+    affinities: List["UserExportDerivedAffinitiesItem"]
+    #: Zorunlu.
+    frequency_cap: Optional["UserExportDerivedFrequencyCap"]
+
+
+class UserExportDerivedAffinitiesItem(TypedDict, total=False):
+    """UserExportDerivedAffinitiesItem şeması."""
+
+    #: Zorunlu.
+    attribute: str
+    #: Zorunlu.
+    value: str
+    #: Zorunlu.
+    score: float
+    #: Zorunlu.
+    rank: float
+    #: Zorunlu.
+    computed_at: str
 
 
 class UserExportDerivedChannelScoresItem(TypedDict, total=False):
@@ -10896,6 +10947,17 @@ class UserExportDerivedDecisionsItem(TypedDict, total=False):
     assigned_at: str
     #: Zorunlu.
     rewarded_at: Optional[str]
+
+
+class UserExportDerivedFrequencyCap(TypedDict, total=False):
+    """UserExportDerivedFrequencyCap şeması."""
+
+    #: Zorunlu.
+    weekly_cap: float
+    #: Zorunlu.
+    engagement: float
+    #: Zorunlu.
+    computed_at: str
 
 
 class UserExportDerivedPredictionsItem(TypedDict, total=False):
@@ -12196,6 +12258,7 @@ __all__ = [
     "AppList",
     "AppPlatformFlags",
     "AppSettings",
+    "AppSettingsAdaptiveFrequency",
     "AppSettingsAndroidChannelsItem",
     "AppSettingsBrandKit",
     "AppSettingsFrequencyCap",
@@ -12796,6 +12859,7 @@ __all__ = [
     "UpdateAppDto",
     "UpdateAppDtoPlatformFlags",
     "UpdateAppDtoSettings",
+    "UpdateAppDtoSettingsAdaptiveFrequency",
     "UpdateAppDtoSettingsAndroidChannelsItem",
     "UpdateAppDtoSettingsBrandKit",
     "UpdateAppDtoSettingsFrequencyCap",
@@ -12915,8 +12979,10 @@ __all__ = [
     "UserDetailAliasesItem",
     "UserExport",
     "UserExportDerived",
+    "UserExportDerivedAffinitiesItem",
     "UserExportDerivedChannelScoresItem",
     "UserExportDerivedDecisionsItem",
+    "UserExportDerivedFrequencyCap",
     "UserExportDerivedPredictionsItem",
     "UserExportDerivedRecommendationsItem",
     "UserExportDerivedRfm",
