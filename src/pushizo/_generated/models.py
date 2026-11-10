@@ -960,6 +960,9 @@ class AppSettings(TypedDict, total=False):
     brandKit: "AppSettingsBrandKit"
     defaultTtlSeconds: int
     identityVerificationRequired: bool
+    #: Değerler: "off", "full", "masked".
+    ipCapture: str
+    ipRetentionDays: int
     allowedOrigins: List[str]
     campaignApprovalRequired: bool
     webPush: "AppSettingsWebPush"
@@ -1256,6 +1259,8 @@ class Campaign(TypedDict, total=False):
     #: Zorunlu.
     category: Optional[str]
     #: Zorunlu.
+    goals: "CampaignGoals"
+    #: Zorunlu.
     ab_test: "CampaignAbTest"
     #: Zorunlu.
     variants: List["CampaignVariantsItem"]
@@ -1365,6 +1370,8 @@ class CampaignDelivery(TypedDict, total=False):
     priority: int
     collapse_id: str
     frequency_cap_exempt: bool
+    #: Değerler: "low", "normal", "high".
+    frequency_priority: str
     global_control_exempt: bool
     quiet_hours_exempt: bool
     one_per_user: bool
@@ -1399,6 +1406,13 @@ class CampaignEmailRisk(TypedDict, total=False):
     bounce_rate_30d: Optional[float]
 
 
+class CampaignGoals(TypedDict, total=False):
+    """CampaignGoals şeması."""
+
+    primary: str
+    secondary: List[str]
+
+
 class CampaignPage(TypedDict, total=False):
     """CampaignPage şeması."""
 
@@ -1431,6 +1445,8 @@ class CampaignsCreateBody(TypedDict, total=False):
     labels: List[str]
     #: Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
     category: Optional[str]
+    #: Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    goals: "CampaignsCreateBodyGoals"
     ab_test: "CampaignsCreateBodyAbTest"
     #: A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
     variants: List["CampaignsCreateBodyVariantsItem"]
@@ -1492,9 +1508,18 @@ class CampaignsCreateBodyDelivery(TypedDict, total=False):
     priority: int
     collapse_id: str
     frequency_cap_exempt: bool
+    #: Değerler: "low", "normal", "high".
+    frequency_priority: str
     global_control_exempt: bool
     quiet_hours_exempt: bool
     one_per_user: bool
+
+
+class CampaignsCreateBodyGoals(TypedDict, total=False):
+    """Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı."""
+
+    primary: str
+    secondary: List[str]
 
 
 class CampaignsCreateBodyRecurrence(TypedDict, total=False):
@@ -1524,6 +1549,8 @@ class CampaignStats(TypedDict, total=False):
     campaign: "Campaign"
     #: Zorunlu.
     rates: "CampaignStatsRates"
+    #: Zorunlu.
+    goals: List["CampaignStatsGoalsItem"]
     #: Zorunlu.
     channels: List["CampaignStatsChannelsItem"]
     #: Zorunlu.
@@ -1578,6 +1605,19 @@ class CampaignStatsErrorsItem(TypedDict, total=False):
     count: int
 
 
+class CampaignStatsGoalsItem(TypedDict, total=False):
+    """CampaignStatsGoalsItem şeması."""
+
+    #: Zorunlu.
+    event: str
+    #: Zorunlu.
+    primary: bool
+    #: Zorunlu.
+    converted: int
+    #: Zorunlu.
+    conversion_rate: Optional[float]
+
+
 class CampaignStatsHourlyItem(TypedDict, total=False):
     """CampaignStatsHourlyItem şeması."""
 
@@ -1620,6 +1660,8 @@ class CampaignsUpdateBody(TypedDict, total=False):
     labels: List[str]
     #: Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
     category: Optional[str]
+    #: Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    goals: "CampaignsUpdateBodyGoals"
     ab_test: "CampaignsUpdateBodyAbTest"
     #: A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
     variants: List["CampaignsUpdateBodyVariantsItem"]
@@ -1681,9 +1723,18 @@ class CampaignsUpdateBodyDelivery(TypedDict, total=False):
     priority: int
     collapse_id: str
     frequency_cap_exempt: bool
+    #: Değerler: "low", "normal", "high".
+    frequency_priority: str
     global_control_exempt: bool
     quiet_hours_exempt: bool
     one_per_user: bool
+
+
+class CampaignsUpdateBodyGoals(TypedDict, total=False):
+    """Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı."""
+
+    primary: str
+    secondary: List[str]
 
 
 class CampaignsUpdateBodyRecurrence(TypedDict, total=False):
@@ -1811,6 +1862,21 @@ class CampaignVariantStatsVariantsItem(TypedDict, total=False):
     open_rate: float
     #: Zorunlu.
     click_rate: float
+    #: Zorunlu.
+    conversion_rate: float
+    #: Zorunlu.
+    goals: List["CampaignVariantStatsVariantsItemGoalsItem"]
+
+
+class CampaignVariantStatsVariantsItemGoalsItem(TypedDict, total=False):
+    """CampaignVariantStatsVariantsItemGoalsItem şeması."""
+
+    #: Zorunlu.
+    event: str
+    #: Zorunlu.
+    primary: bool
+    #: Zorunlu.
+    converted: int
     #: Zorunlu.
     conversion_rate: float
 
@@ -6705,6 +6771,8 @@ class McpCreateCampaignDraftBody(TypedDict, total=False):
     labels: List[str]
     #: Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
     category: Optional[str]
+    #: Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    goals: "McpCreateCampaignDraftBodyGoals"
     ab_test: "McpCreateCampaignDraftBodyAbTest"
     #: A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
     variants: List["McpCreateCampaignDraftBodyVariantsItem"]
@@ -6766,9 +6834,18 @@ class McpCreateCampaignDraftBodyDelivery(TypedDict, total=False):
     priority: int
     collapse_id: str
     frequency_cap_exempt: bool
+    #: Değerler: "low", "normal", "high".
+    frequency_priority: str
     global_control_exempt: bool
     quiet_hours_exempt: bool
     one_per_user: bool
+
+
+class McpCreateCampaignDraftBodyGoals(TypedDict, total=False):
+    """Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı."""
+
+    primary: str
+    secondary: List[str]
 
 
 class McpCreateCampaignDraftBodyRecurrence(TypedDict, total=False):
@@ -9213,6 +9290,83 @@ class TriggerRunDtoAlias(TypedDict, total=False):
     value: str
 
 
+UninstallReport = TypedDict(
+    "UninstallReport",
+    {
+        # Zorunlu.
+        "from": str,
+        # Zorunlu.
+        "to": str,
+        # Zorunlu.
+        "totals": "UninstallReportTotals",
+        # Zorunlu.
+        "previous": Optional["UninstallReportPrevious"],
+        # Zorunlu.
+        "rows": List["UninstallReportRowsItem"],
+        # Zorunlu.
+        "by_channel": List["UninstallReportByChannelItem"],
+        # Zorunlu.
+        "last_messages": List["UninstallReportLastMessagesItem"],
+    },
+    total=False,
+)
+
+
+class UninstallReportByChannelItem(TypedDict, total=False):
+    """UninstallReportByChannelItem şeması."""
+
+    #: Zorunlu.
+    channel: str
+    #: Zorunlu.
+    uninstalls: int
+    #: Zorunlu.
+    active: int
+
+
+class UninstallReportLastMessagesItem(TypedDict, total=False):
+    """UninstallReportLastMessagesItem şeması."""
+
+    #: Zorunlu.
+    campaign_id: Optional[str]
+    #: Zorunlu.
+    name: Optional[str]
+    #: Zorunlu.
+    source: str
+    #: Zorunlu.
+    uninstalls: int
+
+
+class UninstallReportPrevious(TypedDict, total=False):
+    """UninstallReportPrevious şeması."""
+
+    #: Zorunlu.
+    uninstalls: int
+    #: Zorunlu.
+    active: int
+    #: Zorunlu.
+    rate: Optional[float]
+
+
+class UninstallReportRowsItem(TypedDict, total=False):
+    """UninstallReportRowsItem şeması."""
+
+    #: Zorunlu.
+    date: str
+    #: Zorunlu.
+    uninstalls: int
+
+
+class UninstallReportTotals(TypedDict, total=False):
+    """UninstallReportTotals şeması."""
+
+    #: Zorunlu.
+    uninstalls: int
+    #: Zorunlu.
+    active: int
+    #: Zorunlu.
+    rate: Optional[float]
+
+
 class UpdateAdAudienceDto(TypedDict, total=False):
     """UpdateAdAudienceDto şeması."""
 
@@ -9280,6 +9434,9 @@ class UpdateAppDtoSettings(TypedDict, total=False):
     brandKit: "UpdateAppDtoSettingsBrandKit"
     defaultTtlSeconds: int
     identityVerificationRequired: bool
+    #: Değerler: "off", "full", "masked".
+    ipCapture: str
+    ipRetentionDays: int
     allowedOrigins: List[str]
     campaignApprovalRequired: bool
     webPush: "UpdateAppDtoSettingsWebPush"
@@ -10616,6 +10773,10 @@ class User(TypedDict, total=False):
     #: Zorunlu.
     merged_into: Optional[str]
     #: Zorunlu.
+    last_ip: Optional[str]
+    #: Zorunlu.
+    last_ip_at: Optional[str]
+    #: Zorunlu.
     created_at: str
     #: Zorunlu.
     updated_at: str
@@ -10648,6 +10809,10 @@ class UserDetail(TypedDict, total=False):
     usage_seconds: int
     #: Zorunlu.
     merged_into: Optional[str]
+    #: Zorunlu.
+    last_ip: Optional[str]
+    #: Zorunlu.
+    last_ip_at: Optional[str]
     #: Zorunlu.
     created_at: str
     #: Zorunlu.
@@ -12062,6 +12227,7 @@ __all__ = [
     "CampaignApproval",
     "CampaignDelivery",
     "CampaignEmailRisk",
+    "CampaignGoals",
     "CampaignPage",
     "CampaignRecurrence",
     "CampaignsCreateBody",
@@ -12070,12 +12236,14 @@ __all__ = [
     "CampaignsCreateBodyAudience",
     "CampaignsCreateBodyAudienceFilters",
     "CampaignsCreateBodyDelivery",
+    "CampaignsCreateBodyGoals",
     "CampaignsCreateBodyRecurrence",
     "CampaignsCreateBodyVariantsItem",
     "CampaignStats",
     "CampaignStats2",
     "CampaignStatsChannelsItem",
     "CampaignStatsErrorsItem",
+    "CampaignStatsGoalsItem",
     "CampaignStatsHourlyItem",
     "CampaignStatsRates",
     "CampaignsUpdateBody",
@@ -12084,6 +12252,7 @@ __all__ = [
     "CampaignsUpdateBodyAudience",
     "CampaignsUpdateBodyAudienceFilters",
     "CampaignsUpdateBodyDelivery",
+    "CampaignsUpdateBodyGoals",
     "CampaignsUpdateBodyRecurrence",
     "CampaignsUpdateBodyVariantsItem",
     "CampaignVariantsItem",
@@ -12093,6 +12262,7 @@ __all__ = [
     "CampaignVariantStatsAbTestWinner",
     "CampaignVariantStatsSignificance",
     "CampaignVariantStatsVariantsItem",
+    "CampaignVariantStatsVariantsItemGoalsItem",
     "CannedInputDto",
     "CannedResponse",
     "CannedResponseList",
@@ -12444,6 +12614,7 @@ __all__ = [
     "McpCreateCampaignDraftBodyAudience",
     "McpCreateCampaignDraftBodyAudienceFilters",
     "McpCreateCampaignDraftBodyDelivery",
+    "McpCreateCampaignDraftBodyGoals",
     "McpCreateCampaignDraftBodyRecurrence",
     "McpCreateCampaignDraftBodyVariantsItem",
     "McpCreateJourneyDraftBody",
@@ -12613,6 +12784,12 @@ __all__ = [
     "TestPushDto",
     "TriggerRunDto",
     "TriggerRunDtoAlias",
+    "UninstallReport",
+    "UninstallReportByChannelItem",
+    "UninstallReportLastMessagesItem",
+    "UninstallReportPrevious",
+    "UninstallReportRowsItem",
+    "UninstallReportTotals",
     "UpdateAdAudienceDto",
     "UpdateAdCampaignDto",
     "UpdateApiKeyDto",

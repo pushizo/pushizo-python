@@ -267,6 +267,7 @@ class UsersResource:
         cursor: Optional[str] = None,
         sort: Optional[str] = None,
         q: Optional[str] = None,
+        ip: Optional[str] = None,
         tag: Optional[str] = None,
         last_active_after: Optional[str] = None,
         last_active_before: Optional[str] = None,
@@ -284,7 +285,7 @@ class UsersResource:
             "GET",
             "/v1/apps/{appId}/users",
             path_params={},
-            query={"limit": limit, "cursor": cursor, "sort": sort, "q": q, "tag": tag, "last_active_after": last_active_after, "last_active_before": last_active_before},
+            query={"limit": limit, "cursor": cursor, "sort": sort, "q": q, "ip": ip, "tag": tag, "last_active_after": last_active_after, "last_active_before": last_active_before},
             app_id=app_id,
             request_options=request_options,
         )
@@ -296,6 +297,7 @@ class UsersResource:
         cursor: Optional[str] = None,
         sort: Optional[str] = None,
         q: Optional[str] = None,
+        ip: Optional[str] = None,
         tag: Optional[str] = None,
         last_active_after: Optional[str] = None,
         last_active_before: Optional[str] = None,
@@ -308,6 +310,7 @@ class UsersResource:
                 limit=limit,
                 sort=sort,
                 q=q,
+                ip=ip,
                 tag=tag,
                 last_active_after=last_active_after,
                 last_active_before=last_active_before,
@@ -2707,6 +2710,35 @@ class AnalyticsResource:
         return self._client._call(
             "GET",
             "/v1/apps/{appId}/analytics/subscriptions",
+            path_params={},
+            query={"from": from_, "to": to, "compare": compare, "format": format},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def uninstall_report(
+        self,
+        *,
+        from_: Optional[str] = None,
+        to: Optional[str] = None,
+        compare: Optional[str] = None,
+        format: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "UninstallReport":
+        """Uygulama kaldırma raporu
+
+        ``GET /v1/apps/{appId}/analytics/uninstalls``
+
+        Mobil push sağlayıcısının "cihaz kayıtlı değil" yanıtından sayılır.
+
+        Parametreler:
+            compare: Değerler: "true", "false".
+            format: Değerler: "json", "csv".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/analytics/uninstalls",
             path_params={},
             query={"from": from_, "to": to, "compare": compare, "format": format},
             app_id=app_id,
