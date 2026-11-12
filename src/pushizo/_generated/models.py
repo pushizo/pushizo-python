@@ -1052,9 +1052,9 @@ class AppSettingsOnboarding(TypedDict, total=False):
     simulation: bool
     completed_at: Optional[str]
     version: int
-    #: Değerler: "ios", "android", "huawei", "web".
+    #: Değerler: "ios", "android", "huawei", "web", "amazon", "windows", "email", "sms".
     platforms: List[str]
-    #: Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+    #: Değerler: "native", "flutter", "react-native", "expo", "kmp", "unity", "capacitor", "cordova", "maui".
     framework: str
     #: Değerler: "code", "wordpress".
     web_integration: str
@@ -9665,9 +9665,9 @@ class UpdateAppDtoSettingsOnboarding(TypedDict, total=False):
     simulation: bool
     completed_at: Optional[str]
     version: int
-    #: Değerler: "ios", "android", "huawei", "web".
+    #: Değerler: "ios", "android", "huawei", "web", "amazon", "windows", "email", "sms".
     platforms: List[str]
-    #: Değerler: "native", "flutter", "react-native", "unity", "capacitor", "cordova", "maui".
+    #: Değerler: "native", "flutter", "react-native", "expo", "kmp", "unity", "capacitor", "cordova", "maui".
     framework: str
     #: Değerler: "code", "wordpress".
     web_integration: str
