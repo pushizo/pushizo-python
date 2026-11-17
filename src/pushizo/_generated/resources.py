@@ -509,6 +509,70 @@ class UsersResource:
             request_options=request_options,
         )
 
+    def timeline(
+        self,
+        label: str,
+        value: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "UserTimeline":
+        """Kullanıcının olay ve teslimat zaman çizelgesi (en yeni 40 kayıt)
+
+        ``GET /v1/apps/{appId}/users/by/{label}/{value}/timeline``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/users/by/{label}/{value}/timeline",
+            path_params={"label": label, "value": value},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def user_events(
+        self,
+        label: str,
+        value: str,
+        *,
+        limit: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EventList":
+        """Kullanıcının son olayları
+
+        ``GET /v1/apps/{appId}/users/by/{label}/{value}/events``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/users/by/{label}/{value}/events",
+            path_params={"label": label, "value": value},
+            query={"limit": limit},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def user_messages(
+        self,
+        label: str,
+        value: str,
+        *,
+        limit: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "UserMessageList":
+        """Kullanıcının son mesajları (teslimatlar, en yeni önce)
+
+        ``GET /v1/apps/{appId}/users/by/{label}/{value}/messages``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/users/by/{label}/{value}/messages",
+            path_params={"label": label, "value": value},
+            query={"limit": limit},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def add_subscription(
         self,
         label: str,
@@ -587,6 +651,83 @@ class SubscriptionsResource:
 
     def __init__(self, client: "Pushizo") -> None:
         self._client = client
+
+    def list_subscriptions(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        channel: Optional[str] = None,
+        status: Optional[str] = None,
+        test_device: Optional[str] = None,
+        since: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SubscriptionList":
+        """Abonelik listesi (kanal/durum/test cihazı filtreleri; token yalnızca son 8 karakter)
+
+        ``GET /v1/apps/{appId}/subscriptions``
+
+        Parametreler:
+            channel: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
+            status: Değerler: "subscribed", "unsubscribed", "invalid", "pending".
+            test_device: Değerler: "true", "false".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/subscriptions",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "channel": channel, "status": status, "test_device": test_device, "since": since},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_subscriptions_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        channel: Optional[str] = None,
+        status: Optional[str] = None,
+        test_device: Optional[str] = None,
+        since: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["Subscription"]:
+        """``list_subscriptions`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list_subscriptions(
+                limit=limit,
+                channel=channel,
+                status=status,
+                test_device=test_device,
+                since=since,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def cleanup_subscriptions(
+        self,
+        body: "PublicCleanupSubscriptionsDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CleanupResult":
+        """Toplu temizlik: geçersiz (veya abonelikten çıkmış) kayıtları sil
+
+        ``POST /v1/apps/{appId}/subscriptions/cleanup``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/subscriptions/cleanup",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
 
     def get(
         self,
@@ -812,6 +953,28 @@ class EventsResource:
             "/v1/apps/{appId}/events/definitions/{name}",
             path_params={"name": name},
             body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def recent(
+        self,
+        *,
+        name: Optional[str] = None,
+        limit: Optional[int] = None,
+        since: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RecentEvents":
+        """Son olaylar (kullanıcı kimliği ve özelliklerle; ad ve zaman filtresi)
+
+        ``GET /v1/apps/{appId}/events/recent``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/events/recent",
+            path_params={},
+            query={"name": name, "limit": limit, "since": since},
             app_id=app_id,
             request_options=request_options,
         )
@@ -1975,6 +2138,144 @@ class InboxResource:
             request_options=request_options,
         )
 
+    def create_team(
+        self,
+        body: "TeamInputDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InboxTeam":
+        """Takım oluştur (üyeler yanıt rolüne sahip org üyeleri)
+
+        ``POST /v1/apps/{appId}/inbox/teams``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/inbox/teams",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_team(
+        self,
+        team_id: str,
+        body: "TeamUpdateDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InboxTeam":
+        """Takımı güncelle
+
+        ``PATCH /v1/apps/{appId}/inbox/teams/{teamId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/inbox/teams/{teamId}",
+            path_params={"teamId": team_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete_team(
+        self,
+        team_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Takımı sil (konuşmaların takım ataması kalkar)
+
+        ``DELETE /v1/apps/{appId}/inbox/teams/{teamId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/inbox/teams/{teamId}",
+            path_params={"teamId": team_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def rules(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AssignmentRuleList":
+        """Atama kuralları (sırayla değerlendirilir)
+
+        ``GET /v1/apps/{appId}/inbox/assignment-rules``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/inbox/assignment-rules",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_rule(
+        self,
+        body: "AssignmentRuleInputDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AssignmentRule":
+        """Atama kuralı oluştur (kanal/dil/etiket koşulu; round-robin, en az yük veya yalnızca takım)
+
+        ``POST /v1/apps/{appId}/inbox/assignment-rules``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/inbox/assignment-rules",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_rule(
+        self,
+        rule_id: str,
+        body: "AssignmentRuleUpdateDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AssignmentRule":
+        """Atama kuralını güncelle (sıra dahil)
+
+        ``PATCH /v1/apps/{appId}/inbox/assignment-rules/{ruleId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/inbox/assignment-rules/{ruleId}",
+            path_params={"ruleId": rule_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delete_rule(
+        self,
+        rule_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Atama kuralını sil
+
+        ``DELETE /v1/apps/{appId}/inbox/assignment-rules/{ruleId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/inbox/assignment-rules/{ruleId}",
+            path_params={"ruleId": rule_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def agents(
         self,
         *,
@@ -1989,6 +2290,27 @@ class InboxResource:
             "GET",
             "/v1/apps/{appId}/inbox/agents",
             path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_agent(
+        self,
+        account_id: str,
+        body: "AgentUpdateDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "InboxAgent":
+        """Temsilci yönlendirme profili: eşzamanlı konuşma sınırı ve diller
+
+        ``PATCH /v1/apps/{appId}/inbox/agents/{accountId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/inbox/agents/{accountId}",
+            path_params={"accountId": account_id},
+            body=body,
             app_id=app_id,
             request_options=request_options,
         )
@@ -2454,6 +2776,24 @@ class WebhooksResource:
     def __init__(self, client: "Pushizo") -> None:
         self._client = client
 
+    def event_types(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebhookEventTypes":
+        """Abone olunabilecek olay türleri
+
+        ``GET /v1/apps/{appId}/webhooks/event-types``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/webhooks/event-types",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def list(
         self,
         *,
@@ -2661,6 +3001,46 @@ class WebhooksResource:
             cursor,
         )
 
+    def bulk_replay(
+        self,
+        webhook_id: str,
+        body: "BulkReplayDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebhookBulkReplayResult":
+        """Başarısız/ölü teslimleri toplu yeniden gönder (en fazla 1000)
+
+        ``POST /v1/apps/{appId}/webhooks/{webhookId}/replay``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/webhooks/{webhookId}/replay",
+            path_params={"webhookId": webhook_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def delivery(
+        self,
+        delivery_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WebhookDeliveryDetail":
+        """Teslim detayı (gövde dahil)
+
+        ``GET /v1/apps/{appId}/webhooks/deliveries/{deliveryId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/webhooks/deliveries/{deliveryId}",
+            path_params={"deliveryId": delivery_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def replay(
         self,
         delivery_id: str,
@@ -2700,6 +3080,42 @@ class ChannelsResource:
         return self._client._call(
             "GET",
             "/v1/apps/{appId}/channels",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def status(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ChannelStatusList":
+        """Kanal özeti (yalnız sağlayıcı ve durum; yapılandırma ayrıntısı dönmez)
+
+        ``GET /v1/apps/{appId}/channels/status``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/channels/status",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def verify_dns(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ChannelsVerifyDnsResponse":
+        """Gönderici alan adı SPF/DKIM/DMARC doğrulaması
+
+        ``POST /v1/apps/{appId}/channels/email/verify-dns``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/channels/email/verify-dns",
             path_params={},
             app_id=app_id,
             request_options=request_options,
@@ -2751,6 +3167,24 @@ class AnalyticsResource:
 
     def __init__(self, client: "Pushizo") -> None:
         self._client = client
+
+    def sessions(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SessionVolume":
+        """Son 14 gün oturum hacmi ve tekil kullanıcı (günlük toplamlar)
+
+        ``GET /v1/apps/{appId}/analytics/sessions``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/analytics/sessions",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
 
     def overview(
         self,
@@ -3461,6 +3895,55 @@ class OrganizationResource:
             cursor,
         )
 
+    def request_logs(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        status_class: Optional[str] = None,
+        method: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "RequestLogPage":
+        """Public API istek logları (org geneli admin anahtarı; son 7 gün, cursor)
+
+        ``GET /v1/organization/logs``
+
+        Parametreler:
+            status_class: Değerler: "2xx", "4xx", "5xx".
+            method: Değerler: "GET", "POST", "PUT", "PATCH", "DELETE".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/organization/logs",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "app_id": app_id, "status_class": status_class, "method": method},
+            request_options=request_options,
+        )
+
+    def request_logs_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        status_class: Optional[str] = None,
+        method: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["RequestLog"]:
+        """``request_logs`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.request_logs(
+                limit=limit,
+                app_id=app_id,
+                status_class=status_class,
+                method=method,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
     def usage(
         self,
         *,
@@ -3485,6 +3968,24 @@ class AdsResource:
 
     def __init__(self, client: "Pushizo") -> None:
         self._client = client
+
+    def platforms(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdPlatformList":
+        """Reklam platformları (etkin/mock, tanımlayıcılar, lookalike desteği)
+
+        ``GET /v1/apps/{appId}/ads/platforms``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/platforms",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
 
     def list_accounts(
         self,
@@ -3702,6 +4203,26 @@ class AdsResource:
             request_options=request_options,
         )
 
+    def create(
+        self,
+        body: "CreateAdCampaignDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdCampaignCreated":
+        """Reklam kampanyası oluştur: kampanya + reklam seti (Pushizo kitlesi) + kreatif/reklam
+
+        ``POST /v1/apps/{appId}/ads/campaigns``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/ads/campaigns",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def get(
         self,
         entity_id: str,
@@ -3738,6 +4259,156 @@ class AdsResource:
             "/v1/apps/{appId}/ads/campaigns/{entityId}",
             path_params={"entityId": entity_id},
             body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def preview(
+        self,
+        entity_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdCampaignPreview":
+        """Kreatif önizlemesi (platform önizleme bağlantısı + kreatif özeti)
+
+        ``GET /v1/apps/{appId}/ads/campaigns/{entityId}/preview``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/campaigns/{entityId}/preview",
+            path_params={"entityId": entity_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def pages(
+        self,
+        account_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdPageList":
+        """Meta: hesabın tanıtabildiği Facebook sayfaları
+
+        ``GET /v1/apps/{appId}/ads/accounts/{accountId}/pages``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/accounts/{accountId}/pages",
+            path_params={"accountId": account_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def creatives(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdsCreativesResponse":
+        """Yüklenen kreatif görselleri
+
+        ``GET /v1/apps/{appId}/ads/creatives``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/creatives",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def upload(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdCreative":
+        """Kreatif görsel yükle (multipart `file`: PNG/JPEG, en çok 5 MB)
+
+        ``POST /v1/apps/{appId}/ads/creatives``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/ads/creatives",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def settings(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdReportingSettings":
+        """Raporlama para birimi (org) ve atribüsyon varsayılanları (app)
+
+        ``GET /v1/apps/{appId}/ads/settings``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/ads/settings",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_settings(
+        self,
+        body: "AdReportingSettingsInputDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdReportingSettings":
+        """Raporlama para birimi ve atribüsyon varsayılanlarını güncelle
+
+        ``PUT /v1/apps/{appId}/ads/settings``
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/ads/settings",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def test_capi(
+        self,
+        config_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdCapiTestResult":
+        """Platform test aracına sentetik test olayı gönder
+
+        ``POST /v1/apps/{appId}/ads/conversions-api/configs/{configId}/test``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/ads/conversions-api/configs/{configId}/test",
+            path_params={"configId": config_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def retry_capi(
+        self,
+        delivery_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AdCapiDelivery":
+        """Başarısız teslimi yeniden dene
+
+        ``POST /v1/apps/{appId}/ads/conversions-api/deliveries/{deliveryId}/retry``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/ads/conversions-api/deliveries/{deliveryId}/retry",
+            path_params={"deliveryId": delivery_id},
             app_id=app_id,
             request_options=request_options,
         )
@@ -5350,6 +6021,25 @@ class ConversationsResource:
             request_options=request_options,
         )
 
+    def contact(
+        self,
+        conversation_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ConversationContact":
+        """Kişi profili: özellikler, etiketler, abonelikler (maskeli), son olaylar, diğer konuşmalar
+
+        ``GET /v1/apps/{appId}/conversations/{conversationId}/contact``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/conversations/{conversationId}/contact",
+            path_params={"conversationId": conversation_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def messages(
         self,
         conversation_id: str,
@@ -6545,6 +7235,124 @@ class EmailDeliverabilityResource:
             request_options=request_options,
         )
 
+    def hygiene(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailHygieneStatus":
+        """Liste temizliği durumu: e-posta aboneliklerinin denetim dağılımı ve son doğrulama çalıştırması
+
+        ``GET /v1/apps/{appId}/email-deliverability/hygiene``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/email-deliverability/hygiene",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def start_hygiene(
+        self,
+        body: Dict[str, Any],
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailHygieneStart":
+        """Listeyi doğrula: tüm e-posta aboneliklerini toplu, hız sınırlı doğrula (etkin çalıştırma varsa o döner)
+
+        ``POST /v1/apps/{appId}/email-deliverability/hygiene-runs``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/email-deliverability/hygiene-runs",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def hygiene_run(
+        self,
+        run_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailHygieneRun":
+        """Liste doğrulama çalıştırması (ilerleme ve özet)
+
+        ``GET /v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}",
+            path_params={"runId": run_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def suppress_hygiene(
+        self,
+        run_id: str,
+        body: Dict[str, Any],
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailHygieneSuppress":
+        """Doğrulamada geçersiz bulunan adresleri bastır (abonelik invalid + suppression list)
+
+        ``POST /v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}/suppress``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}/suppress",
+            path_params={"runId": run_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def insights(
+        self,
+        *,
+        days: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailProviderInsights":
+        """Posta sağlayıcısı bazında (Gmail, Outlook, Yahoo, diğer) teslim, açılma, tıklama, bounce ve şikâyet sayıları
+
+        ``GET /v1/apps/{appId}/email-deliverability/insights``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/email-deliverability/insights",
+            path_params={},
+            query={"days": days},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def bounces(
+        self,
+        *,
+        days: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "EmailBounceStats":
+        """E-posta bounce eğilimi (%2 hedef), tür/neden dağılımı ve en çok bounce alan alıcı alan adları
+
+        ``GET /v1/apps/{appId}/email-deliverability/bounces``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/email-deliverability/bounces",
+            path_params={},
+            query={"days": days},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def postmaster(
         self,
         *,
@@ -7215,6 +8023,24 @@ class IntegrationsResource:
             request_options=request_options,
         )
 
+    def hooks(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "ZapierHookList":
+        """Zapier REST Hook abonelikleri
+
+        ``GET /v1/apps/{appId}/integrations/zapier/hooks``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/integrations/zapier/hooks",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def unsubscribe(
         self,
         hook_id: str,
@@ -7254,6 +8080,102 @@ class IntegrationsResource:
             "/v1/apps/{appId}/integrations/zapier/samples",
             path_params={},
             query={"event": event, "event_name": event_name},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "IntegrationList":
+        """Bağlı entegrasyonlar ve katalog
+
+        ``GET /v1/apps/{appId}/integrations``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/integrations",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get(
+        self,
+        type: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Integration":
+        """Entegrasyon ayrıntısı (kimlik bilgisi maskeli)
+
+        ``GET /v1/apps/{appId}/integrations/{type}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/integrations/{type}",
+            path_params={"type": type},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def runs(
+        self,
+        type: str,
+        *,
+        limit: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "IntegrationRunList":
+        """Son çalışmalar (senkron, olay gönderimi, gelen istekler, test)
+
+        ``GET /v1/apps/{appId}/integrations/{type}/runs``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/integrations/{type}/runs",
+            path_params={"type": type},
+            query={"limit": limit},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def test(
+        self,
+        type: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "IntegrationTestResult":
+        """Bağlantı testi
+
+        ``POST /v1/apps/{appId}/integrations/{type}/test``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/integrations/{type}/test",
+            path_params={"type": type},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def sync(
+        self,
+        type: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "IntegrationSyncResult":
+        """Cohort senkronunu şimdi çalıştır (worker en geç 1 dk içinde)
+
+        ``POST /v1/apps/{appId}/integrations/{type}/sync``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/integrations/{type}/sync",
+            path_params={"type": type},
             app_id=app_id,
             request_options=request_options,
         )
@@ -9143,6 +10065,62 @@ class RfmResource:
         )
 
 
+class SdkErrorsResource:
+    """sdkErrors kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def list(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        platform: Optional[str] = None,
+        level: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SdkErrorPage":
+        """SDK hata raporları (son 7 gün, cursor)
+
+        ``GET /v1/apps/{appId}/sdk-errors``
+
+        Parametreler:
+            level: Değerler: "error", "warning".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/sdk-errors",
+            path_params={},
+            query={"limit": limit, "cursor": cursor, "platform": platform, "level": level},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_all(
+        self,
+        *,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        platform: Optional[str] = None,
+        level: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["SdkErrorPageDataItem"]:
+        """``list`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.list(
+                limit=limit,
+                platform=platform,
+                level=level,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+
 class SiteSearchResource:
     """siteSearch kaynağı."""
 
@@ -9800,6 +10778,27 @@ class SurveysResource:
             request_options=request_options,
         )
 
+    def distribute(
+        self,
+        survey_id: str,
+        body: "SurveyInAppDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Survey":
+        """In-app dağıtımı: anketi HTML in-app mesajına dönüştür (oluştur/güncelle, isteğe bağlı yayınla)
+
+        ``POST /v1/apps/{appId}/surveys/{surveyId}/distribute/in-app``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/surveys/{surveyId}/distribute/in-app",
+            path_params={"surveyId": survey_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def report(
         self,
         survey_id: str,
@@ -9890,6 +10889,33 @@ class SurveysResource:
             "/v1/apps/{appId}/surveys/{surveyId}/responses",
             path_params={"surveyId": survey_id},
             body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
+class TraceResource:
+    """trace kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def trace(
+        self,
+        *,
+        q: str,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "TraceResult":
+        """Mesaj izleme: msg_/dlv_/sub_ ID, external_id veya token son 8 karakteri
+
+        ``GET /v1/apps/{appId}/trace``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/trace",
+            path_params={},
+            query={"q": q},
             app_id=app_id,
             request_options=request_options,
         )
@@ -11200,10 +12226,12 @@ class GeneratedResources:
     recommendations: RecommendationsResource
     reverse_etl: ReverseEtlResource
     rfm: RfmResource
+    sdk_errors: SdkErrorsResource
     site_search: SiteSearchResource
     sms_keywords: SmsKeywordsResource
     sql: SqlResource
     surveys: SurveysResource
+    trace: TraceResource
     verify: VerifyResource
     wallet: WalletResource
     warehouse_exports: WarehouseExportsResource
@@ -11264,10 +12292,12 @@ class GeneratedResources:
         self.recommendations = RecommendationsResource(self)  # type: ignore[arg-type]
         self.reverse_etl = ReverseEtlResource(self)  # type: ignore[arg-type]
         self.rfm = RfmResource(self)  # type: ignore[arg-type]
+        self.sdk_errors = SdkErrorsResource(self)  # type: ignore[arg-type]
         self.site_search = SiteSearchResource(self)  # type: ignore[arg-type]
         self.sms_keywords = SmsKeywordsResource(self)  # type: ignore[arg-type]
         self.sql = SqlResource(self)  # type: ignore[arg-type]
         self.surveys = SurveysResource(self)  # type: ignore[arg-type]
+        self.trace = TraceResource(self)  # type: ignore[arg-type]
         self.verify = VerifyResource(self)  # type: ignore[arg-type]
         self.wallet = WalletResource(self)  # type: ignore[arg-type]
         self.warehouse_exports = WarehouseExportsResource(self)  # type: ignore[arg-type]
@@ -11329,10 +12359,12 @@ RESOURCE_NAMES = (
     "recommendations",
     "reverse_etl",
     "rfm",
+    "sdk_errors",
     "site_search",
     "sms_keywords",
     "sql",
     "surveys",
+    "trace",
     "verify",
     "wallet",
     "warehouse_exports",
