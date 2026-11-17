@@ -487,7 +487,7 @@ class AddAliasDto(TypedDict, total=False):
 class AddSubscriptionDto(TypedDict, total=False):
     """AddSubscriptionDto şeması."""
 
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
     #: Zorunlu.
     token: str
@@ -1025,7 +1025,7 @@ class AppSettingsFrequencyCapsItem(TypedDict, total=False):
     max: int
     #: Zorunlu.
     window: "AppSettingsFrequencyCapsItemWindow"
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
 
 
@@ -1495,7 +1495,7 @@ class CampaignsCreateBodyAudience(TypedDict, total=False):
     exclude_segments: List[str]
     #: Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
     filters: "CampaignsCreateBodyAudienceFilters"
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
     test_devices_only: bool
 
@@ -1613,7 +1613,7 @@ class CampaignStatsCards(TypedDict, total=False):
 class CampaignStatsChannelsItem(TypedDict, total=False):
     """CampaignStatsChannelsItem şeması."""
 
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
     #: Zorunlu.
     targeted: int
@@ -1729,7 +1729,7 @@ class CampaignsUpdateBodyAudience(TypedDict, total=False):
     exclude_segments: List[str]
     #: Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
     filters: "CampaignsUpdateBodyAudienceFilters"
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
     test_devices_only: bool
 
@@ -2041,9 +2041,9 @@ class CatalogUpsertResult(TypedDict, total=False):
 class ChannelConfig(TypedDict, total=False):
     """ChannelConfig şeması."""
 
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
-    #: Zorunlu. Değerler: "apns", "fcm", "hms", "adm", "wns", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
+    #: Zorunlu. Değerler: "apns", "fcm", "hms", "adm", "wns", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "telegram_bot", "viber_bot", "mock".
     provider: Optional[str]
     #: Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
     status: str
@@ -2114,6 +2114,11 @@ class ChannelConfigConfig(TypedDict, total=False):
     rbm_agent_id: str
     content_sid: str
     sms_fallback: bool
+    telegram_bot_username: str
+    viber_uri: str
+    viber_sender_name: str
+    viber_sender_avatar: str
+    webhook_registered_at: str
 
 
 class ChannelConfigDnsCheck(TypedDict, total=False):
@@ -2343,7 +2348,7 @@ class Conversation(TypedDict, total=False):
 
     #: Zorunlu.
     id: str
-    #: Zorunlu. Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+    #: Zorunlu. Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
     channel: str
     #: Zorunlu. Değerler: "open", "pending", "resolved", "closed".
     status: str
@@ -2918,7 +2923,7 @@ class CreateCategoryDto(TypedDict, total=False):
     #: Zorunlu.
     name: Dict[str, str]
     description: Dict[str, str]
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: Optional[List[str]]
     default_opted_in: bool
     position: int
@@ -3018,7 +3023,7 @@ CreateExportDtoFilters = TypedDict(
         "message_id": str,
         "campaign_id": str,
         "status": str,
-        # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+        # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
         "channel": str,
         "segment_id": str,
     },
@@ -3224,7 +3229,7 @@ class CreateKeywordDto(TypedDict, total=False):
     keyword: str
     #: Değerler: "org", "app".
     scope: str
-    #: Değerler: "sms", "whatsapp", "rcs".
+    #: Değerler: "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
     #: Zorunlu.
     actions: "CreateKeywordDtoActions"
@@ -3322,6 +3327,16 @@ class CreateLookalikeDto(TypedDict, total=False):
     ratio: float
 
 
+class CreateMessengerLinkDto(TypedDict, total=False):
+    """CreateMessengerLinkDto şeması."""
+
+    #: Zorunlu. Değerler: "telegram", "viber".
+    channel: str
+    user_id: str
+    external_id: str
+    ttl_seconds: int
+
+
 class CreateNotificationDto(TypedDict, total=False):
     """CreateNotificationDto şeması."""
 
@@ -3397,6 +3412,8 @@ class CreateNotificationDto(TypedDict, total=False):
     rcs_content_sid: str
     rcs_content_variables: Dict[str, str]
     rcs_fallback_text: Dict[str, str]
+    messenger_image_url: str
+    messenger_buttons: List[Any]
     add_to_inbox: bool
     inbox_ttl: int
     content_card: "CreateNotificationDtoContentCard"
@@ -3473,7 +3490,7 @@ class CreateNotificationDtoTarget(TypedDict, total=False):
     included_segments: List[str]
     excluded_segments: List[str]
     filters: Any
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
     test_devices_only: bool
     email_to: List[str]
@@ -3647,7 +3664,7 @@ class CreateSavedReportDtoDefinitionSort(TypedDict, total=False):
 class CreateSuppressionDto(TypedDict, total=False):
     """CreateSuppressionDto şeması."""
 
-    #: Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
     #: Zorunlu.
     value: str
@@ -3707,7 +3724,7 @@ class CreateTemplateDto(TypedDict, total=False):
 
     #: Zorunlu.
     name: str
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: Optional[str]
     tags: List[str]
     #: Zorunlu.
@@ -3775,6 +3792,8 @@ class CreateTemplateDtoContent(TypedDict, total=False):
     rcs_content_sid: str
     rcs_content_variables: Dict[str, str]
     rcs_fallback_text: Dict[str, str]
+    messenger_image_url: str
+    messenger_buttons: List[Any]
     ios_carousel: List["CreateTemplateDtoContentIosCarouselItem"]
     android_live_update: "CreateTemplateDtoContentAndroidLiveUpdate"
     voip: bool
@@ -4521,7 +4540,7 @@ class Delivery(TypedDict, total=False):
     subscription_id: str
     #: Zorunlu.
     user_id: Optional[str]
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
     #: Zorunlu.
     provider: Optional[str]
@@ -4824,7 +4843,7 @@ class EstimateAudienceDtoTarget(TypedDict, total=False):
     included_segments: List[str]
     excluded_segments: List[str]
     filters: Any
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
     test_devices_only: bool
     email_to: List[str]
@@ -5060,7 +5079,7 @@ ExportFilters = TypedDict(
         "message_id": str,
         "campaign_id": str,
         "status": str,
-        # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+        # Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
         "channel": str,
         "segment_id": str,
     },
@@ -6937,7 +6956,7 @@ class McpCreateCampaignDraftBodyAudience(TypedDict, total=False):
     exclude_segments: List[str]
     #: Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
     filters: "McpCreateCampaignDraftBodyAudienceFilters"
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
     test_devices_only: bool
 
@@ -7298,6 +7317,23 @@ class MessageVariantsItem(TypedDict, total=False):
     is_control: bool
 
 
+class MessengerLink(TypedDict, total=False):
+    """MessengerLink şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu. Değerler: "telegram", "viber".
+    channel: str
+    #: Zorunlu.
+    user_id: str
+    #: Zorunlu.
+    url: str
+    #: Zorunlu.
+    token: str
+    #: Zorunlu.
+    expires_at: str
+
+
 class Ok(TypedDict, total=False):
     """Ok şeması."""
 
@@ -7374,9 +7410,9 @@ OverviewStats = TypedDict(
 class OverviewStatsChannelsItem(TypedDict, total=False):
     """OverviewStatsChannelsItem şeması."""
 
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
-    #: Zorunlu. Değerler: "apns", "fcm", "hms", "adm", "wns", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "mock".
+    #: Zorunlu. Değerler: "apns", "fcm", "hms", "adm", "wns", "webpush", "smtp", "ses", "resend", "twilio", "netgsm", "meta_whatsapp", "google_rbm", "telegram_bot", "viber_bot", "mock".
     provider: Optional[str]
     #: Zorunlu. Değerler: "unconfigured", "active", "invalid", "suspended".
     status: str
@@ -7949,7 +7985,7 @@ class Recommendations(TypedDict, total=False):
 class RenderPreview(TypedDict, total=False):
     """RenderPreview şeması."""
 
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
     #: Zorunlu.
     language: str
@@ -8021,7 +8057,7 @@ class RenderPreviewSms(TypedDict, total=False):
 class RenderTemplateDto(TypedDict, total=False):
     """RenderTemplateDto şeması."""
 
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
     language: str
     user: "RenderTemplateDtoUser"
@@ -8091,6 +8127,8 @@ class RenderTemplateDtoContent(TypedDict, total=False):
     rcs_content_sid: str
     rcs_content_variables: Dict[str, str]
     rcs_fallback_text: Dict[str, str]
+    messenger_image_url: str
+    messenger_buttons: List[Any]
     ios_carousel: List["RenderTemplateDtoContentIosCarouselItem"]
     android_live_update: "RenderTemplateDtoContentAndroidLiveUpdate"
     voip: bool
@@ -8793,7 +8831,7 @@ class SetPreferencesDtoPreferencesItem(TypedDict, total=False):
 
     #: Zorunlu.
     category: str
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: Optional[str]
     #: Zorunlu.
     opted_in: bool
@@ -8810,7 +8848,7 @@ class SmsKeyword(TypedDict, total=False):
     scope: str
     #: Zorunlu.
     app_id: Optional[str]
-    #: Zorunlu. Değerler: "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
     #: Zorunlu.
     actions: Dict[str, Any]
@@ -8901,7 +8939,7 @@ class Subscription(TypedDict, total=False):
     app_id: str
     #: Zorunlu.
     user_id: Optional[str]
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
     #: Zorunlu.
     token: str
@@ -9056,7 +9094,7 @@ class Suppression(TypedDict, total=False):
     id: str
     #: Zorunlu.
     app_id: str
-    #: Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: str
     #: Zorunlu.
     value_masked: str
@@ -9313,7 +9351,7 @@ class Template(TypedDict, total=False):
     app_id: str
     #: Zorunlu.
     name: str
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: Optional[str]
     #: Zorunlu.
     current_version: int
@@ -9638,7 +9676,7 @@ class UpdateAppDtoSettingsFrequencyCapsItem(TypedDict, total=False):
     max: int
     #: Zorunlu.
     window: "UpdateAppDtoSettingsFrequencyCapsItemWindow"
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
 
 
@@ -9878,7 +9916,7 @@ class UpdateCategoryDto(TypedDict, total=False):
 
     name: Dict[str, str]
     description: Dict[str, str]
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: Optional[List[str]]
     default_opted_in: bool
     position: int
@@ -10053,7 +10091,7 @@ class UpdateKeywordDto(TypedDict, total=False):
     """UpdateKeywordDto şeması."""
 
     keyword: str
-    #: Değerler: "sms", "whatsapp", "rcs".
+    #: Değerler: "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
     actions: "UpdateKeywordDtoActions"
     enabled: bool
@@ -10267,7 +10305,7 @@ class UpdateTemplateDto(TypedDict, total=False):
     """UpdateTemplateDto şeması."""
 
     name: str
-    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channel: Optional[str]
     tags: List[str]
     content: "UpdateTemplateDtoContent"
@@ -10334,6 +10372,8 @@ class UpdateTemplateDtoContent(TypedDict, total=False):
     rcs_content_sid: str
     rcs_content_variables: Dict[str, str]
     rcs_fallback_text: Dict[str, str]
+    messenger_image_url: str
+    messenger_buttons: List[Any]
     ios_carousel: List["UpdateTemplateDtoContentIosCarouselItem"]
     android_live_update: "UpdateTemplateDtoContentAndroidLiveUpdate"
     voip: bool
@@ -11022,7 +11062,7 @@ class User(TypedDict, total=False):
     updated_at: str
     #: Zorunlu.
     subscription_count: int
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
 
 
@@ -11063,7 +11103,7 @@ class UserDetail(TypedDict, total=False):
     updated_at: str
     #: Zorunlu.
     subscription_count: int
-    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+    #: Zorunlu. Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
     channels: List[str]
     #: Zorunlu.
     aliases: List["UserDetailAliasesItem"]
@@ -12840,6 +12880,7 @@ __all__ = [
     "CreateLiveActivityTypeDtoContentStateSchema",
     "CreateLiveActivityTypeDtoContentStateSchemaPropertiesValue",
     "CreateLookalikeDto",
+    "CreateMessengerLinkDto",
     "CreateNotificationDto",
     "CreateNotificationDtoAndroidLiveUpdate",
     "CreateNotificationDtoButtonsItem",
@@ -13120,6 +13161,7 @@ __all__ = [
     "MessagesReportRowsItem",
     "MessagesReportTotals",
     "MessageVariantsItem",
+    "MessengerLink",
     "Ok",
     "Org",
     "OrgSettings",
