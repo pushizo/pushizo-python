@@ -987,7 +987,7 @@ class TemplatesResource:
         ``GET /v1/apps/{appId}/templates``
 
         Parametreler:
-            channel: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+            channel: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
         """
         return self._client._call(
             "GET",
@@ -1207,7 +1207,7 @@ class CampaignsResource:
         Parametreler:
             status: Değerler: "draft", "scheduled", "running", "paused", "completed", "cancelled", "failed".
             type: Değerler: "one_time", "scheduled", "recurring", "automated", "transactional".
-            channel: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs".
+            channel: Değerler: "ios_push", "android_push", "hms_push", "adm_push", "wns_push", "web_push", "email", "sms", "whatsapp", "rcs", "telegram", "viber".
         """
         return self._client._call(
             "GET",
@@ -1963,7 +1963,7 @@ class InboxResource:
         ``GET /v1/apps/{appId}/inbox/metrics``
 
         Parametreler:
-            channel: Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+            channel: Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
         """
         return self._client._call(
             "GET",
@@ -2111,7 +2111,7 @@ class SuppressionsResource:
         ``GET /v1/apps/{appId}/suppressions``
 
         Parametreler:
-            channel: Değerler: "email", "sms", "whatsapp", "rcs".
+            channel: Değerler: "email", "sms", "whatsapp", "rcs", "telegram", "viber".
             reason: Değerler: "bounce", "complaint", "manual", "unsubscribe_link", "stop".
         """
         return self._client._call(
@@ -4583,7 +4583,7 @@ class ConversationsResource:
         ``GET /v1/apps/{appId}/conversations``
 
         Parametreler:
-            channel: Değerler: "sms", "whatsapp", "rcs", "email", "chat".
+            channel: Değerler: "sms", "whatsapp", "rcs", "telegram", "viber", "email", "chat".
             status: Değerler: "open", "pending", "resolved", "closed".
             unread: Değerler: "true", "false".
         """
@@ -6810,6 +6810,33 @@ class McpResource:
         )
 
 
+class MessengerLinksResource:
+    """messengerLinks kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def create(
+        self,
+        body: "CreateMessengerLinkDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "MessengerLink":
+        """Telegram/Viber abonelik bağlama derin bağlantısı (tek kullanımlık belirteç; kullanıcı bota yazınca sohbet kimliği bu kullanıcıya abonelik olarak bağlanır)
+
+        ``POST /v1/apps/{appId}/messenger-links``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/messenger-links",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class PredictionsResource:
     """predictions kaynağı."""
 
@@ -8821,6 +8848,7 @@ class GeneratedResources:
     landing_pages: LandingPagesResource
     live_activities: LiveActivitiesResource
     mcp: McpResource
+    messenger_links: MessengerLinksResource
     predictions: PredictionsResource
     preferences: PreferencesResource
     promo_code_lists: PromoCodeListsResource
@@ -8876,6 +8904,7 @@ class GeneratedResources:
         self.landing_pages = LandingPagesResource(self)  # type: ignore[arg-type]
         self.live_activities = LiveActivitiesResource(self)  # type: ignore[arg-type]
         self.mcp = McpResource(self)  # type: ignore[arg-type]
+        self.messenger_links = MessengerLinksResource(self)  # type: ignore[arg-type]
         self.predictions = PredictionsResource(self)  # type: ignore[arg-type]
         self.preferences = PreferencesResource(self)  # type: ignore[arg-type]
         self.promo_code_lists = PromoCodeListsResource(self)  # type: ignore[arg-type]
@@ -8932,6 +8961,7 @@ RESOURCE_NAMES = (
     "landing_pages",
     "live_activities",
     "mcp",
+    "messenger_links",
     "predictions",
     "preferences",
     "promo_code_lists",
