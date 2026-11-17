@@ -8389,6 +8389,297 @@ class WarehouseExportsResource:
         )
 
 
+class WarehouseSegmentsResource:
+    """warehouseSegments kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def options(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseSegmentOptions":
+        """Ambar segmenti seçenekleri ve sınırlar
+
+        ``GET /v1/apps/{appId}/warehouse-segments/options``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/warehouse-segments/options",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_connections(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseSegmentConnectionList":
+        """Ambar bağlantıları
+
+        ``GET /v1/apps/{appId}/warehouse-segments/connections``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/warehouse-segments/connections",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_connection(
+        self,
+        body: "CreateWarehouseConnectionDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseSegmentConnection":
+        """Ambar bağlantısı oluştur
+
+        ``POST /v1/apps/{appId}/warehouse-segments/connections``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/warehouse-segments/connections",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def get_connection(
+        self,
+        connection_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseSegmentConnection":
+        """Ambar bağlantısı detayı
+
+        ``GET /v1/apps/{appId}/warehouse-segments/connections/{connectionId}``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}",
+            path_params={"connectionId": connection_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_connection(
+        self,
+        connection_id: str,
+        body: "UpdateWarehouseConnectionDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseSegmentConnection":
+        """Ambar bağlantısını güncelle
+
+        ``PATCH /v1/apps/{appId}/warehouse-segments/connections/{connectionId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}",
+            path_params={"connectionId": connection_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def remove_connection(
+        self,
+        connection_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Ambar bağlantısını sil
+
+        ``DELETE /v1/apps/{appId}/warehouse-segments/connections/{connectionId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}",
+            path_params={"connectionId": connection_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def test_connection(
+        self,
+        connection_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseSegmentConnectionTest":
+        """Ambar bağlantısını dene
+
+        ``POST /v1/apps/{appId}/warehouse-segments/connections/{connectionId}/test``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}/test",
+            path_params={"connectionId": connection_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def preview(
+        self,
+        body: "PreviewWarehouseQueryDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseSegmentPreview":
+        """Ambar sorgusunu önizle (dry-run veya örnek)
+
+        ``POST /v1/apps/{appId}/warehouse-segments/preview``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/warehouse-segments/preview",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def list_segments(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseSegmentList":
+        """Ambar segmentleri
+
+        ``GET /v1/apps/{appId}/warehouse-segments/segments``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/warehouse-segments/segments",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_segment(
+        self,
+        body: "CreateWarehouseSegmentDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Segment":
+        """Ambar segmenti oluştur
+
+        ``POST /v1/apps/{appId}/warehouse-segments/segments``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/warehouse-segments/segments",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_segment(
+        self,
+        segment_id: str,
+        body: "UpdateWarehouseSegmentDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Segment":
+        """Ambar segmentini güncelle
+
+        ``PATCH /v1/apps/{appId}/warehouse-segments/segments/{segmentId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}",
+            path_params={"segmentId": segment_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def refresh(
+        self,
+        segment_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Segment":
+        """Ambar segmentini yenileme kuyruğuna al
+
+        ``POST /v1/apps/{appId}/warehouse-segments/segments/{segmentId}/refresh``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}/refresh",
+            path_params={"segmentId": segment_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def runs(
+        self,
+        *,
+        segment_id: Optional[str] = None,
+        connection_id: Optional[str] = None,
+        status: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "WarehouseSegmentRunList":
+        """Ambar sorgu kaydı
+
+        ``GET /v1/apps/{appId}/warehouse-segments/runs``
+
+        Parametreler:
+            status: Değerler: "ok", "rejected", "timeout", "failed".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/warehouse-segments/runs",
+            path_params={},
+            query={"segment_id": segment_id, "connection_id": connection_id, "status": status, "limit": limit, "cursor": cursor},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def runs_all(
+        self,
+        *,
+        segment_id: Optional[str] = None,
+        connection_id: Optional[str] = None,
+        status: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["WarehouseSegmentRunListDataItem"]:
+        """``runs`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.runs(
+                segment_id=segment_id,
+                connection_id=connection_id,
+                status=status,
+                limit=limit,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+
 class WebCampaignsResource:
     """webCampaigns kaynağı."""
 
@@ -8797,6 +9088,7 @@ class GeneratedResources:
     verify: VerifyResource
     wallet: WalletResource
     warehouse_exports: WarehouseExportsResource
+    warehouse_segments: WarehouseSegmentsResource
     web_campaigns: WebCampaignsResource
     web_personalizations: WebPersonalizationsResource
     whatsapp: WhatsappResource
@@ -8852,6 +9144,7 @@ class GeneratedResources:
         self.verify = VerifyResource(self)  # type: ignore[arg-type]
         self.wallet = WalletResource(self)  # type: ignore[arg-type]
         self.warehouse_exports = WarehouseExportsResource(self)  # type: ignore[arg-type]
+        self.warehouse_segments = WarehouseSegmentsResource(self)  # type: ignore[arg-type]
         self.web_campaigns = WebCampaignsResource(self)  # type: ignore[arg-type]
         self.web_personalizations = WebPersonalizationsResource(self)  # type: ignore[arg-type]
         self.whatsapp = WhatsappResource(self)  # type: ignore[arg-type]
@@ -8908,6 +9201,7 @@ RESOURCE_NAMES = (
     "verify",
     "wallet",
     "warehouse_exports",
+    "warehouse_segments",
     "web_campaigns",
     "web_personalizations",
     "whatsapp",
