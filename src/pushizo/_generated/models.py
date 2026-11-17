@@ -4053,6 +4053,47 @@ class CreateWalletTemplateDtoDesignFieldsItem(TypedDict, total=False):
     section: str
 
 
+class CreateWarehouseConnectionDto(TypedDict, total=False):
+    """CreateWarehouseConnectionDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+    type: str
+    #: Zorunlu.
+    config: Dict[str, Any]
+    #: Zorunlu.
+    credentials: Dict[str, Any]
+
+
+class CreateWarehouseSegmentDto(TypedDict, total=False):
+    """CreateWarehouseSegmentDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    description: Optional[str]
+    #: Zorunlu.
+    connection_id: str
+    #: Zorunlu.
+    query: str
+    #: Zorunlu.
+    id_column: str
+    #: Değerler: "external_id", "user_id".
+    id_type: str
+    refresh_interval_minutes: Optional[int]
+    limits: "CreateWarehouseSegmentDtoLimits"
+
+
+class CreateWarehouseSegmentDtoLimits(TypedDict, total=False):
+    """CreateWarehouseSegmentDtoLimits şeması."""
+
+    timeout_seconds: int
+    max_rows: int
+    max_bytes_billed: int
+    #: Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+    max_warehouse_size: Optional[str]
+
+
 class CreateWarmupPlanDto(TypedDict, total=False):
     """CreateWarmupPlanDto şeması."""
 
@@ -7858,6 +7899,32 @@ class PredictionUsersPageDataItem(TypedDict, total=False):
     bucket: str
 
 
+class PreviewWarehouseQueryDto(TypedDict, total=False):
+    """PreviewWarehouseQueryDto şeması."""
+
+    #: Zorunlu.
+    connection_id: str
+    #: Zorunlu.
+    query: str
+    #: Zorunlu.
+    id_column: str
+    #: Değerler: "external_id", "user_id".
+    id_type: str
+    limits: "PreviewWarehouseQueryDtoLimits"
+    #: Değerler: "dry_run", "sample".
+    mode: str
+
+
+class PreviewWarehouseQueryDtoLimits(TypedDict, total=False):
+    """PreviewWarehouseQueryDtoLimits şeması."""
+
+    timeout_seconds: int
+    max_rows: int
+    max_bytes_billed: int
+    #: Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+    max_warehouse_size: Optional[str]
+
+
 class PromoCodeList(TypedDict, total=False):
     """PromoCodeList şeması."""
 
@@ -8743,6 +8810,8 @@ class Segment(TypedDict, total=False):
     updated_at: str
     #: Zorunlu.
     sql: Optional["SegmentSql"]
+    #: Zorunlu.
+    warehouse: Optional["SegmentWarehouse"]
 
 
 class SegmentCampaigns(TypedDict, total=False):
@@ -8889,6 +8958,48 @@ class SegmentsUpdateBodyDefinition(TypedDict, total=False):
     all: List[Dict[str, Any]]
     any: List[Dict[str, Any]]
     none: List[Dict[str, Any]]
+
+
+class SegmentWarehouse(TypedDict, total=False):
+    """SegmentWarehouse şeması."""
+
+    #: Zorunlu.
+    connection_id: Optional[str]
+    #: Zorunlu.
+    query: str
+    #: Zorunlu.
+    id_column: str
+    #: Zorunlu. Değerler: "external_id", "user_id".
+    id_type: str
+    #: Zorunlu.
+    limits: "SegmentWarehouseLimits"
+    #: Zorunlu.
+    refresh_interval_minutes: Optional[int]
+    #: Zorunlu. Değerler: "queued", "failed", "ok", "never".
+    refresh_state: str
+    #: Zorunlu.
+    refresh_requested_at: Optional[str]
+    #: Zorunlu.
+    refreshed_at: Optional[str]
+    #: Zorunlu.
+    member_count: Optional[int]
+    #: Zorunlu.
+    last_error: Optional[str]
+    #: Zorunlu.
+    bytes_processed: Optional[float]
+
+
+class SegmentWarehouseLimits(TypedDict, total=False):
+    """SegmentWarehouseLimits şeması."""
+
+    #: Zorunlu.
+    timeout_seconds: int
+    #: Zorunlu.
+    max_rows: int
+    #: Zorunlu.
+    max_bytes_billed: float
+    #: Zorunlu. Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+    max_warehouse_size: Optional[str]
 
 
 class SelectWinnerDto(TypedDict, total=False):
@@ -10685,6 +10796,14 @@ class UpdateWalletTemplateDtoDesignFieldsItem(TypedDict, total=False):
     section: str
 
 
+class UpdateWarehouseConnectionDto(TypedDict, total=False):
+    """UpdateWarehouseConnectionDto şeması."""
+
+    name: str
+    config: Dict[str, Any]
+    credentials: Dict[str, Any]
+
+
 class UpdateWarehouseExportDto(TypedDict, total=False):
     """UpdateWarehouseExportDto şeması."""
 
@@ -10696,6 +10815,30 @@ class UpdateWarehouseExportDto(TypedDict, total=False):
     enabled: bool
     config: Dict[str, Any]
     credentials: Dict[str, Any]
+
+
+class UpdateWarehouseSegmentDto(TypedDict, total=False):
+    """UpdateWarehouseSegmentDto şeması."""
+
+    name: str
+    description: Optional[str]
+    connection_id: str
+    query: str
+    id_column: str
+    #: Değerler: "external_id", "user_id".
+    id_type: str
+    refresh_interval_minutes: Optional[int]
+    limits: "UpdateWarehouseSegmentDtoLimits"
+
+
+class UpdateWarehouseSegmentDtoLimits(TypedDict, total=False):
+    """UpdateWarehouseSegmentDtoLimits şeması."""
+
+    timeout_seconds: int
+    max_rows: int
+    max_bytes_billed: int
+    #: Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+    max_warehouse_size: Optional[str]
 
 
 class UpdateWarmupPlanDto(TypedDict, total=False):
@@ -11825,6 +11968,180 @@ class WarehouseExportRunTablesValueTo(TypedDict, total=False):
     ts: str
     #: Zorunlu.
     id: str
+
+
+class WarehouseSegmentConnection(TypedDict, total=False):
+    """WarehouseSegmentConnection şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    app_id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+    type: str
+    #: Zorunlu.
+    config: Dict[str, Any]
+    #: Zorunlu.
+    credentials_hint: str
+    #: Zorunlu.
+    segment_count: int
+    #: Zorunlu.
+    last_tested_at: Optional[str]
+    #: Zorunlu.
+    last_test_error: Optional[str]
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class WarehouseSegmentConnectionList(TypedDict, total=False):
+    """WarehouseSegmentConnectionList şeması."""
+
+    #: Zorunlu.
+    data: List["WarehouseSegmentConnection"]
+
+
+class WarehouseSegmentConnectionTest(TypedDict, total=False):
+    """WarehouseSegmentConnectionTest şeması."""
+
+    #: Zorunlu.
+    ok: bool
+    #: Zorunlu.
+    error: Optional["WarehouseSegmentConnectionTestError"]
+
+
+class WarehouseSegmentConnectionTestError(TypedDict, total=False):
+    """WarehouseSegmentConnectionTestError şeması."""
+
+    #: Zorunlu.
+    code: str
+    #: Zorunlu.
+    message: str
+
+
+class WarehouseSegmentList(TypedDict, total=False):
+    """WarehouseSegmentList şeması."""
+
+    #: Zorunlu.
+    data: List["Segment"]
+
+
+class WarehouseSegmentOptions(TypedDict, total=False):
+    """WarehouseSegmentOptions şeması."""
+
+    #: Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+    types: List[str]
+    #: Zorunlu. Değerler: "external_id", "user_id".
+    id_types: List[str]
+    #: Zorunlu. Değerler: "X-Small", "Small", "Medium", "Large", "X-Large", "2X-Large", "3X-Large", "4X-Large", "5X-Large", "6X-Large".
+    snowflake_warehouse_sizes: List[str]
+    #: Zorunlu.
+    refresh_intervals: List[int]
+    #: Zorunlu.
+    limits: "WarehouseSegmentOptionsLimits"
+
+
+class WarehouseSegmentOptionsLimits(TypedDict, total=False):
+    """WarehouseSegmentOptionsLimits şeması."""
+
+    #: Zorunlu.
+    query_max: int
+    #: Zorunlu.
+    timeout_default_seconds: int
+    #: Zorunlu.
+    timeout_min_seconds: int
+    #: Zorunlu.
+    timeout_max_seconds: int
+    #: Zorunlu.
+    max_rows_default: int
+    #: Zorunlu.
+    max_rows_max: int
+    #: Zorunlu.
+    max_bytes_billed_default: int
+    #: Zorunlu.
+    max_bytes_billed_min: int
+    #: Zorunlu.
+    max_bytes_billed_max: int
+    #: Zorunlu.
+    preview_sample: int
+    #: Zorunlu.
+    connections_per_app: int
+
+
+class WarehouseSegmentPreview(TypedDict, total=False):
+    """WarehouseSegmentPreview şeması."""
+
+    #: Zorunlu.
+    run_id: str
+    #: Zorunlu. Değerler: "dry_run", "sample".
+    mode: str
+    #: Zorunlu.
+    estimated_bytes: Optional[float]
+    #: Zorunlu.
+    max_bytes_billed: Optional[float]
+    #: Zorunlu.
+    within_limit: bool
+    #: Zorunlu.
+    sample: Optional[List[str]]
+    #: Zorunlu.
+    sample_truncated: bool
+    #: Zorunlu.
+    sample_matched: Optional[int]
+    #: Zorunlu.
+    duration_ms: int
+
+
+class WarehouseSegmentRunList(TypedDict, total=False):
+    """WarehouseSegmentRunList şeması."""
+
+    #: Zorunlu.
+    data: List["WarehouseSegmentRunListDataItem"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+    #: Zorunlu.
+    has_more: bool
+
+
+class WarehouseSegmentRunListDataItem(TypedDict, total=False):
+    """WarehouseSegmentRunListDataItem şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    segment_id: Optional[str]
+    #: Zorunlu.
+    connection_id: Optional[str]
+    #: Zorunlu. Değerler: "bigquery", "snowflake", "databricks".
+    warehouse_type: str
+    #: Zorunlu. Değerler: "panel", "api", "schedule".
+    source: str
+    #: Zorunlu.
+    actor_id: Optional[str]
+    #: Zorunlu.
+    query: str
+    #: Zorunlu.
+    query_hash: str
+    #: Zorunlu. Değerler: "ok", "rejected", "timeout", "failed".
+    status: str
+    #: Zorunlu. Değerler: "empty", "too_long", "syntax", "multiple_statements", "not_select", "forbidden_relation", "forbidden_function", "forbidden_construct", "forbidden_type".
+    reason: Optional[str]
+    #: Zorunlu.
+    error: Optional[str]
+    #: Zorunlu.
+    row_count: int
+    #: Zorunlu.
+    matched_count: Optional[int]
+    #: Zorunlu.
+    bytes_processed: Optional[float]
+    #: Zorunlu.
+    truncated: bool
+    #: Zorunlu.
+    duration_ms: int
+    #: Zorunlu.
+    created_at: str
 
 
 class WarehouseTables(TypedDict, total=False):
@@ -13035,6 +13352,9 @@ __all__ = [
     "CreateWalletTemplateDto",
     "CreateWalletTemplateDtoDesign",
     "CreateWalletTemplateDtoDesignFieldsItem",
+    "CreateWarehouseConnectionDto",
+    "CreateWarehouseSegmentDto",
+    "CreateWarehouseSegmentDtoLimits",
     "CreateWarmupPlanDto",
     "CreateWarmupPlanDtoCurve",
     "CreateWarmupPlanDtoProviderShares",
@@ -13302,6 +13622,8 @@ __all__ = [
     "PredictionModelMetricsImportanceItem",
     "PredictionUsersPage",
     "PredictionUsersPageDataItem",
+    "PreviewWarehouseQueryDto",
+    "PreviewWarehouseQueryDtoLimits",
     "PromoCodeList",
     "PromoCodeListList",
     "PromoCodesPage",
@@ -13374,6 +13696,8 @@ __all__ = [
     "SegmentSql",
     "SegmentsUpdateBody",
     "SegmentsUpdateBodyDefinition",
+    "SegmentWarehouse",
+    "SegmentWarehouseLimits",
     "SelectWinnerDto",
     "SetOwnerDto",
     "SetPreferencesDto",
@@ -13520,7 +13844,10 @@ __all__ = [
     "UpdateWalletTemplateDto",
     "UpdateWalletTemplateDtoDesign",
     "UpdateWalletTemplateDtoDesignFieldsItem",
+    "UpdateWarehouseConnectionDto",
     "UpdateWarehouseExportDto",
+    "UpdateWarehouseSegmentDto",
+    "UpdateWarehouseSegmentDtoLimits",
     "UpdateWarmupPlanDto",
     "UpdateWarmupPlanDtoProviderShares",
     "UpdateWebCampaignDto",
@@ -13600,6 +13927,16 @@ __all__ = [
     "WarehouseExportRunTablesValue",
     "WarehouseExportRunTablesValueFrom",
     "WarehouseExportRunTablesValueTo",
+    "WarehouseSegmentConnection",
+    "WarehouseSegmentConnectionList",
+    "WarehouseSegmentConnectionTest",
+    "WarehouseSegmentConnectionTestError",
+    "WarehouseSegmentList",
+    "WarehouseSegmentOptions",
+    "WarehouseSegmentOptionsLimits",
+    "WarehouseSegmentPreview",
+    "WarehouseSegmentRunList",
+    "WarehouseSegmentRunListDataItem",
     "WarehouseTables",
     "WarehouseTablesDataItem",
     "WarehouseTablesDataItemColumnsItem",
