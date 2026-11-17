@@ -11238,6 +11238,8 @@ class UserExportDerived(TypedDict, total=False):
     affinities: List["UserExportDerivedAffinitiesItem"]
     #: Zorunlu.
     frequency_cap: Optional["UserExportDerivedFrequencyCap"]
+    #: Zorunlu.
+    companies: List["UserExportDerivedCompaniesItem"]
 
 
 class UserExportDerivedAffinitiesItem(TypedDict, total=False):
@@ -11270,6 +11272,21 @@ class UserExportDerivedChannelScoresItem(TypedDict, total=False):
     is_best: bool
     #: Zorunlu.
     computed_at: str
+
+
+class UserExportDerivedCompaniesItem(TypedDict, total=False):
+    """UserExportDerivedCompaniesItem şeması."""
+
+    #: Zorunlu.
+    company_id: str
+    #: Zorunlu.
+    external_id: str
+    #: Zorunlu.
+    name: Optional[str]
+    #: Zorunlu.
+    role: str
+    #: Zorunlu.
+    joined_at: str
 
 
 class UserExportDerivedDecisionsItem(TypedDict, total=False):
@@ -13546,6 +13563,7 @@ __all__ = [
     "UserExportDerived",
     "UserExportDerivedAffinitiesItem",
     "UserExportDerivedChannelScoresItem",
+    "UserExportDerivedCompaniesItem",
     "UserExportDerivedDecisionsItem",
     "UserExportDerivedFrequencyCap",
     "UserExportDerivedPredictionsItem",
