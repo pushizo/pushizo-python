@@ -2780,6 +2780,35 @@ class AnalyticsResource:
             request_options=request_options,
         )
 
+    def android_delivery_report(
+        self,
+        *,
+        from_: Optional[str] = None,
+        to: Optional[str] = None,
+        compare: Optional[str] = None,
+        format: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "AndroidDeliveryReport":
+        """Android teslimat sağlığı raporu
+
+        ``GET /v1/apps/{appId}/analytics/android-delivery``
+
+        Üretici ve ROM bazında gönderildi, teslim alındı, açıldı sayıları ile gönderimden cihaza ulaşmaya kadar geçen süre. Teslim alındı cihazdaki SDK alındısından, kısıt özeti SDK teşhisinden hesaplanır.
+
+        Parametreler:
+            compare: Değerler: "true", "false".
+            format: Değerler: "json", "csv".
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/analytics/android-delivery",
+            path_params={},
+            query={"from": from_, "to": to, "compare": compare, "format": format},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
     def events(
         self,
         *,

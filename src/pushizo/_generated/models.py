@@ -516,6 +516,23 @@ class AddSubscriptionDtoDevice(TypedDict, total=False):
     form_factor: str
     #: Değerler: "alert", "voip", "app_clip".
     push_kind: str
+    manufacturer: str
+    brand: str
+    rom: str
+    rom_version: str
+    delivery: "AddSubscriptionDtoDeviceDelivery"
+
+
+class AddSubscriptionDtoDeviceDelivery(TypedDict, total=False):
+    """AddSubscriptionDtoDeviceDelivery şeması."""
+
+    battery_optimization_exempt: bool
+    background_restricted: bool
+    channel_blocked: bool
+    power_save_mode: bool
+    data_saver: bool
+    #: Değerler: "exempted", "active", "working_set", "frequent", "rare", "restricted".
+    standby_bucket: str
 
 
 class AddSubscriptionDtoOptIn(TypedDict, total=False):
@@ -772,6 +789,181 @@ class AdSpendReportTotals(TypedDict, total=False):
     cpa: Optional[float]
     #: Zorunlu.
     roas: Optional[float]
+
+
+AndroidDeliveryReport = TypedDict(
+    "AndroidDeliveryReport",
+    {
+        # Zorunlu.
+        "from": str,
+        # Zorunlu.
+        "to": str,
+        # Zorunlu.
+        "devices": "AndroidDeliveryReportDevices",
+        # Zorunlu.
+        "totals": "AndroidDeliveryReportTotals",
+        # Zorunlu.
+        "previous": Optional["AndroidDeliveryReportPrevious"],
+        # Zorunlu.
+        "deprioritized": int,
+        # Zorunlu.
+        "aggressive": "AndroidDeliveryReportAggressive",
+        # Zorunlu.
+        "others": "AndroidDeliveryReportOthers",
+        # Zorunlu.
+        "vendors": List["AndroidDeliveryReportVendorsItem"],
+        # Zorunlu.
+        "roms": List["AndroidDeliveryReportRomsItem"],
+        # Zorunlu. Değerler: "upgrade_sdk", "vendor_guidance", "background_restricted", "battery_exemption", "deprioritized", "notifications_blocked".
+        "recommendations": List[str],
+    },
+    total=False,
+)
+
+
+class AndroidDeliveryReportAggressive(TypedDict, total=False):
+    """AndroidDeliveryReportAggressive şeması."""
+
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    delivered: int
+    #: Zorunlu.
+    delivery_rate: Optional[float]
+
+
+class AndroidDeliveryReportDevices(TypedDict, total=False):
+    """AndroidDeliveryReportDevices şeması."""
+
+    #: Zorunlu.
+    total: int
+    #: Zorunlu.
+    reporting: int
+    #: Zorunlu.
+    reporting_rate: Optional[float]
+    #: Zorunlu.
+    restricted: int
+    #: Zorunlu.
+    restricted_rate: Optional[float]
+    #: Zorunlu.
+    background_restricted: int
+    #: Zorunlu.
+    battery_optimized: int
+    #: Zorunlu.
+    low_standby_bucket: int
+    #: Zorunlu.
+    power_save: int
+    #: Zorunlu.
+    data_saver: int
+    #: Zorunlu.
+    channel_blocked: int
+    #: Zorunlu.
+    notifications_blocked: int
+    #: Zorunlu.
+    aggressive_vendor: int
+    #: Zorunlu.
+    aggressive_vendor_rate: Optional[float]
+
+
+class AndroidDeliveryReportOthers(TypedDict, total=False):
+    """AndroidDeliveryReportOthers şeması."""
+
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    delivered: int
+    #: Zorunlu.
+    delivery_rate: Optional[float]
+
+
+class AndroidDeliveryReportPrevious(TypedDict, total=False):
+    """AndroidDeliveryReportPrevious şeması."""
+
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    delivered: int
+    #: Zorunlu.
+    opened: int
+    #: Zorunlu.
+    delivery_rate: Optional[float]
+    #: Zorunlu.
+    open_rate: Optional[float]
+    #: Zorunlu.
+    median_delay_seconds: Optional[int]
+    #: Zorunlu.
+    p90_delay_seconds: Optional[int]
+
+
+class AndroidDeliveryReportRomsItem(TypedDict, total=False):
+    """AndroidDeliveryReportRomsItem şeması."""
+
+    #: Zorunlu.
+    rom: str
+    #: Zorunlu.
+    devices: int
+    #: Zorunlu.
+    restricted: int
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    delivered: int
+    #: Zorunlu.
+    delivery_rate: Optional[float]
+    #: Zorunlu.
+    median_delay_seconds: Optional[int]
+
+
+class AndroidDeliveryReportTotals(TypedDict, total=False):
+    """AndroidDeliveryReportTotals şeması."""
+
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    delivered: int
+    #: Zorunlu.
+    opened: int
+    #: Zorunlu.
+    delivery_rate: Optional[float]
+    #: Zorunlu.
+    open_rate: Optional[float]
+    #: Zorunlu.
+    median_delay_seconds: Optional[int]
+    #: Zorunlu.
+    p90_delay_seconds: Optional[int]
+
+
+class AndroidDeliveryReportVendorsItem(TypedDict, total=False):
+    """AndroidDeliveryReportVendorsItem şeması."""
+
+    #: Zorunlu.
+    vendor: str
+    #: Zorunlu.
+    aggressive: bool
+    #: Zorunlu.
+    devices: int
+    #: Zorunlu.
+    reporting: int
+    #: Zorunlu.
+    restricted: int
+    #: Zorunlu.
+    battery_optimized: int
+    #: Zorunlu.
+    sent: int
+    #: Zorunlu.
+    delivered: int
+    #: Zorunlu.
+    opened: int
+    #: Zorunlu.
+    delivery_rate: Optional[float]
+    #: Zorunlu.
+    open_rate: Optional[float]
+    #: Zorunlu.
+    median_delay_seconds: Optional[int]
+    #: Zorunlu.
+    p90_delay_seconds: Optional[int]
+    #: Zorunlu.
+    deprioritized: int
 
 
 class ApiEventsDto(TypedDict, total=False):
@@ -7644,6 +7836,23 @@ class PatchSubscriptionDtoDevice(TypedDict, total=False):
     form_factor: str
     #: Değerler: "alert", "voip", "app_clip".
     push_kind: str
+    manufacturer: str
+    brand: str
+    rom: str
+    rom_version: str
+    delivery: "PatchSubscriptionDtoDeviceDelivery"
+
+
+class PatchSubscriptionDtoDeviceDelivery(TypedDict, total=False):
+    """PatchSubscriptionDtoDeviceDelivery şeması."""
+
+    battery_optimization_exempt: bool
+    background_restricted: bool
+    channel_blocked: bool
+    power_save_mode: bool
+    data_saver: bool
+    #: Değerler: "exempted", "active", "working_set", "frequent", "rare", "restricted".
+    standby_bucket: str
 
 
 class PatchUserDto(TypedDict, total=False):
@@ -9187,6 +9396,23 @@ class SubscriptionDevice(TypedDict, total=False):
     form_factor: str
     #: Değerler: "alert", "voip", "app_clip".
     push_kind: str
+    manufacturer: str
+    brand: str
+    rom: str
+    rom_version: str
+    delivery: "SubscriptionDeviceDelivery"
+
+
+class SubscriptionDeviceDelivery(TypedDict, total=False):
+    """SubscriptionDeviceDelivery şeması."""
+
+    battery_optimization_exempt: bool
+    background_restricted: bool
+    channel_blocked: bool
+    power_save_mode: bool
+    data_saver: bool
+    #: Değerler: "exempted", "active", "working_set", "frequent", "rare", "restricted".
+    standby_bucket: str
 
 
 class SubscriptionLocation(TypedDict, total=False):
@@ -13104,6 +13330,7 @@ __all__ = [
     "AddAliasDto",
     "AddSubscriptionDto",
     "AddSubscriptionDtoDevice",
+    "AddSubscriptionDtoDeviceDelivery",
     "AddSubscriptionDtoOptIn",
     "AdEntity",
     "AdEntityCreative",
@@ -13117,6 +13344,14 @@ __all__ = [
     "AdSpendReport",
     "AdSpendReportRowsItem",
     "AdSpendReportTotals",
+    "AndroidDeliveryReport",
+    "AndroidDeliveryReportAggressive",
+    "AndroidDeliveryReportDevices",
+    "AndroidDeliveryReportOthers",
+    "AndroidDeliveryReportPrevious",
+    "AndroidDeliveryReportRomsItem",
+    "AndroidDeliveryReportTotals",
+    "AndroidDeliveryReportVendorsItem",
     "ApiEventsDto",
     "ApiEventsDtoEventsItem",
     "ApiKey",
@@ -13603,6 +13838,7 @@ __all__ = [
     "PatchEventDefinitionDto",
     "PatchSubscriptionDto",
     "PatchSubscriptionDtoDevice",
+    "PatchSubscriptionDtoDeviceDelivery",
     "PatchUserDto",
     "PatchUserDtoDeltas",
     "PatchUserDtoDeltasPurchasesItem",
@@ -13712,6 +13948,7 @@ __all__ = [
     "StartVerifyDto",
     "Subscription",
     "SubscriptionDevice",
+    "SubscriptionDeviceDelivery",
     "SubscriptionLocation",
     "SubscriptionsReport",
     "SubscriptionsReportByChannelItem",
