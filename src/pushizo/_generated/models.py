@@ -3922,6 +3922,20 @@ class CreateSavedReportDtoDefinitionSort(TypedDict, total=False):
     direction: str
 
 
+class CreateSiteSearchSourceDto(TypedDict, total=False):
+    """CreateSiteSearchSourceDto şeması."""
+
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "sitemap", "urls".
+    kind: str
+    url: str
+    urls: List[str]
+    max_pages: int
+    refresh_hours: Optional[int]
+    enabled: bool
+
+
 class CreateSuppressionDto(TypedDict, total=False):
     """CreateSuppressionDto şeması."""
 
@@ -8289,6 +8303,17 @@ class PublicSurveyResponseDto(TypedDict, total=False):
     external_id: str
 
 
+class PutSiteSearchDocumentDto(TypedDict, total=False):
+    """PutSiteSearchDocumentDto şeması."""
+
+    #: Zorunlu.
+    url: str
+    title: str
+    content: str
+    html: str
+    language: str
+
+
 class RecommendationConfig(TypedDict, total=False):
     """RecommendationConfig şeması."""
 
@@ -9241,6 +9266,256 @@ class SetPreferencesDtoPreferencesItem(TypedDict, total=False):
     channel: Optional[str]
     #: Zorunlu.
     opted_in: bool
+
+
+class SiteSearchCrawlRequest(TypedDict, total=False):
+    """SiteSearchCrawlRequest şeması."""
+
+    #: Zorunlu.
+    queued: bool
+    #: Zorunlu.
+    source: "SiteSearchSource"
+
+
+class SiteSearchDocument(TypedDict, total=False):
+    """SiteSearchDocument şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    key: str
+    #: Zorunlu.
+    source_id: Optional[str]
+    #: Zorunlu.
+    url: str
+    #: Zorunlu.
+    title: str
+    #: Zorunlu.
+    language: Optional[str]
+    #: Zorunlu.
+    chunks: int
+    #: Zorunlu.
+    chars: int
+    #: Zorunlu.
+    indexed_at: str
+    #: Zorunlu.
+    created_at: str
+
+
+class SiteSearchDocumentPage(TypedDict, total=False):
+    """SiteSearchDocumentPage şeması."""
+
+    #: Zorunlu.
+    data: List["SiteSearchDocument"]
+    #: Zorunlu.
+    next_cursor: Optional[str]
+    #: Zorunlu.
+    has_more: bool
+
+
+class SiteSearchDocumentResult(TypedDict, total=False):
+    """SiteSearchDocumentResult şeması."""
+
+    #: Zorunlu. Değerler: "created", "updated", "unchanged".
+    outcome: str
+    #: Zorunlu.
+    document: "SiteSearchDocument"
+
+
+class SiteSearchOverview(TypedDict, total=False):
+    """SiteSearchOverview şeması."""
+
+    #: Zorunlu.
+    settings: "SiteSearchOverviewSettings"
+    #: Zorunlu.
+    index: "SiteSearchOverviewIndex"
+    #: Zorunlu.
+    usage: "SiteSearchOverviewUsage"
+    #: Zorunlu.
+    ai: "SiteSearchOverviewAi"
+
+
+class SiteSearchOverviewAi(TypedDict, total=False):
+    """SiteSearchOverviewAi şeması."""
+
+    #: Zorunlu.
+    available: bool
+    #: Zorunlu. Değerler: "disabled", "unavailable", "cap_reached".
+    reason: Optional[str]
+
+
+class SiteSearchOverviewIndex(TypedDict, total=False):
+    """SiteSearchOverviewIndex şeması."""
+
+    #: Zorunlu.
+    documents: int
+    #: Zorunlu.
+    chunks: int
+    #: Zorunlu.
+    sources: int
+    #: Zorunlu.
+    last_indexed_at: Optional[str]
+
+
+class SiteSearchOverviewSettings(TypedDict, total=False):
+    """SiteSearchOverviewSettings şeması."""
+
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu.
+    ai_answers: bool
+    #: Zorunlu.
+    allowed_origins: List[str]
+    #: Zorunlu.
+    language: str
+    #: Zorunlu.
+    text_search_config: str
+    #: Zorunlu.
+    monthly_token_cap: int
+    #: Zorunlu.
+    query_retention_days: int
+    #: Zorunlu.
+    updated_at: Optional[str]
+
+
+class SiteSearchOverviewUsage(TypedDict, total=False):
+    """SiteSearchOverviewUsage şeması."""
+
+    #: Zorunlu.
+    tokens_this_month: int
+    #: Zorunlu.
+    monthly_token_cap: int
+    #: Zorunlu.
+    period_start: str
+
+
+class SiteSearchReport(TypedDict, total=False):
+    """SiteSearchReport şeması."""
+
+    #: Zorunlu.
+    period_days: int
+    #: Zorunlu.
+    searches: int
+    #: Zorunlu.
+    zero_results: int
+    #: Zorunlu.
+    click_through_rate: float
+    #: Zorunlu.
+    answers_requested: int
+    #: Zorunlu.
+    answered: int
+    #: Zorunlu.
+    not_found: int
+    #: Zorunlu.
+    answer_fallbacks: int
+    #: Zorunlu.
+    tokens: int
+    #: Zorunlu.
+    top_queries: List["SiteSearchReportTopQueriesItem"]
+    #: Zorunlu.
+    zero_result_queries: List["SiteSearchReportZeroResultQueriesItem"]
+    #: Zorunlu.
+    daily: List["SiteSearchReportDailyItem"]
+
+
+class SiteSearchReportDailyItem(TypedDict, total=False):
+    """SiteSearchReportDailyItem şeması."""
+
+    #: Zorunlu.
+    date: str
+    #: Zorunlu.
+    searches: int
+    #: Zorunlu.
+    zero_results: int
+    #: Zorunlu.
+    answered: int
+
+
+class SiteSearchReportTopQueriesItem(TypedDict, total=False):
+    """SiteSearchReportTopQueriesItem şeması."""
+
+    #: Zorunlu.
+    query: str
+    #: Zorunlu.
+    searches: int
+    #: Zorunlu.
+    clicks: int
+    #: Zorunlu.
+    avg_results: float
+
+
+class SiteSearchReportZeroResultQueriesItem(TypedDict, total=False):
+    """SiteSearchReportZeroResultQueriesItem şeması."""
+
+    #: Zorunlu.
+    query: str
+    #: Zorunlu.
+    searches: int
+
+
+class SiteSearchSource(TypedDict, total=False):
+    """SiteSearchSource şeması."""
+
+    #: Zorunlu.
+    id: str
+    #: Zorunlu.
+    name: str
+    #: Zorunlu. Değerler: "sitemap", "urls".
+    kind: str
+    #: Zorunlu.
+    url: Optional[str]
+    #: Zorunlu.
+    urls: List[str]
+    #: Zorunlu.
+    max_pages: int
+    #: Zorunlu.
+    refresh_hours: Optional[int]
+    #: Zorunlu.
+    enabled: bool
+    #: Zorunlu. Değerler: "idle", "queued", "crawling", "ok", "partial", "failed".
+    status: str
+    #: Zorunlu.
+    documents: int
+    #: Zorunlu.
+    crawl_requested_at: Optional[str]
+    #: Zorunlu.
+    last_crawled_at: Optional[str]
+    #: Zorunlu.
+    next_crawl_at: Optional[str]
+    #: Zorunlu.
+    last_error: Optional[str]
+    #: Zorunlu.
+    stats: "SiteSearchSourceStats"
+    #: Zorunlu.
+    created_at: str
+    #: Zorunlu.
+    updated_at: str
+
+
+class SiteSearchSourceList(TypedDict, total=False):
+    """SiteSearchSourceList şeması."""
+
+    #: Zorunlu.
+    data: List["SiteSearchSource"]
+
+
+class SiteSearchSourceStats(TypedDict, total=False):
+    """SiteSearchSourceStats şeması."""
+
+    #: Zorunlu.
+    pages_found: int
+    #: Zorunlu.
+    pages_indexed: int
+    #: Zorunlu.
+    pages_unchanged: int
+    #: Zorunlu.
+    pages_skipped: int
+    #: Zorunlu.
+    pages_failed: int
+    #: Zorunlu.
+    pages_removed: int
+    #: Zorunlu.
+    duration_ms: int
 
 
 class SmsKeyword(TypedDict, total=False):
@@ -10722,6 +10997,30 @@ class UpdateSavedReportDtoDefinitionSort(TypedDict, total=False):
     by: str
     #: Değerler: "asc", "desc".
     direction: str
+
+
+class UpdateSiteSearchSettingsDto(TypedDict, total=False):
+    """UpdateSiteSearchSettingsDto şeması."""
+
+    enabled: bool
+    ai_answers: bool
+    allowed_origins: List[str]
+    language: str
+    monthly_token_cap: int
+    query_retention_days: int
+
+
+class UpdateSiteSearchSourceDto(TypedDict, total=False):
+    """UpdateSiteSearchSourceDto şeması."""
+
+    name: str
+    #: Değerler: "sitemap", "urls".
+    kind: str
+    url: str
+    urls: List[str]
+    max_pages: int
+    refresh_hours: Optional[int]
+    enabled: bool
 
 
 class UpdateTemplateDto(TypedDict, total=False):
@@ -13563,6 +13862,7 @@ __all__ = [
     "CreateSavedReportDto",
     "CreateSavedReportDtoDefinition",
     "CreateSavedReportDtoDefinitionSort",
+    "CreateSiteSearchSourceDto",
     "CreateSuppressionDto",
     "CreateSurveyDto",
     "CreateSurveyDtoQuestionsItem",
@@ -13872,6 +14172,7 @@ __all__ = [
     "ProvidersReportTotals",
     "PublicFormSubmitDto",
     "PublicSurveyResponseDto",
+    "PutSiteSearchDocumentDto",
     "RecommendationConfig",
     "Recommendations",
     "RenderPreview",
@@ -13938,6 +14239,22 @@ __all__ = [
     "SetOwnerDto",
     "SetPreferencesDto",
     "SetPreferencesDtoPreferencesItem",
+    "SiteSearchCrawlRequest",
+    "SiteSearchDocument",
+    "SiteSearchDocumentPage",
+    "SiteSearchDocumentResult",
+    "SiteSearchOverview",
+    "SiteSearchOverviewAi",
+    "SiteSearchOverviewIndex",
+    "SiteSearchOverviewSettings",
+    "SiteSearchOverviewUsage",
+    "SiteSearchReport",
+    "SiteSearchReportDailyItem",
+    "SiteSearchReportTopQueriesItem",
+    "SiteSearchReportZeroResultQueriesItem",
+    "SiteSearchSource",
+    "SiteSearchSourceList",
+    "SiteSearchSourceStats",
     "SmsKeyword",
     "SmsKeywordList",
     "SmsVerification",
@@ -14058,6 +14375,8 @@ __all__ = [
     "UpdateSavedReportDto",
     "UpdateSavedReportDtoDefinition",
     "UpdateSavedReportDtoDefinitionSort",
+    "UpdateSiteSearchSettingsDto",
+    "UpdateSiteSearchSourceDto",
     "UpdateTemplateDto",
     "UpdateTemplateDtoContent",
     "UpdateTemplateDtoContentAndroidLiveUpdate",

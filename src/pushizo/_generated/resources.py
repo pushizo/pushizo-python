@@ -7663,6 +7663,254 @@ class RfmResource:
         )
 
 
+class SiteSearchResource:
+    """siteSearch kaynağı."""
+
+    def __init__(self, client: "Pushizo") -> None:
+        self._client = client
+
+    def overview(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SiteSearchOverview":
+        """Site araması ayarları, dizin durumu ve AI kullanımı
+
+        ``GET /v1/apps/{appId}/site-search``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/site-search",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_settings(
+        self,
+        body: "UpdateSiteSearchSettingsDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SiteSearchOverview":
+        """Site araması ayarlarını güncelle
+
+        ``PATCH /v1/apps/{appId}/site-search/settings``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/site-search/settings",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def sources(
+        self,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SiteSearchSourceList":
+        """Arama kaynakları
+
+        ``GET /v1/apps/{appId}/site-search/sources``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/site-search/sources",
+            path_params={},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def create_source(
+        self,
+        body: "CreateSiteSearchSourceDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SiteSearchSource":
+        """Arama kaynağı ekle
+
+        ``POST /v1/apps/{appId}/site-search/sources``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/site-search/sources",
+            path_params={},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def update_source(
+        self,
+        source_id: str,
+        body: "UpdateSiteSearchSourceDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SiteSearchSource":
+        """Arama kaynağını düzenle
+
+        ``PATCH /v1/apps/{appId}/site-search/sources/{sourceId}``
+        """
+        return self._client._call(
+            "PATCH",
+            "/v1/apps/{appId}/site-search/sources/{sourceId}",
+            path_params={"sourceId": source_id},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def remove_source(
+        self,
+        source_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Arama kaynağını ve sayfalarını sil
+
+        ``DELETE /v1/apps/{appId}/site-search/sources/{sourceId}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/site-search/sources/{sourceId}",
+            path_params={"sourceId": source_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def crawl(
+        self,
+        source_id: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SiteSearchCrawlRequest":
+        """Kaynağı şimdi yeniden tara
+
+        ``POST /v1/apps/{appId}/site-search/sources/{sourceId}/crawl``
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/site-search/sources/{sourceId}/crawl",
+            path_params={"sourceId": source_id},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def documents(
+        self,
+        *,
+        source_id: Optional[str] = None,
+        q: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SiteSearchDocumentPage":
+        """Dizindeki belgeler
+
+        ``GET /v1/apps/{appId}/site-search/documents``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/site-search/documents",
+            path_params={},
+            query={"source_id": source_id, "q": q, "limit": limit, "cursor": cursor},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def documents_all(
+        self,
+        *,
+        source_id: Optional[str] = None,
+        q: Optional[str] = None,
+        limit: Optional[int] = None,
+        cursor: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> Iterator["SiteSearchDocument"]:
+        """``documents`` sonuçlarını ``next_cursor`` ile tüm sayfalar boyunca tek tek döndürür."""
+        return self._client._paginate(
+            lambda next_cursor: self.documents(
+                source_id=source_id,
+                q=q,
+                limit=limit,
+                app_id=app_id,
+                request_options=request_options,
+                cursor=next_cursor,
+            ),
+            cursor,
+        )
+
+    def put_document(
+        self,
+        document_key: str,
+        body: "PutSiteSearchDocumentDto",
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SiteSearchDocumentResult":
+        """Belgeyi dizine yükle veya değiştir (anahtar app içinde tekildir)
+
+        ``PUT /v1/apps/{appId}/site-search/documents/{documentKey}``
+        """
+        return self._client._call(
+            "PUT",
+            "/v1/apps/{appId}/site-search/documents/{documentKey}",
+            path_params={"documentKey": document_key},
+            body=body,
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def remove_document(
+        self,
+        document_key: str,
+        *,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "Ok":
+        """Belgeyi dizinden sil (belge kimliği veya anahtarı)
+
+        ``DELETE /v1/apps/{appId}/site-search/documents/{documentKey}``
+        """
+        return self._client._call(
+            "DELETE",
+            "/v1/apps/{appId}/site-search/documents/{documentKey}",
+            path_params={"documentKey": document_key},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def report(
+        self,
+        *,
+        days: Optional[int] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "SiteSearchReport":
+        """Arama raporu
+
+        ``GET /v1/apps/{appId}/site-search/report``
+        """
+        return self._client._call(
+            "GET",
+            "/v1/apps/{appId}/site-search/report",
+            path_params={},
+            query={"days": days},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+
 class SmsKeywordsResource:
     """smsKeywords kaynağı."""
 
@@ -9175,6 +9423,7 @@ class GeneratedResources:
     recommendations: RecommendationsResource
     reverse_etl: ReverseEtlResource
     rfm: RfmResource
+    site_search: SiteSearchResource
     sms_keywords: SmsKeywordsResource
     surveys: SurveysResource
     verify: VerifyResource
@@ -9232,6 +9481,7 @@ class GeneratedResources:
         self.recommendations = RecommendationsResource(self)  # type: ignore[arg-type]
         self.reverse_etl = ReverseEtlResource(self)  # type: ignore[arg-type]
         self.rfm = RfmResource(self)  # type: ignore[arg-type]
+        self.site_search = SiteSearchResource(self)  # type: ignore[arg-type]
         self.sms_keywords = SmsKeywordsResource(self)  # type: ignore[arg-type]
         self.surveys = SurveysResource(self)  # type: ignore[arg-type]
         self.verify = VerifyResource(self)  # type: ignore[arg-type]
@@ -9290,6 +9540,7 @@ RESOURCE_NAMES = (
     "recommendations",
     "reverse_etl",
     "rfm",
+    "site_search",
     "sms_keywords",
     "surveys",
     "verify",
