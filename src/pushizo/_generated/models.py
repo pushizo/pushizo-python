@@ -1318,6 +1318,8 @@ class Campaign(TypedDict, total=False):
     updated_at: str
     #: Zorunlu.
     estimated_recipients: Optional[int]
+    #: Zorunlu.
+    preflight: Optional["CampaignPreflight"]
 
 
 class CampaignAbTest(TypedDict, total=False):
@@ -1434,6 +1436,73 @@ class CampaignPage(TypedDict, total=False):
     next_cursor: Optional[str]
     #: Zorunlu.
     has_more: bool
+
+
+class CampaignPreflight(TypedDict, total=False):
+    """CampaignPreflight şeması."""
+
+    #: Zorunlu.
+    checked_at: str
+    #: Zorunlu.
+    summary: "CampaignPreflightSummary"
+    #: Zorunlu.
+    codes: List[str]
+    acknowledged_by: str
+    acknowledged_at: str
+
+
+class CampaignPreflightReport(TypedDict, total=False):
+    """CampaignPreflightReport şeması."""
+
+    #: Zorunlu.
+    campaign_id: str
+    #: Zorunlu.
+    checked_at: str
+    #: Zorunlu.
+    links_checked: bool
+    #: Zorunlu.
+    summary: "CampaignPreflightReportSummary"
+    #: Zorunlu.
+    findings: List["CampaignPreflightReportFindingsItem"]
+
+
+class CampaignPreflightReportFindingsItem(TypedDict, total=False):
+    """CampaignPreflightReportFindingsItem şeması."""
+
+    #: Zorunlu. Değerler: "brand_name_casing", "off_brand_color", "off_brand_font", "banned_phrase", "phishing_term", "link_invalid", "link_insecure_http", "link_unsafe_host", "link_shortener", "link_missing_utm", "link_broken", "link_unreachable", "liquid_syntax_error", "liquid_missing_default", "liquid_unknown_variable", "liquid_undefined_property", "commercial_no_category", "iys_sms_filter_informational", "sms_missing_opt_out", "email_missing_postal_address", "send_time_outside_hours".
+    code: str
+    #: Zorunlu. Değerler: "brand", "content", "links", "personalization", "compliance".
+    category: str
+    #: Zorunlu. Değerler: "critical", "warning", "info".
+    severity: str
+    field: str
+    params: Dict[str, Any]
+
+
+class CampaignPreflightReportSummary(TypedDict, total=False):
+    """CampaignPreflightReportSummary şeması."""
+
+    #: Zorunlu.
+    critical: int
+    #: Zorunlu.
+    warning: int
+    #: Zorunlu.
+    info: int
+    #: Zorunlu.
+    blocked: bool
+
+
+class CampaignPreflightSummary(TypedDict, total=False):
+    """CampaignPreflightSummary şeması."""
+
+    #: Zorunlu.
+    critical: int
+    #: Zorunlu.
+    warning: int
+    #: Zorunlu.
+    info: int
+    #: Zorunlu.
+    blocked: bool
 
 
 class CampaignRecurrence(TypedDict, total=False):
@@ -12704,6 +12773,11 @@ __all__ = [
     "CampaignEmailRisk",
     "CampaignGoals",
     "CampaignPage",
+    "CampaignPreflight",
+    "CampaignPreflightReport",
+    "CampaignPreflightReportFindingsItem",
+    "CampaignPreflightReportSummary",
+    "CampaignPreflightSummary",
     "CampaignRecurrence",
     "CampaignsCreateBody",
     "CampaignsCreateBodyAbTest",

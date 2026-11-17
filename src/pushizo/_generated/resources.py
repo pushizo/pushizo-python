@@ -1332,6 +1332,7 @@ class CampaignsResource:
         body: "ScheduleCampaignDto",
         *,
         force: Optional[str] = None,
+        preflight_ack: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Campaign":
@@ -1341,12 +1342,13 @@ class CampaignsResource:
 
         Parametreler:
             force: Değerler: "true", "false".
+            preflight_ack: Değerler: "true", "false".
         """
         return self._client._call(
             "POST",
             "/v1/apps/{appId}/campaigns/{campaignId}/schedule",
             path_params={"campaignId": campaign_id},
-            query={"force": force},
+            query={"force": force, "preflight_ack": preflight_ack},
             body=body,
             app_id=app_id,
             request_options=request_options,
@@ -1357,6 +1359,7 @@ class CampaignsResource:
         campaign_id: str,
         *,
         force: Optional[str] = None,
+        preflight_ack: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Campaign":
@@ -1366,12 +1369,37 @@ class CampaignsResource:
 
         Parametreler:
             force: Değerler: "true", "false".
+            preflight_ack: Değerler: "true", "false".
         """
         return self._client._call(
             "POST",
             "/v1/apps/{appId}/campaigns/{campaignId}/send",
             path_params={"campaignId": campaign_id},
-            query={"force": force},
+            query={"force": force, "preflight_ack": preflight_ack},
+            app_id=app_id,
+            request_options=request_options,
+        )
+
+    def preflight(
+        self,
+        campaign_id: str,
+        *,
+        check_links: Optional[str] = None,
+        app_id: Optional[str] = None,
+        request_options: Optional[RequestOptions] = None,
+    ) -> "CampaignPreflightReport":
+        """Yayın öncesi denetim raporu (marka, yasaklı ifade, bağlantı, kişiselleştirme, KVKK/İYS)
+
+        ``POST /v1/apps/{appId}/campaigns/{campaignId}/preflight``
+
+        Parametreler:
+            check_links: Değerler: "true", "false".
+        """
+        return self._client._call(
+            "POST",
+            "/v1/apps/{appId}/campaigns/{campaignId}/preflight",
+            path_params={"campaignId": campaign_id},
+            query={"check_links": check_links},
             app_id=app_id,
             request_options=request_options,
         )
@@ -1475,17 +1503,24 @@ class CampaignsResource:
         self,
         campaign_id: str,
         *,
+        force: Optional[str] = None,
+        preflight_ack: Optional[str] = None,
         app_id: Optional[str] = None,
         request_options: Optional[RequestOptions] = None,
     ) -> "Campaign":
         """Onayla
 
         ``POST /v1/apps/{appId}/campaigns/{campaignId}/approve``
+
+        Parametreler:
+            force: Değerler: "true", "false".
+            preflight_ack: Değerler: "true", "false".
         """
         return self._client._call(
             "POST",
             "/v1/apps/{appId}/campaigns/{campaignId}/approve",
             path_params={"campaignId": campaign_id},
+            query={"force": force, "preflight_ack": preflight_ack},
             app_id=app_id,
             request_options=request_options,
         )
