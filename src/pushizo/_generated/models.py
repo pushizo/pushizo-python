@@ -8634,6 +8634,8 @@ class Segment(TypedDict, total=False):
     created_at: str
     #: Zorunlu.
     updated_at: str
+    #: Zorunlu.
+    sql: Optional["SegmentSql"]
 
 
 class SegmentCampaigns(TypedDict, total=False):
@@ -8747,6 +8749,21 @@ class SegmentsPreviewBodyDefinition(TypedDict, total=False):
     all: List[Dict[str, Any]]
     any: List[Dict[str, Any]]
     none: List[Dict[str, Any]]
+
+
+class SegmentSql(TypedDict, total=False):
+    """SegmentSql şeması."""
+
+    #: Zorunlu.
+    query: str
+    #: Zorunlu.
+    refresh_interval_minutes: Optional[int]
+    #: Zorunlu.
+    refreshed_at: Optional[str]
+    #: Zorunlu.
+    member_count: Optional[int]
+    #: Zorunlu.
+    last_error: Optional[str]
 
 
 class SegmentsUpdateBody(TypedDict, total=False):
@@ -13221,6 +13238,7 @@ __all__ = [
     "SegmentsCreateBodyDefinition",
     "SegmentsPreviewBody",
     "SegmentsPreviewBodyDefinition",
+    "SegmentSql",
     "SegmentsUpdateBody",
     "SegmentsUpdateBodyDefinition",
     "SelectWinnerDto",
