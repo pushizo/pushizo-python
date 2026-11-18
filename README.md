@@ -13,17 +13,6 @@
 
 **Pushizo Python SDK** — Server-side SDK for Python with synchronous and asyncio clients. Models and resources are generated from the Pushizo OpenAPI schema; retries, idempotency, pagination and webhook verification are built in.
 
-> **Status:** Publishing to PyPI is in progress.<br>
-> **Durum:** PyPI yayını hazırlanıyor.
-
-**Install from GitHub until then · O zamana kadar GitHub'dan kurulum:**
-
-```bash
-pip install https://github.com/pushizo/pushizo-python/releases/download/v0.1.0/pushizo-0.1.0-py3-none-any.whl
-```
-
-**After publication · Yayından sonra:**
-
 ```bash
 pip install pushizo
 ```
@@ -66,7 +55,7 @@ print(res["id"], res["status"])
 
 # Kullanıcı oluştur/güncelle ve abonelik ekle
 hs.users.upsert({"external_id": "user-42", "tags": {"plan": "pro"}})
-hs.users.add_subscription("external_id", "user-42", {"channel": "email", "token": "ayse@example.com"})
+hs.users.add_subscription("external_id", "user-42", {"channel": "email", "token": "ayse@pushizo.com"})
 
 # Cursor sayfalama: tüm sayfaları tek tek dolaşır
 for segment in hs.segments.list_all(limit=100):
